@@ -1,0 +1,84 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/components.css";
+
+/* Dark mode variant — .theme-dark class on <html> (applied by next-themes) */
+@custom-variant dark (&:where(.theme-dark, .theme-dark *));
+
+@theme inline {
+  /* Surfaces */
+  --color-background:     var(--background);
+  --color-surface:        var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunk:   var(--surface-sunk);
+
+  /* Borders */
+  --color-border:        var(--border);
+  --color-border-strong: var(--border-strong);
+
+  /* Text */
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-text-subtle:    var(--text-subtle);
+
+  /* Accent */
+  --color-accent:            var(--accent);
+  --color-accent-hover:      var(--accent-hover);
+  --color-accent-muted:      var(--accent-muted);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Semantic */
+  --color-success:       var(--success);
+  --color-success-muted: var(--success-muted);
+  --color-warning:       var(--warning);
+  --color-warning-muted: var(--warning-muted);
+  --color-error:         var(--error);
+  --color-error-muted:   var(--error-muted);
+  --color-info:          var(--info);
+  --color-info-muted:    var(--info-muted);
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/* Base resets — come after imports to override hardcoded values in screens/page CSS */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  background-color: var(--background);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::selection {
+  background: var(--accent-muted);
+  color: var(--text-primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
