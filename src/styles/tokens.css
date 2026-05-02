@@ -1,0 +1,187 @@
+/* ============================================================
+   NexDash Design System — Color, Type, Spacing tokens
+   ============================================================ */
+
+/* ----- Type & spacing (theme-agnostic) ----- */
+:root {
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Type scale (rem) */
+  --fs-xs:   0.6875rem; /* 11px */
+  --fs-sm:   0.8125rem; /* 13px */
+  --fs-base: 0.875rem;  /* 14px */
+  --fs-lg:   1rem;      /* 16px */
+  --fs-xl:   1.25rem;   /* 20px */
+  --fs-2xl:  1.5rem;    /* 24px */
+  --fs-3xl:  2rem;      /* 32px */
+
+  --lh-xs: 1.25;
+  --lh-sm: 1.4;
+  --lh-base: 1.5;
+  --lh-lg: 1.5;
+  --lh-xl: 1.35;
+  --lh-2xl: 1.25;
+  --lh-3xl: 1.15;
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Letter spacing */
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide:  0.04em;
+  --tracking-wider: 0.08em;
+
+  /* Spacing scale (4px base) */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-full: 9999px;
+
+  /* Layout */
+  --sidebar-w: 248px;
+  --topbar-h:  56px;
+  --content-max: 1440px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2,.8,.2,1);
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+
+  /* Accent (default Indigo). Swapped at runtime. */
+  --accent:            oklch(62% 0.19 274);
+  --accent-hover:      oklch(68% 0.18 274);
+  --accent-muted:      oklch(62% 0.19 274 / 0.14);
+  --accent-foreground: #FFFFFF;
+}
+
+/* ============================================================
+   THEME 1 — Midnight Pro (dark)
+   ============================================================ */
+.theme-dark {
+  color-scheme: dark;
+
+  --background:     #0A0A0F;
+  --surface:        #13131A;
+  --surface-raised: #1C1C27;
+  --surface-sunk:   #0F0F15;
+
+  --border:         rgba(255, 255, 255, 0.06);
+  --border-strong:  rgba(255, 255, 255, 0.12);
+  --border-focus:   var(--accent);
+
+  --text-primary:   #F0F0F3;
+  --text-secondary: #B4B4C2;
+  --text-muted:     #6B6B80;
+  --text-subtle:    #4A4A5A;
+
+  /* Semantic — desaturated to feel native */
+  --success:        oklch(72% 0.14 152);
+  --success-muted:  oklch(72% 0.14 152 / 0.14);
+  --warning:        oklch(78% 0.13 80);
+  --warning-muted:  oklch(78% 0.13 80 / 0.14);
+  --error:          oklch(67% 0.18 20);
+  --error-muted:    oklch(67% 0.18 20 / 0.14);
+  --info:           oklch(72% 0.12 230);
+  --info-muted:     oklch(72% 0.12 230 / 0.14);
+
+  /* Depth — dark relies on surface layering, no shadows */
+  --shadow-card: none;
+  --shadow-pop: 0 0 0 1px rgba(255,255,255,0.05), 0 8px 24px rgba(0,0,0,0.5);
+
+  /* Dark grid lines for charts */
+  --grid: rgba(255,255,255,0.05);
+}
+
+/* ============================================================
+   THEME 2 — Arctic Light
+   ============================================================ */
+.theme-light {
+  color-scheme: light;
+
+  --background:     #F7F7F8;
+  --surface:        #FFFFFF;
+  --surface-raised: #F0F0F2;
+  --surface-sunk:   #ECECEE;
+
+  --border:         rgba(0, 0, 0, 0.06);
+  --border-strong:  rgba(0, 0, 0, 0.12);
+  --border-focus:   var(--accent);
+
+  --text-primary:   #09090B;
+  --text-secondary: #3F3F46;
+  --text-muted:     #71717A;
+  --text-subtle:    #A1A1AA;
+
+  --success:        oklch(58% 0.15 152);
+  --success-muted:  oklch(58% 0.15 152 / 0.10);
+  --warning:        oklch(64% 0.15 70);
+  --warning-muted:  oklch(64% 0.15 70 / 0.10);
+  --error:          oklch(56% 0.20 25);
+  --error-muted:    oklch(56% 0.20 25 / 0.10);
+  --info:           oklch(58% 0.14 235);
+  --info-muted:     oklch(58% 0.14 235 / 0.10);
+
+  /* Light gets a single soft shadow */
+  --shadow-card: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.04);
+  --shadow-pop:  0 1px 2px rgba(16,24,40,0.06), 0 8px 24px rgba(16,24,40,0.08);
+
+  --grid: rgba(0,0,0,0.05);
+}
+
+/* ============================================================
+   Accent palette — applied via [data-accent="..."] on theme root
+   Each accent shares a fixed chroma per theme so swapping feels balanced
+   ============================================================ */
+
+/* Dark theme accents — lighter/brighter to read on dark surfaces */
+.theme-dark[data-accent="indigo"]  { --accent: oklch(64% 0.19 274); --accent-hover: oklch(70% 0.18 274); --accent-muted: oklch(64% 0.19 274 / 0.16); --accent-foreground:#FFFFFF; }
+.theme-dark[data-accent="violet"]  { --accent: oklch(64% 0.22 300); --accent-hover: oklch(70% 0.20 300); --accent-muted: oklch(64% 0.22 300 / 0.16); --accent-foreground:#FFFFFF; }
+.theme-dark[data-accent="emerald"] { --accent: oklch(70% 0.16 158); --accent-hover: oklch(76% 0.14 158); --accent-muted: oklch(70% 0.16 158 / 0.16); --accent-foreground:#0A0A0F; }
+.theme-dark[data-accent="rose"]    { --accent: oklch(68% 0.20 14);  --accent-hover: oklch(74% 0.18 14);  --accent-muted: oklch(68% 0.20 14 / 0.16);  --accent-foreground:#FFFFFF; }
+.theme-dark[data-accent="amber"]   { --accent: oklch(78% 0.16 75);  --accent-hover: oklch(84% 0.14 75);  --accent-muted: oklch(78% 0.16 75 / 0.16);  --accent-foreground:#0A0A0F; }
+.theme-dark[data-accent="cyan"]    { --accent: oklch(74% 0.13 215); --accent-hover: oklch(80% 0.11 215); --accent-muted: oklch(74% 0.13 215 / 0.16); --accent-foreground:#0A0A0F; }
+
+/* Light theme accents — slightly deeper for contrast on white */
+.theme-light[data-accent="indigo"]  { --accent: oklch(54% 0.21 274); --accent-hover: oklch(48% 0.22 274); --accent-muted: oklch(54% 0.21 274 / 0.10); --accent-foreground:#FFFFFF; }
+.theme-light[data-accent="violet"]  { --accent: oklch(52% 0.24 300); --accent-hover: oklch(46% 0.25 300); --accent-muted: oklch(52% 0.24 300 / 0.10); --accent-foreground:#FFFFFF; }
+.theme-light[data-accent="emerald"] { --accent: oklch(56% 0.16 158); --accent-hover: oklch(50% 0.17 158); --accent-muted: oklch(56% 0.16 158 / 0.10); --accent-foreground:#FFFFFF; }
+.theme-light[data-accent="rose"]    { --accent: oklch(56% 0.21 14);  --accent-hover: oklch(50% 0.22 14);  --accent-muted: oklch(56% 0.21 14 / 0.10);  --accent-foreground:#FFFFFF; }
+.theme-light[data-accent="amber"]   { --accent: oklch(64% 0.16 70);  --accent-hover: oklch(58% 0.17 70);  --accent-muted: oklch(64% 0.16 70 / 0.12);  --accent-foreground:#0A0A0F; }
+.theme-light[data-accent="cyan"]    { --accent: oklch(58% 0.13 215); --accent-hover: oklch(52% 0.14 215); --accent-muted: oklch(58% 0.13 215 / 0.10); --accent-foreground:#FFFFFF; }
+
+/* ============================================================
+   Base resets within a themed scope
+   ============================================================ */
+.themed {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  background: var(--background);
+  color: var(--text-primary);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+.themed *, .themed *::before, .themed *::after {
+  box-sizing: border-box;
+}
+
+.themed ::selection { background: var(--accent-muted); color: var(--text-primary); }
