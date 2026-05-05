@@ -1,20 +1,25 @@
 /* ============================================================
-   NexDash Design System — Color, Type, Spacing tokens
+   NexDash Design System — Mercury-inspired tokens
+   Color, Type, Spacing tokens
    ============================================================ */
 
 /* ----- Type & spacing (theme-agnostic) ----- */
 :root {
-  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Mercury uses arcadia/arcadiaDisplay (proprietary). Inter is the
+     official substitute and matches the geometric, slightly open feel. */
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  /* Type scale (rem) */
-  --fs-xs:   0.6875rem; /* 11px */
-  --fs-sm:   0.8125rem; /* 13px */
-  --fs-base: 0.875rem;  /* 14px */
-  --fs-lg:   1rem;      /* 16px */
-  --fs-xl:   1.25rem;   /* 20px */
-  --fs-2xl:  1.5rem;    /* 24px */
-  --fs-3xl:  2rem;      /* 32px */
+  /* Type scale (rem) — kept dashboard-friendly, not Mercury's marketing scale.
+     Sizes unchanged from before; the personality shift comes from weight + tracking. */
+  --fs-xs: 0.6875rem; /* 11px */
+  --fs-sm: 0.8125rem; /* 13px */
+  --fs-base: 0.875rem; /* 14px */
+  --fs-lg: 1rem; /* 16px */
+  --fs-xl: 1.25rem; /* 20px */
+  --fs-2xl: 1.5rem; /* 24px */
+  --fs-3xl: 2rem; /* 32px */
 
   --lh-xs: 1.25;
   --lh-sm: 1.4;
@@ -24,18 +29,22 @@
   --lh-2xl: 1.25;
   --lh-3xl: 1.15;
 
+  /* Mercury weights cap at 530. We keep the token names for compatibility
+     but remap to lighter values. Phase 2 (components.css) will choose which
+     weights to use; the values here are the only "heavy" we ever go. */
   --fw-regular: 400;
-  --fw-medium:  500;
-  --fw-semibold: 600;
-  --fw-bold: 700;
+  --fw-medium: 480; /* was 500 — Mercury's body medium */
+  --fw-semibold: 530; /* was 600 — Mercury's heaviest weight */
+  --fw-bold: 530; /* was 700 — clamped to 530, Mercury never goes heavier */
 
-  /* Letter spacing */
-  --tracking-tight: -0.015em;
-  --tracking-normal: 0;
-  --tracking-wide:  0.04em;
-  --tracking-wider: 0.08em;
+  /* Letter spacing — Mercury uses subtle POSITIVE tracking, not negative.
+     This is one of the most defining personality shifts. */
+  --tracking-tight: 0.005em; /* was -0.015em — flipped sign */
+  --tracking-normal: 0.01em;
+  --tracking-wide: 0.02em;
+  --tracking-wider: 0.08em; /* uppercase labels keep wider tracking */
 
-  /* Spacing scale (4px base) */
+  /* Spacing scale (4px base) — unchanged */
   --space-0: 0;
   --space-1: 4px;
   --space-2: 8px;
@@ -48,124 +57,202 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Radii */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
+  /* Radii — Mercury's signature shift.
+     Cards are SHARP (0-4px), buttons and inputs are PILLS (32-40px). */
+  --radius-sm: 2px; /* was 4px */
+  --radius-md: 4px; /* was 6px — containers */
+  --radius-lg: 0px; /* was 10px — CARDS ARE SHARP */
+  --radius-xl: 4px; /* was 14px */
+  --radius-pill: 32px; /* NEW — buttons, inputs */
+  --radius-pill-lg: 40px; /* NEW — large pill (header CTAs) */
   --radius-full: 9999px;
 
   /* Layout */
   --sidebar-w: 248px;
-  --topbar-h:  56px;
+  --topbar-h: 56px;
   --content-max: 1440px;
 
   /* Motion */
-  --ease-out: cubic-bezier(.2,.8,.2,1);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --dur-fast: 120ms;
   --dur-base: 180ms;
 
-  /* Accent (default Indigo). Swapped at runtime. */
-  --accent:            oklch(62% 0.19 274);
-  --accent-hover:      oklch(68% 0.18 274);
-  --accent-muted:      oklch(62% 0.19 274 / 0.14);
-  --accent-foreground: #FFFFFF;
+  /* Default accent — Mercury Blue. Swapped at runtime via [data-accent]. */
+  --accent: #5266eb;
+  --accent-hover: #6577f0;
+  --accent-muted: rgba(82, 102, 235, 0.16);
+  --accent-foreground: #ffffff;
 }
 
 /* ============================================================
-   THEME 1 — Midnight Pro (dark)
+   THEME 1 — Mercury Dark (Mountain Top Command Center)
+   Direct mapping from Mercury's published palette.
    ============================================================ */
 .theme-dark {
   color-scheme: dark;
 
-  --background:     #0A0A0F;
-  --surface:        #13131A;
-  --surface-raised: #1C1C27;
-  --surface-sunk:   #0F0F15;
+  /* Surfaces — straight from Mercury's design.md */
+  --background: #171721; /* Deep Space */
+  --surface: #1e1e2a; /* Midnight Slate */
+  --surface-raised: #272735; /* Graphite */
+  --surface-sunk: #13131c; /* slightly below Deep Space for sunk wells */
 
-  --border:         rgba(255, 255, 255, 0.06);
-  --border-strong:  rgba(255, 255, 255, 0.12);
-  --border-focus:   var(--accent);
+  /* Borders — based on Lead (#70707d) with opacity, not pure white.
+     This is what gives Mercury its "warm dark" feel vs cold white-on-black. */
+  --border: rgba(112, 112, 125, 0.2);
+  --border-strong: rgba(112, 112, 125, 0.35);
+  --border-focus: var(--accent);
 
-  --text-primary:   #F0F0F3;
-  --text-secondary: #B4B4C2;
-  --text-muted:     #6B6B80;
-  --text-subtle:    #4A4A5A;
+  /* Text — Mercury's Starlight / Silver / Lead hierarchy */
+  --text-primary: #ededf3; /* Starlight */
+  --text-secondary: #c3c3cc; /* Silver */
+  --text-muted: #70707d; /* Lead */
+  --text-subtle: #4a4a55; /* darker Lead for very faint text */
 
-  /* Semantic — desaturated to feel native */
-  --success:        oklch(72% 0.14 152);
-  --success-muted:  oklch(72% 0.14 152 / 0.14);
-  --warning:        oklch(78% 0.13 80);
-  --warning-muted:  oklch(78% 0.13 80 / 0.14);
-  --error:          oklch(67% 0.18 20);
-  --error-muted:    oklch(67% 0.18 20 / 0.14);
-  --info:           oklch(72% 0.12 230);
-  --info-muted:     oklch(72% 0.12 230 / 0.14);
+  /* Semantic colors — Mercury keeps everything desaturated.
+     We slightly mute these vs the previous theme to feel native. */
+  --success: oklch(68% 0.11 152);
+  --success-muted: oklch(68% 0.11 152 / 0.14);
+  --warning: oklch(74% 0.1 80);
+  --warning-muted: oklch(74% 0.1 80 / 0.14);
+  --error: oklch(64% 0.15 20);
+  --error-muted: oklch(64% 0.15 20 / 0.14);
+  --info: oklch(70% 0.1 230);
+  --info-muted: oklch(70% 0.1 230 / 0.14);
 
-  /* Depth — dark relies on surface layering, no shadows */
+  /* Depth — Mercury's rule: "Don't apply shadows for elevation.
+     Use color and opacity shifts instead." So no card shadow in dark. */
   --shadow-card: none;
-  --shadow-pop: 0 0 0 1px rgba(255,255,255,0.05), 0 8px 24px rgba(0,0,0,0.5);
+  --shadow-pop:
+    0 0 0 1px rgba(112, 112, 125, 0.15), 0 8px 24px rgba(0, 0, 0, 0.6);
 
-  /* Dark grid lines for charts */
-  --grid: rgba(255,255,255,0.05);
+  --grid: rgba(112, 112, 125, 0.12);
 }
 
 /* ============================================================
-   THEME 2 — Arctic Light
+   THEME 2 — Mercury Light (Arctic adaptation)
+   Mercury is dark-only. This is our coherent light counterpart:
+   same neutral discipline, same Lead-based borders, no shadow drama.
    ============================================================ */
 .theme-light {
   color-scheme: light;
 
-  --background:     #F7F7F8;
-  --surface:        #FFFFFF;
-  --surface-raised: #F0F0F2;
-  --surface-sunk:   #ECECEE;
+  --background: #f5f5f7; /* cool off-white, equivalent of Deep Space */
+  --surface: #ffffff; /* pure white, equivalent of Midnight Slate */
+  --surface-raised: #ebebed; /* light gray, equivalent of Graphite */
+  --surface-sunk: #e8e8ea;
 
-  --border:         rgba(0, 0, 0, 0.06);
-  --border-strong:  rgba(0, 0, 0, 0.12);
-  --border-focus:   var(--accent);
+  /* Same Lead-based border system as dark — feels coherent */
+  --border: rgba(112, 112, 125, 0.18);
+  --border-strong: rgba(112, 112, 125, 0.32);
+  --border-focus: var(--accent);
 
-  --text-primary:   #09090B;
-  --text-secondary: #3F3F46;
-  --text-muted:     #71717A;
-  --text-subtle:    #A1A1AA;
+  /* Inverted Mercury hierarchy — same tonal relationships */
+  --text-primary: #0d0d12; /* near-black, mirror of Starlight */
+  --text-secondary: #3c3c45; /* mid-gray, mirror of Silver */
+  --text-muted: #70707d; /* Lead works in both themes — same value */
+  --text-subtle: #a8a8b0;
 
-  --success:        oklch(58% 0.15 152);
-  --success-muted:  oklch(58% 0.15 152 / 0.10);
-  --warning:        oklch(64% 0.15 70);
-  --warning-muted:  oklch(64% 0.15 70 / 0.10);
-  --error:          oklch(56% 0.20 25);
-  --error-muted:    oklch(56% 0.20 25 / 0.10);
-  --info:           oklch(58% 0.14 235);
-  --info-muted:     oklch(58% 0.14 235 / 0.10);
+  /* Semantic — slightly deeper for contrast on light */
+  --success: oklch(54% 0.13 152);
+  --success-muted: oklch(54% 0.13 152 / 0.1);
+  --warning: oklch(58% 0.13 70);
+  --warning-muted: oklch(58% 0.13 70 / 0.1);
+  --error: oklch(52% 0.18 25);
+  --error-muted: oklch(52% 0.18 25 / 0.1);
+  --info: oklch(54% 0.12 235);
+  --info-muted: oklch(54% 0.12 235 / 0.1);
 
-  /* Light gets a single soft shadow */
-  --shadow-card: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.04);
-  --shadow-pop:  0 1px 2px rgba(16,24,40,0.06), 0 8px 24px rgba(16,24,40,0.08);
+  /* Light gets the softest possible shadow — Mercury still avoids drama.
+     A 1px hairline of contrast, no big blur. */
+  --shadow-card: 0 0 0 1px rgba(112, 112, 125, 0.06);
+  --shadow-pop:
+    0 0 0 1px rgba(112, 112, 125, 0.1), 0 4px 16px rgba(0, 0, 0, 0.04);
 
-  --grid: rgba(0,0,0,0.05);
+  --grid: rgba(0, 0, 0, 0.05);
 }
 
 /* ============================================================
    Accent palette — applied via [data-accent="..."] on theme root
-   Each accent shares a fixed chroma per theme so swapping feels balanced
+   Re-tuned to feel Mercury-monochrome: less vibrant, more serious,
+   each one reads as "the brand color" of a fictional Mercury sibling.
    ============================================================ */
 
-/* Dark theme accents — lighter/brighter to read on dark surfaces */
-.theme-dark[data-accent="indigo"]  { --accent: oklch(64% 0.19 274); --accent-hover: oklch(70% 0.18 274); --accent-muted: oklch(64% 0.19 274 / 0.16); --accent-foreground:#FFFFFF; }
-.theme-dark[data-accent="violet"]  { --accent: oklch(64% 0.22 300); --accent-hover: oklch(70% 0.20 300); --accent-muted: oklch(64% 0.22 300 / 0.16); --accent-foreground:#FFFFFF; }
-.theme-dark[data-accent="emerald"] { --accent: oklch(70% 0.16 158); --accent-hover: oklch(76% 0.14 158); --accent-muted: oklch(70% 0.16 158 / 0.16); --accent-foreground:#0A0A0F; }
-.theme-dark[data-accent="rose"]    { --accent: oklch(68% 0.20 14);  --accent-hover: oklch(74% 0.18 14);  --accent-muted: oklch(68% 0.20 14 / 0.16);  --accent-foreground:#FFFFFF; }
-.theme-dark[data-accent="amber"]   { --accent: oklch(78% 0.16 75);  --accent-hover: oklch(84% 0.14 75);  --accent-muted: oklch(78% 0.16 75 / 0.16);  --accent-foreground:#0A0A0F; }
-.theme-dark[data-accent="cyan"]    { --accent: oklch(74% 0.13 215); --accent-hover: oklch(80% 0.11 215); --accent-muted: oklch(74% 0.13 215 / 0.16); --accent-foreground:#0A0A0F; }
+/* Dark theme accents */
+.theme-dark[data-accent="indigo"] {
+  --accent: #5266eb;
+  --accent-hover: #6577f0;
+  --accent-muted: rgba(82, 102, 235, 0.16);
+  --accent-foreground: #ffffff;
+} /* Mercury Blue */
+.theme-dark[data-accent="violet"] {
+  --accent: #7c5fe8;
+  --accent-hover: #8b71ec;
+  --accent-muted: rgba(124, 95, 232, 0.16);
+  --accent-foreground: #ffffff;
+}
+.theme-dark[data-accent="emerald"] {
+  --accent: #4caf8e;
+  --accent-hover: #5cbf9d;
+  --accent-muted: rgba(76, 175, 142, 0.16);
+  --accent-foreground: #0d0d12;
+}
+.theme-dark[data-accent="rose"] {
+  --accent: #e85a7a;
+  --accent-hover: #ec6e8a;
+  --accent-muted: rgba(232, 90, 122, 0.16);
+  --accent-foreground: #ffffff;
+}
+.theme-dark[data-accent="amber"] {
+  --accent: #d4a04a;
+  --accent-hover: #ddae5d;
+  --accent-muted: rgba(212, 160, 74, 0.16);
+  --accent-foreground: #0d0d12;
+}
+.theme-dark[data-accent="cyan"] {
+  --accent: #4ab5d4;
+  --accent-hover: #5ec3de;
+  --accent-muted: rgba(74, 181, 212, 0.16);
+  --accent-foreground: #0d0d12;
+}
 
-/* Light theme accents — slightly deeper for contrast on white */
-.theme-light[data-accent="indigo"]  { --accent: oklch(54% 0.21 274); --accent-hover: oklch(48% 0.22 274); --accent-muted: oklch(54% 0.21 274 / 0.10); --accent-foreground:#FFFFFF; }
-.theme-light[data-accent="violet"]  { --accent: oklch(52% 0.24 300); --accent-hover: oklch(46% 0.25 300); --accent-muted: oklch(52% 0.24 300 / 0.10); --accent-foreground:#FFFFFF; }
-.theme-light[data-accent="emerald"] { --accent: oklch(56% 0.16 158); --accent-hover: oklch(50% 0.17 158); --accent-muted: oklch(56% 0.16 158 / 0.10); --accent-foreground:#FFFFFF; }
-.theme-light[data-accent="rose"]    { --accent: oklch(56% 0.21 14);  --accent-hover: oklch(50% 0.22 14);  --accent-muted: oklch(56% 0.21 14 / 0.10);  --accent-foreground:#FFFFFF; }
-.theme-light[data-accent="amber"]   { --accent: oklch(64% 0.16 70);  --accent-hover: oklch(58% 0.17 70);  --accent-muted: oklch(64% 0.16 70 / 0.12);  --accent-foreground:#0A0A0F; }
-.theme-light[data-accent="cyan"]    { --accent: oklch(58% 0.13 215); --accent-hover: oklch(52% 0.14 215); --accent-muted: oklch(58% 0.13 215 / 0.10); --accent-foreground:#FFFFFF; }
+/* Light theme accents — slightly deeper, same monochrome discipline */
+.theme-light[data-accent="indigo"] {
+  --accent: #4051d6;
+  --accent-hover: #3644c4;
+  --accent-muted: rgba(64, 81, 214, 0.1);
+  --accent-foreground: #ffffff;
+}
+.theme-light[data-accent="violet"] {
+  --accent: #6347d4;
+  --accent-hover: #553bc2;
+  --accent-muted: rgba(99, 71, 212, 0.1);
+  --accent-foreground: #ffffff;
+}
+.theme-light[data-accent="emerald"] {
+  --accent: #2d8a6e;
+  --accent-hover: #257858;
+  --accent-muted: rgba(45, 138, 110, 0.1);
+  --accent-foreground: #ffffff;
+}
+.theme-light[data-accent="rose"] {
+  --accent: #d13d62;
+  --accent-hover: #bc3354;
+  --accent-muted: rgba(209, 61, 98, 0.1);
+  --accent-foreground: #ffffff;
+}
+.theme-light[data-accent="amber"] {
+  --accent: #b07a1f;
+  --accent-hover: #966719;
+  --accent-muted: rgba(176, 122, 31, 0.12);
+  --accent-foreground: #ffffff;
+}
+.theme-light[data-accent="cyan"] {
+  --accent: #2783a8;
+  --accent-hover: #207094;
+  --accent-muted: rgba(39, 131, 168, 0.1);
+  --accent-foreground: #ffffff;
+}
 
 /* ============================================================
    Base resets within a themed scope
@@ -174,14 +261,20 @@
   font-family: var(--font-sans);
   font-size: var(--fs-base);
   line-height: var(--lh-base);
+  letter-spacing: var(--tracking-tight);
   background: var(--background);
   color: var(--text-primary);
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
 }
 
-.themed *, .themed *::before, .themed *::after {
+.themed *,
+.themed *::before,
+.themed *::after {
   box-sizing: border-box;
 }
 
-.themed ::selection { background: var(--accent-muted); color: var(--text-primary); }
+.themed ::selection {
+  background: var(--accent-muted);
+  color: var(--text-primary);
+}
