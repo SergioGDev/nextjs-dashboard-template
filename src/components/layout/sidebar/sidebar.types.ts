@@ -13,6 +13,7 @@ export type SidebarLink = {
   badge?: SidebarBadge;
   count?: number;
   disabled?: boolean;
+  exact?: boolean;
 };
 
 export type SidebarGroup = {

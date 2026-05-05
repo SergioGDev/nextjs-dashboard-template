@@ -14,6 +14,7 @@ export const routes = {
   },
   ui: {
     overview: '/ui',
+    foundations: '/ui/foundations',
     toasts: '/ui/toasts',
     emptyStates: '/ui/empty-states',
     errorStates: '/ui/error-states',

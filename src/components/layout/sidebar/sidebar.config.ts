@@ -7,6 +7,7 @@ import {
   Sparkles,
   Layers,
   PanelLeft,
+  Palette,
 } from 'lucide-react';
 import { routes } from '@config/routes';
 import type { SidebarConfig } from './sidebar.types';
@@ -23,7 +24,7 @@ export const sidebarConfig: SidebarConfig = [
         label: 'sidebar.items.reports',
         icon: FileText,
         children: [
-          { type: 'link', label: 'sidebar.items.reportsOverview', href: routes.reports.overview },
+          { type: 'link', label: 'sidebar.items.reportsOverview', href: routes.reports.overview, exact: true },
           { type: 'link', label: 'sidebar.items.reportsScheduled', href: routes.reports.scheduled },
           { type: 'link', label: 'sidebar.items.reportsArchived', href: routes.reports.archived },
         ],
@@ -36,7 +37,8 @@ export const sidebarConfig: SidebarConfig = [
     id: 'ui',
     title: 'sidebar.sections.ui',
     items: [
-      { type: 'link', label: 'sidebar.items.uiOverview', href: routes.ui.overview, icon: Sparkles },
+      { type: 'link', label: 'sidebar.items.uiOverview', href: routes.ui.overview, icon: Sparkles, exact: true },
+      { type: 'link', label: 'sidebar.items.uiFoundations', href: routes.ui.foundations, icon: Palette },
       {
         type: 'group',
         label: 'sidebar.items.uiComponents',

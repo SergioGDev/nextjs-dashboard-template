@@ -1,0 +1,171 @@
+{
+  "title": "Foundations",
+  "subtitle": "The design tokens, primitives, and rules that everything else in the system is built on. Browse colors, typography, spacing, motion, and the principles behind them.",
+  "toc": {
+    "label": "On this page",
+    "philosophy": "Design philosophy",
+    "colors": "Colors",
+    "typography": "Typography",
+    "spacing": "Spacing",
+    "radii": "Radii",
+    "elevation": "Elevation",
+    "motion": "Motion",
+    "iconography": "Iconography"
+  },
+  "philosophy": {
+    "title": "Design philosophy",
+    "subtitle": "Six principles inherited from the Mercury system that shape every component decision.",
+    "principles": {
+      "sharp_cards": {
+        "title": "Cards are sharp",
+        "description": "Cards use --radius-lg: 0px. The sharpness is the most distinctive signature of the system, contrasting with pill-shaped controls."
+      },
+      "pill_controls": {
+        "title": "Controls are pills",
+        "description": "Buttons and inputs use --radius-pill: 32px. The full-pill geometry makes interactive elements feel approachable against the sharp container chrome."
+      },
+      "positive_tracking": {
+        "title": "Positive tracking",
+        "description": "Letter-spacing is slightly positive (0.005em). Most dashboards use negative tracking to look modern; we go the opposite way for a calmer, more legible read."
+      },
+      "weight_ceiling": {
+        "title": "Weight ceiling at 530",
+        "description": "No font weight ever exceeds 530. Hierarchy is built through size, color, and tracking — never through bold black-on-white shouting."
+      },
+      "layering_over_shadow": {
+        "title": "Layering over shadow",
+        "description": "Elevation is communicated by stacking surface tones (background → surface → surface-raised), not by drop shadows. Shadows exist only for floating overlays."
+      },
+      "monochrome_accent": {
+        "title": "Monochrome accent",
+        "description": "The interface is overwhelmingly neutral. Accent color is reserved for primary actions, focus rings, and active states — never for decoration."
+      }
+    }
+  },
+  "colors": {
+    "title": "Colors",
+    "subtitle": "Surface, text, border, and semantic tokens. Every value adapts to dark/light themes through CSS custom properties.",
+    "surfaces": {
+      "title": "Surfaces",
+      "description": "Four surface levels create vertical depth. Stack them — never reach for a shadow first.",
+      "background_role": "Page background",
+      "surface_role": "Card surface",
+      "surface_raised_role": "Raised surface",
+      "surface_sunk_role": "Sunk well"
+    },
+    "text": {
+      "title": "Text",
+      "description": "Four-tier text hierarchy. Pair primary with body copy and headings; reserve subtle for placeholders and disabled state.",
+      "primary_role": "Primary text",
+      "secondary_role": "Secondary text",
+      "muted_role": "Muted text",
+      "subtle_role": "Subtle text"
+    },
+    "borders": {
+      "title": "Borders",
+      "description": "Lead-based hairlines that read as borders without competing with content. Focus inherits the active accent.",
+      "default_role": "Default border",
+      "strong_role": "Strong border",
+      "focus_role": "Focus ring (accent)"
+    },
+    "semantic": {
+      "title": "Semantic",
+      "description": "Four semantic intents, each with a solid and a muted background companion. Desaturated to feel native to the system.",
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error",
+      "info": "Info",
+      "muted_suffix": "Muted"
+    },
+    "accent": {
+      "title": "Accent",
+      "description": "Six accent presets are swappable at runtime via the [data-accent] attribute. Try one — it only re-themes this section, not the rest of the app.",
+      "picker_label": "Try an accent",
+      "demo_button": "Primary action",
+      "demo_text": "Accent text"
+    }
+  },
+  "typography": {
+    "title": "Typography",
+    "subtitle": "Inter for prose, JetBrains Mono for code. Font weights are capped at 530 and tracking runs slightly positive.",
+    "families": {
+      "title": "Families",
+      "description": "Inter substitutes Mercury's proprietary arcadia. JetBrains Mono is reserved for monospace contexts: code, token names, tabular numbers."
+    },
+    "scale": {
+      "title": "Scale",
+      "description": "Seven sizes from --fs-xs (11px) to --fs-3xl (32px), each paired with a matching --lh-* line-height token."
+    },
+    "weights": {
+      "title": "Weights",
+      "description": "Four weight tokens, all clamped at 530 or below. The system never goes heavier — the boldest text is still light by conventional standards."
+    },
+    "tracking": {
+      "title": "Tracking",
+      "description": "Mercury uses subtly POSITIVE tracking (+0.005em on body) instead of the negative tracking common in modern UI. This is one of the most defining personality shifts.",
+      "note": "Mercury uses positive tracking. Negative tracking is never used in this system."
+    }
+  },
+  "spacing": {
+    "title": "Spacing",
+    "subtitle": "A 4px-based scale from 0 to 64px covering all gaps, padding and margins in the system.",
+    "description": "Twelve tokens with predictable doubling (--space-1 through --space-16). Use these tokens directly; avoid arbitrary pixel values."
+  },
+  "radii": {
+    "title": "Radii",
+    "subtitle": "Seven tokens that encode two of Mercury's most distinctive signatures: sharp cards and pill controls.",
+    "description": "Containers and small elements use small radii (0–4px). Buttons and inputs use --radius-pill (32px) and --radius-pill-lg (40px). Badges and dots use --radius-full.",
+    "signature_sharp": "Cards are sharp",
+    "signature_pill": "Controls are pills"
+  },
+  "elevation": {
+    "title": "Elevation",
+    "subtitle": "Mercury layers depth through surface tone, not box-shadow. Shadows exist for floating elements only.",
+    "layering": {
+      "title": "Surface layering (primary)",
+      "description": "Four surface tokens stack to create depth: --surface-sunk below, --background as canvas, --surface for cards, --surface-raised for elements that pop forward."
+    },
+    "shadows": {
+      "title": "Box shadows (secondary)",
+      "description": "--shadow-card is reserved for light theme only — a 1px hairline of contrast, no blur drama. --shadow-pop is for popovers, dropdowns and tooltips in both themes.",
+      "dark_note": "No shadow in dark theme — by design.",
+      "pop_note": "Used by popovers, dropdowns, tooltips."
+    }
+  },
+  "motion": {
+    "title": "Motion",
+    "subtitle": "Three durations, two easings. Most UI motion uses --ease-out at --dur-fast or --dur-base.",
+    "durations": {
+      "title": "Durations",
+      "description": "--dur-fast for hover and focus reactions. --dur-base for most state transitions. --dur-slow for overlays entering and leaving."
+    },
+    "easings": {
+      "title": "Easings",
+      "description": "--ease-out for outgoing motion (most UI). --ease-in-out for symmetric transitions like overlays opening and closing."
+    },
+    "demo": {
+      "title": "Demo",
+      "replay": "Replay all"
+    }
+  },
+  "iconography": {
+    "title": "Iconography",
+    "subtitle": "Lucide icons with consistent sizing and stroke-width across the system.",
+    "library": {
+      "title": "Library",
+      "description": "Lucide React is the only icon library. Always import from lucide-react and never inline SVGs."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Four canonical sizes: 14px in navigation, 16px inline with text, 20px in buttons and form controls, 24px for display contexts. Stroke-width stays at the Lucide default (2).",
+      "nav": "Navigation",
+      "inline": "Inline with text",
+      "control": "Buttons & controls",
+      "display": "Display"
+    }
+  },
+  "localization": {
+    "title": "Localization",
+    "description": "Token names, hex values, and unit suffixes are intentionally left untranslated — they are part of the design system's vocabulary. Only descriptive prose is localized."
+  }
+}

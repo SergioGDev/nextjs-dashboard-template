@@ -39,10 +39,11 @@
       "subtitle": "Component library and design system reference for the NexDash template. Browse, preview, and copy code snippets for every component."
     },
     "componentCount": "{count, plural, one {# component} other {# components}}",
+    "sectionCount": "{count, plural, one {# section} other {# sections}}",
     "categories": {
       "foundations": {
         "label": "Foundations",
-        "description": "Colors, typography, spacing, icons"
+        "description": "Tokens, philosophy, colors, typography, motion"
       },
       "inputs": {
         "label": "Inputs",

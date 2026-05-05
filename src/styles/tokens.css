@@ -74,8 +74,10 @@
 
   /* Motion */
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 120ms;
   --dur-base: 180ms;
+  --dur-slow: 240ms;
 
   /* Default accent — Mercury Blue. Swapped at runtime via [data-accent]. */
   --accent: #5266eb;

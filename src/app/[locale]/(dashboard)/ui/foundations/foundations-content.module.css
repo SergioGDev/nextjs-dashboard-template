@@ -1,0 +1,54 @@
+@keyframes nx-foundations-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes nx-foundations-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(64px);
+  }
+}
+
+.pulseFast {
+  animation: nx-foundations-pulse var(--dur-fast) var(--ease-out) infinite;
+}
+.pulseBase {
+  animation: nx-foundations-pulse var(--dur-base) var(--ease-out) infinite;
+}
+.pulseSlow {
+  animation: nx-foundations-pulse var(--dur-slow) var(--ease-out) infinite;
+}
+
+.easeOutLoop {
+  animation: nx-foundations-slide 1500ms var(--ease-out) infinite alternate;
+}
+.easeInOutLoop {
+  animation: nx-foundations-slide 1500ms var(--ease-in-out) infinite alternate;
+}
+
+.cellFastOut {
+  animation: nx-foundations-slide var(--dur-fast) var(--ease-out) 1 forwards;
+}
+.cellBaseOut {
+  animation: nx-foundations-slide var(--dur-base) var(--ease-out) 1 forwards;
+}
+.cellSlowOut {
+  animation: nx-foundations-slide var(--dur-slow) var(--ease-out) 1 forwards;
+}
+.cellFastInOut {
+  animation: nx-foundations-slide var(--dur-fast) var(--ease-in-out) 1 forwards;
+}
+.cellBaseInOut {
+  animation: nx-foundations-slide var(--dur-base) var(--ease-in-out) 1 forwards;
+}
+.cellSlowInOut {
+  animation: nx-foundations-slide var(--dur-slow) var(--ease-in-out) 1 forwards;
+}

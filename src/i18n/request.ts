@@ -15,7 +15,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
 });
 
 async function loadMessages(locale: string) {
-  const [common, auth, dashboard, analytics, users, reports, settings, uiShowcase] =
+  const [common, auth, dashboard, analytics, users, reports, settings, uiShowcase, foundations] =
     await Promise.all([
       import(`../messages/${locale}/common.json`).then((m) => m.default),
       import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
@@ -25,7 +25,8 @@ async function loadMessages(locale: string) {
       import(`../features/reports/i18n/${locale}.json`).then((m) => m.default),
       import(`../features/settings/i18n/${locale}.json`).then((m) => m.default),
       import(`../features/ui-showcase/i18n/${locale}.json`).then((m) => m.default),
+      import(`../features/ui-showcase/i18n/foundations-${locale}.json`).then((m) => m.default),
     ]);
 
-  return { common, auth, dashboard, analytics, users, reports, settings, uiShowcase };
+  return { common, auth, dashboard, analytics, users, reports, settings, uiShowcase, foundations };
 }

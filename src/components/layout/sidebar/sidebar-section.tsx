@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { SidebarLink } from './sidebar-link';
 import { SidebarGroup } from './sidebar-group';
+import { isLinkActive } from './is-link-active';
 import type { SidebarSection as SidebarSectionType } from './sidebar.types';
 
 interface SidebarSectionProps {
@@ -33,15 +34,11 @@ export function SidebarSection({
       )}
       {section.items.map((item) => {
         if (item.type === 'link') {
-          const isActive =
-            item.href === '/'
-              ? pathname === '/'
-              : pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <SidebarLink
               key={item.href}
               item={item}
-              isActive={isActive}
+              isActive={isLinkActive(item, pathname)}
               collapsed={collapsed}
             />
           );
@@ -49,9 +46,7 @@ export function SidebarSection({
 
         const groupId = toGroupId(section.id, item.label);
         const isGroupExpanded = isExpanded(groupId);
-        const isGroupActive = item.children.some(
-          (child) => pathname === child.href || pathname.startsWith(child.href + '/')
-        );
+        const isGroupActive = item.children.some((child) => isLinkActive(child, pathname));
 
         return (
           <SidebarGroup

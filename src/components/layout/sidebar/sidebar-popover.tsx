@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { Tooltip } from '@components/ui/tooltip';
+import { isLinkActive } from './is-link-active';
 import type { SidebarGroup } from './sidebar.types';
 
 interface SidebarPopoverProps {
@@ -99,7 +100,7 @@ export function SidebarPopover({ item, activeHref, isActive }: SidebarPopoverPro
             </span>
           </div>
           {item.children.map((child) => {
-            const isChildActive = activeHref === child.href || activeHref.startsWith(child.href + '/');
+            const isChildActive = isLinkActive(child, activeHref);
             return (
               <Link
                 key={child.href}

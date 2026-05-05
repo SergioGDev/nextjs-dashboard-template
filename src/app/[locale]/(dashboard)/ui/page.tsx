@@ -19,10 +19,11 @@ interface Category {
   count: number;
   href: string | null;
   icon: React.ElementType;
+  unit?: 'components' | 'sections';
 }
 
 const categories: Category[] = [
-  { key: 'foundations', count: 0, href: null, icon: Palette },
+  { key: 'foundations', count: 8, href: routes.ui.foundations, icon: Palette, unit: 'sections' },
   { key: 'inputs', count: 0, href: null, icon: Layers },
   { key: 'display', count: 0, href: null, icon: Table2 },
   { key: 'feedback', count: 4, href: routes.ui.toasts, icon: Bell },
@@ -53,7 +54,8 @@ export default async function UiOverviewPage({ params }: { params: Promise<{ loc
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        {categories.map(({ key, count, href, icon: Icon }) => {
+        {categories.map(({ key, count, href, icon: Icon, unit = 'components' }) => {
+          const countKey = unit === 'sections' ? 'overview.sectionCount' : 'overview.componentCount';
           const inner = (
             <div className="p-5 space-y-3">
               <div className="flex items-start justify-between gap-2">
@@ -62,7 +64,7 @@ export default async function UiOverviewPage({ params }: { params: Promise<{ loc
                 </div>
                 {href ? (
                   <span className="text-xs font-medium text-[var(--text-muted)]">
-                    {t('overview.componentCount', { count })}
+                    {t(countKey, { count })}
                   </span>
                 ) : (
                   <Badge variant="muted">{t('common.comingSoon')}</Badge>

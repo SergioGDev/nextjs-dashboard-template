@@ -5,6 +5,7 @@ import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SidebarLink } from './sidebar-link';
 import { SidebarPopover } from './sidebar-popover';
+import { isLinkActive } from './is-link-active';
 import type { SidebarGroup as SidebarGroupType } from './sidebar.types';
 
 interface SidebarGroupProps {
@@ -68,19 +69,15 @@ export function SidebarGroup({
         <div>
           {/* Guide line: left border aligns with center of parent icon, continuous across all children */}
           <div className="pt-0.5 pb-1 space-y-0.5 ml-[22px] border-l border-[var(--border-strong)]">
-            {item.children.map((child) => {
-              const isChildActive =
-                activeHref === child.href || activeHref.startsWith(child.href + '/');
-              return (
-                <SidebarLink
-                  key={child.href}
-                  item={child}
-                  isActive={isChildActive}
-                  collapsed={false}
-                  isChild
-                />
-              );
-            })}
+            {item.children.map((child) => (
+              <SidebarLink
+                key={child.href}
+                item={child}
+                isActive={isLinkActive(child, activeHref)}
+                collapsed={false}
+                isChild
+              />
+            ))}
           </div>
         </div>
       </div>

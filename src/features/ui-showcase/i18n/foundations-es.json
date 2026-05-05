@@ -1,0 +1,171 @@
+{
+  "title": "Bases",
+  "subtitle": "Los design tokens, primitivas y reglas sobre las que se construye todo lo demás. Explora colores, tipografía, espaciado, motion y los principios detrás.",
+  "toc": {
+    "label": "En esta página",
+    "philosophy": "Filosofía de diseño",
+    "colors": "Colores",
+    "typography": "Tipografía",
+    "spacing": "Espaciado",
+    "radii": "Radii",
+    "elevation": "Elevación",
+    "motion": "Motion",
+    "iconography": "Iconografía"
+  },
+  "philosophy": {
+    "title": "Filosofía de diseño",
+    "subtitle": "Seis principios heredados del sistema Mercury que guían cada decisión de componente.",
+    "principles": {
+      "sharp_cards": {
+        "title": "Las cards son nítidas",
+        "description": "Las cards usan --radius-lg: 0px. La nitidez es la firma más distintiva del sistema, en contraste con los controles pill."
+      },
+      "pill_controls": {
+        "title": "Los controles son pills",
+        "description": "Botones e inputs usan --radius-pill: 32px. La geometría pill hace que los elementos interactivos se sientan accesibles frente a los contenedores nítidos."
+      },
+      "positive_tracking": {
+        "title": "Tracking positivo",
+        "description": "El letter-spacing es ligeramente positivo (0.005em). Casi todos los dashboards usan tracking negativo para parecer modernos; nosotros vamos al lado opuesto para una lectura más calmada y legible."
+      },
+      "weight_ceiling": {
+        "title": "Tope de peso en 530",
+        "description": "Ningún peso de fuente supera 530. La jerarquía se construye por tamaño, color y tracking — nunca con bold black-on-white."
+      },
+      "layering_over_shadow": {
+        "title": "Capas en lugar de sombras",
+        "description": "La elevación se comunica apilando tonos de superficie (background → surface → surface-raised), no con drop shadows. Las sombras se reservan para overlays flotantes."
+      },
+      "monochrome_accent": {
+        "title": "Accent monocromo",
+        "description": "La interfaz es abrumadoramente neutra. El color accent se reserva para acciones primarias, focus rings y estados activos — nunca para decoración."
+      }
+    }
+  },
+  "colors": {
+    "title": "Colores",
+    "subtitle": "Tokens de superficie, texto, borde y semánticos. Cada valor se adapta a temas dark/light mediante CSS custom properties.",
+    "surfaces": {
+      "title": "Superficies",
+      "description": "Cuatro niveles de superficie crean profundidad vertical. Apílalos — no recurras antes a una sombra.",
+      "background_role": "Fondo de página",
+      "surface_role": "Superficie de card",
+      "surface_raised_role": "Superficie elevada",
+      "surface_sunk_role": "Pozo hundido"
+    },
+    "text": {
+      "title": "Texto",
+      "description": "Jerarquía de texto en cuatro niveles. Empareja primary con copy y headings; reserva subtle para placeholders y estado disabled.",
+      "primary_role": "Texto primario",
+      "secondary_role": "Texto secundario",
+      "muted_role": "Texto muted",
+      "subtle_role": "Texto sutil"
+    },
+    "borders": {
+      "title": "Bordes",
+      "description": "Líneas hairline basadas en Lead que se leen como bordes sin competir con el contenido. El focus hereda el accent activo.",
+      "default_role": "Borde por defecto",
+      "strong_role": "Borde fuerte",
+      "focus_role": "Focus ring (accent)"
+    },
+    "semantic": {
+      "title": "Semánticos",
+      "description": "Cuatro intents semánticos, cada uno con un sólido y un fondo muted acompañante. Desaturados para sentirse nativos al sistema.",
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error",
+      "info": "Info",
+      "muted_suffix": "Muted"
+    },
+    "accent": {
+      "title": "Accent",
+      "description": "Seis presets de accent intercambiables en runtime mediante el atributo [data-accent]. Prueba uno — solo re-tematiza esta sección, no el resto de la app.",
+      "picker_label": "Prueba un accent",
+      "demo_button": "Acción primaria",
+      "demo_text": "Texto accent"
+    }
+  },
+  "typography": {
+    "title": "Tipografía",
+    "subtitle": "Inter para prosa, JetBrains Mono para código. Los font weights están limitados a 530 y el tracking es ligeramente positivo.",
+    "families": {
+      "title": "Familias",
+      "description": "Inter sustituye al propietario arcadia de Mercury. JetBrains Mono se reserva para contextos monospace: código, nombres de tokens, números tabulares."
+    },
+    "scale": {
+      "title": "Escala",
+      "description": "Siete tamaños desde --fs-xs (11px) hasta --fs-3xl (32px), cada uno emparejado con un token --lh-* de line-height."
+    },
+    "weights": {
+      "title": "Pesos",
+      "description": "Cuatro tokens de peso, todos limitados a 530 o por debajo. El sistema nunca va más pesado — el texto más bold sigue siendo light según los estándares convencionales."
+    },
+    "tracking": {
+      "title": "Tracking",
+      "description": "Mercury usa tracking sutilmente POSITIVO (+0.005em en body) en lugar del tracking negativo común en UI moderna. Es uno de los cambios de personalidad más definitorios.",
+      "note": "Mercury usa tracking positivo. El tracking negativo no se usa nunca en este sistema."
+    }
+  },
+  "spacing": {
+    "title": "Espaciado",
+    "subtitle": "Una escala basada en 4px desde 0 hasta 64px que cubre todos los gaps, padding y margins del sistema.",
+    "description": "Doce tokens con doblado predecible (--space-1 hasta --space-16). Usa estos tokens directamente; evita valores arbitrarios en píxeles."
+  },
+  "radii": {
+    "title": "Radii",
+    "subtitle": "Siete tokens que codifican dos de las firmas más distintivas de Mercury: cards sharp y controles pill.",
+    "description": "Containers y elementos pequeños usan radios bajos (0–4px). Botones e inputs usan --radius-pill (32px) y --radius-pill-lg (40px). Badges y dots usan --radius-full.",
+    "signature_sharp": "Las cards son sharp",
+    "signature_pill": "Los controles son pill"
+  },
+  "elevation": {
+    "title": "Elevación",
+    "subtitle": "Mercury construye profundidad por tono de superficie, no por box-shadow. Las sombras existen solo para elementos flotantes.",
+    "layering": {
+      "title": "Surface layering (primario)",
+      "description": "Cuatro tokens de superficie se apilan para crear profundidad: --surface-sunk debajo, --background como lienzo, --surface para cards, --surface-raised para elementos que saltan al frente."
+    },
+    "shadows": {
+      "title": "Box shadows (secundario)",
+      "description": "--shadow-card se reserva para light theme — solo una línea de contraste de 1px, sin blur. --shadow-pop se usa para popovers, dropdowns y tooltips en ambos temas.",
+      "dark_note": "Sin sombra en dark theme — por diseño.",
+      "pop_note": "Se usa en popovers, dropdowns, tooltips."
+    }
+  },
+  "motion": {
+    "title": "Motion",
+    "subtitle": "Tres duraciones, dos easings. La mayoría del movimiento UI usa --ease-out con --dur-fast o --dur-base.",
+    "durations": {
+      "title": "Duraciones",
+      "description": "--dur-fast para reacciones de hover y focus. --dur-base para la mayoría de transiciones de estado. --dur-slow para overlays que entran o salen."
+    },
+    "easings": {
+      "title": "Easings",
+      "description": "--ease-out para movimientos de salida (la mayoría de la UI). --ease-in-out para transiciones simétricas como overlays que se abren y cierran."
+    },
+    "demo": {
+      "title": "Demo",
+      "replay": "Repetir todo"
+    }
+  },
+  "iconography": {
+    "title": "Iconografía",
+    "subtitle": "Iconos Lucide con tamaño y stroke-width consistentes en todo el sistema.",
+    "library": {
+      "title": "Librería",
+      "description": "Lucide React es la única librería de iconos. Importa siempre desde lucide-react y nunca uses SVGs inline."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "description": "Cuatro tamaños canónicos: 14px en navegación, 16px en línea con texto, 20px en botones y form controls, 24px en contextos de display. El stroke-width se queda en el default de Lucide (2).",
+      "nav": "Navegación",
+      "inline": "En línea con texto",
+      "control": "Botones y controles",
+      "display": "Display"
+    }
+  },
+  "localization": {
+    "title": "Localización",
+    "description": "Los nombres de token, valores hex y sufijos de unidad se dejan deliberadamente sin traducir — forman parte del vocabulario del design system. Solo se localiza la prosa descriptiva."
+  }
+}

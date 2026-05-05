@@ -39,10 +39,11 @@
       "subtitle": "Librería de componentes y referencia del sistema de diseño de la plantilla NexDash. Explora, previsualiza y copia los snippets de cada componente."
     },
     "componentCount": "{count, plural, one {# componente} other {# componentes}}",
+    "sectionCount": "{count, plural, one {# sección} other {# secciones}}",
     "categories": {
       "foundations": {
-        "label": "Fundamentos",
-        "description": "Colores, tipografía, espaciado, iconos"
+        "label": "Bases",
+        "description": "Tokens, filosofía, colores, tipografía, motion"
       },
       "inputs": {
         "label": "Inputs",

@@ -6,6 +6,216 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6a.4] Sidebar active matcher fix + "Foundations" → "Bases" (ES) — 2026-05-05
+
+Dos paper cuts detectados tras cerrar B6a, arreglados antes de arrancar B6b. Sin cambios funcionales más allá de estos dos puntos.
+
+### Fix: sidebar active state
+
+El item `Overview` (`href: /ui`) se marcaba como activo en cualquier ruta hija de `/ui` (Foundations, Toasts, Empty states, etc.). El bug también afectaba latentemente al item `Reports overview` (`href: /reports`) cuando se navegaba a `/reports/scheduled` o `/reports/archived` — los dos quedaban marcados.
+
+Causa: `sidebar-section.tsx` aplicaba prefix match (`pathname === href || pathname.startsWith(href + '/')`) a todos los `type: 'link'`. El único caso especial era `href === '/'` para Dashboard.
+
+Solución (Option A del plan, no Option B): nueva propiedad `exact?: boolean` en `SidebarLink`. Items con `exact: true` se matchean sólo exactamente; el resto mantiene el comportamiento anterior (prefix-or-exact).
+
+Razón para descartar Option B (default exact, prefix opt-in via `children`): este codebase no tiene "items con children" navegables — los grupos no son links. Pero hay leaf links que SÍ deben hacer prefix match (p. ej. `Users` con `/users` y `/users/{id}` para detalle de usuario, donde detalle no aparece en el sidebar). Option B regresaría ese caso.
+
+Cambios:
+- `sidebar.types.ts`: nueva prop `exact?: boolean` en `SidebarLink`.
+- `is-link-active.ts`: nuevo helper que centraliza la lógica (`exact || href === '/' → exact match; else prefix-or-exact`). Usado por section, group y popover para evitar duplicación.
+- `sidebar-section.tsx`, `sidebar-group.tsx`, `sidebar-popover.tsx`: reemplazado el matcher inline por el helper.
+- `sidebar.config.ts`: marcado `exact: true` en los dos items que lo necesitan (Reports overview y UI Overview). Resto intacto.
+
+Comportamiento verificado:
+- `/ui` → `Overview` activo, `Bases`/`Foundations` no.
+- `/ui/foundations` → `Bases` activo, `Overview` no.
+- `/ui/toasts` → `Toasts` activo, `Overview` no.
+- `/reports/scheduled` → `Scheduled` activo, `Overview` (de Reports) no, grupo `Reports` se mantiene como contenedor del activo.
+- `/users/123` → `Users` activo (preservado).
+- `/` → `Dashboard` activo (preservado).
+- `/analytics` → `Analytics` activo, `Dashboard` no (preservado).
+
+### i18n: "Foundations" → "Bases" (ES)
+
+Reemplazado en las tres strings ES visibles que mostraban el label:
+- `src/messages/es/common.json` → `sidebar.items.uiFoundations: "Bases"` (label del sidebar).
+- `src/features/ui-showcase/i18n/foundations-es.json` → `title: "Bases"` (h1 de la página).
+- `src/features/ui-showcase/i18n/es.json` → `overview.categories.foundations.label: "Bases"` (card del overview de `/ui`).
+
+Inglés intacto: `Foundations` sigue en EN en todos los archivos.
+
+URLs intactas: `/ui/foundations` sigue siendo la ruta en ambos idiomas (`routes.ui.foundations` no se toca).
+
+Identifiers de código intactos: `FoundationsContent`, `FoundationsPage`, namespace `foundations`, archivo `foundations-{en,es}.json`, `routes.ui.foundations`. Todo lo que no se ve en UI permanece como referencia técnica al concepto del design system.
+
+### Verificación
+
+- `npm run lint` → 0 errores nuevos.
+- `npm run build` → 38 páginas.
+
+### B6a sigue CERRADO
+
+B6a.4 es un fix post-cierre, no parte del scope original de B6a. Próximo: **B6b — Inputs básicos**.
+
+---
+
+## [B6a.3] Foundations — Elevation, Motion, Iconography + cierre B6a — 2026-05-05
+
+Tercer y último sub-bloque de B6a. Añade las 3 secciones que faltaban (Elevation, Motion, Iconography), expone Foundations en el sidebar y en el overview, y crea `docs/foundations.md`. **B6a queda CERRADO**: las 8 secciones de Foundations están con contenido y la página es navegable desde la propia UI.
+
+### Cambios
+
+- **ElevationSection** (`id="elevation"`):
+  - **Surface layering**: torre visual de 4 superficies anidadas (`--surface-sunk` → `--background` → `--surface` → `--surface-raised`), cada nivel con su label en font-mono y border sutil para que se distinga incluso cuando la diferencia tonal es mínima. Decisión: omitida la grid duplicada de TokenSwatch (los 4 surfaces ya están en Colors); la torre los enseña en su rol de elevación.
+  - **Box shadows**: 2 cards demo (`--shadow-card` y `--shadow-pop`) con notas explicativas (`shadows.dark_note` y `shadows.pop_note`). En dark, la card de `--shadow-card` aparece sin sombra — comportamiento correcto y documentado.
+- **MotionSection** (`id="motion"`):
+  - **Durations**: 3 `TokenRow` (`--dur-fast`, `--dur-base`, `--dur-slow`) con preview siendo un pulse infinito (opacity 0.3↔1) con la duración del token.
+  - **Easings**: 2 `TokenRow` (`--ease-out`, `--ease-in-out`) con mini-track 80×20px y cuadrado animado en bucle alternate de 1500ms con el easing del token.
+  - **Demo grid 3×2**: 6 cells (3 duraciones × 2 easings) con botón "Replay all" (icono `RotateCcw`). El botón incrementa una `key` en el contenedor que fuerza re-mount y reinicia las 6 animaciones a la vez. Cada cell usa una clase del CSS module con `animation-iteration-count: 1` y `fill-mode: forwards`.
+  - Animaciones implementadas en CSS module local (`foundations-content.module.css`): keyframes `nx-foundations-pulse` y `nx-foundations-slide` + 11 clases (3 pulse, 2 loop, 6 cell). `tokens.css` y `components.css` intactos.
+- **IconographySection** (`id="iconography"`):
+  - **Library**: card con `import` statement (font-mono) y rejilla de 12 iconos representativos a 20px con hover transition al `--text-primary`.
+  - **Sizes**: variante inline tipo TokenRow con grid `[80px, 160px, 1fr]` mostrando los 4 tamaños canónicos (14, 16, 20, 24) con `Search` como icono de muestra. NO se reusa `TokenRow` porque no hay var name semánticamente correcto para tamaños de icono.
+- **i18n** (`foundations-en.json` + `foundations-es.json`):
+  - Subtitles y descriptions de elevation/motion/iconography reescritos para alinearse con la prosa propuesta en el plan.
+  - Nuevas claves: `elevation.shadows.dark_note`, `elevation.shadows.pop_note`, `iconography.sizes.{nav,inline,control,display}`.
+  - **Stroke-width corregido**: el plan sugería documentar 1.75 como default, pero el código del proyecto NO setea `strokeWidth` en ningún uso de Lucide React, por lo que se aplica el default real de la librería (2). Documentado correctamente como "stays at the Lucide default (2)".
+- **Sidebar `/ui`** (`sidebar.config.ts`):
+  - Foundations añadido como entrada directa después de Overview, ANTES del grupo Components. Icono `Palette` (mismo que el overview, evita reusar `Layers` ya empleado por el grupo Components).
+  - Etiqueta i18n nueva: `common.json` → `sidebar.items.uiFoundations` ("Foundations" en EN y ES — mantener nombre en inglés por consistencia con el resto de nombres del design system).
+- **Overview `/ui`** (`/ui/page.tsx`):
+  - Foundations cambia de "Coming soon" (`count: 0, href: null`) a card activa (`count: 8, href: routes.ui.foundations`).
+  - Sigue siendo la primera del array (no se ha cambiado el orden).
+  - Nueva propiedad `unit?: 'components' | 'sections'` en el tipo `Category`. Foundations usa `unit: 'sections'`; el resto mantiene `'components'` por defecto.
+  - Nueva clave i18n `uiShowcase.overview.sectionCount` con plural ICU equivalente al `componentCount` existente.
+  - Descripción de la categoría Foundations actualizada en EN ("Tokens, philosophy, colors, typography, motion") y ES (equivalente). La anterior ("Colors, typography, spacing, icons") quedaba corta.
+- **`docs/foundations.md`**: documento nuevo con estructura, componentes auxiliares, política i18n, comportamiento de `AccentScope`, animaciones de Motion, cuándo actualizar la página e integración.
+
+### Decisiones tomadas
+
+- **CSS module local** (`foundations-content.module.css`) en lugar de tocar `components.css` global. Razón: las animaciones son específicas de la página Foundations y no se usan en ningún otro sitio. Mantener el scope local evita polución del CSS global y permite que futuros refactors de Foundations no toquen archivos compartidos.
+- **Re-mount con `key`** para "Replay all" en lugar de manipular `transition` y `transform` con state. Razón: simpler, robusto, declarativo. Cada cell tiene una sola clase CSS con la animación; el re-mount reinicia el ciclo. Sin riesgos de race conditions o transiciones interrumpidas.
+- **Preview de Easings con cuadrado en bucle alternate**, no curva Bézier en SVG. Razón: el cuadrado moviéndose comunica intuitivamente la diferencia entre `--ease-out` (acelera al final) y `--ease-in-out` (simétrico). Calcular la curva en SVG sería más preciso pero menos legible para alguien sin background de motion design.
+- **Stroke-width documentado como 2** (Lucide default), no 1.75 como sugería el plan. Razón: verificación empírica en el código — no hay uso de `strokeWidth` prop en ningún Lucide del proyecto, por lo que se aplica el default real de la librería.
+- **Foundations como link directo en el sidebar**, no dentro del grupo Components. Razón: Foundations no documenta un componente individual sino los tokens base del sistema. Está en la misma capa conceptual que Overview, no al mismo nivel que Toasts/Empty states/etc.
+- **Iconos del sidebar para Foundations**: `Palette`, mismo que el overview. Coherencia visual entre sidebar y overview ayuda al usuario a identificar la sección. `Layers` está reservado para el grupo Components.
+- **`unit: 'sections'` para Foundations** en lugar de quedarnos con "8 components". Razón: Foundations no documenta componentes sino tokens y principios; "8 sections" es semánticamente más honesto.
+
+### Verificación
+
+- `npm run lint` → 0 errores nuevos. Solo dos warnings preexistentes (no relacionados).
+- `npm run build` → 38 páginas (sin nuevas rutas; `/ui/foundations` ahora está expuesta también desde sidebar y overview).
+- TOC sin anchors muertos: las 8 entradas (`philosophy`, `colors`, `typography`, `spacing`, `radii`, `elevation`, `motion`, `iconography`) apuntan a contenido real.
+
+### Deuda técnica detectada
+
+- **Texto de los principles aún hardcoded en namespace**: `PRINCIPLE_KEYS` mapea a iconos en código. Si en el futuro se añaden o reordenan principios, hay que tocar dos sitios (i18n + array TS). Aceptable para 6 entradas, revisitar si se acerca a 10+.
+- **Re-mount de Replay grid hace flicker en navegadores lentos**: las 6 cells se desmontan y vuelven a montar al pulsar el botón. En la práctica imperceptible, pero si se vuelve molesto, alternativa: usar `Element.getAnimations()` y resetear `currentTime = 0`.
+- **Inconsistencia visual de radii en `/ui` aún sin resolver** (deuda heredada de B6a.1). Algunos paneles del showcase usan `rounded-xl` (12px tailwind), otros `--radius-md` (4px). Foundations entera usa `--radius-md`. Resolución pendiente para el cierre de B6.
+
+### Estado del bloque B6a — CERRADO
+
+- 8/8 secciones de Foundations con contenido real.
+- Página integrada en sidebar y overview.
+- `docs/foundations.md` documenta la estructura para futuros bloques de B6.
+- Próximo: **B6b — Inputs básicos**.
+
+---
+
+## [B6a.2] Foundations — Typography, Spacing, Radii — 2026-05-05
+
+Segundo sub-bloque de B6a. Añade tres secciones reales (Typography con 4 subsecciones, Spacing y Radii) a la página `/ui/foundations`. Cinco de las ocho secciones planeadas ya tienen contenido. Pendiente B6a.3 (Elevation, Motion, Iconography + integración en sidebar y overview de `/ui`).
+
+### Cambios
+
+- **TypographySection** (`foundations-content.tsx`):
+  - **Families**: dos cards lado a lado (Sans/Inter, Mono/JetBrains Mono) con palabra grande, pangram en su familia y stack CSS literal en font-mono.
+  - **Scale**: 7 `TypeSpecimen` en orden descendente (Display 3XL → Caption XS) con sample, specs (--fs, --lh, --fw, --tracking) y usage hint.
+  - **Weights**: 4 cards con "Aa" enorme, los dos tokens que llegan a 530 (`--fw-semibold` y `--fw-bold`) llevan nota italic "Capped at 530". Para `--fw-medium` y `--fw-bold` se muestra el remap "(was 500)" y "(was 700)" en `--text-subtle`.
+  - **Tracking**: nota italic con `t('tracking.note')` + tabla de 4 `TokenRow` (tracking-tight, normal, wide, wider). Cada preview renderiza la palabra muestra con su `letter-spacing` aplicado; tracking-wider usa "OVERLINE LABEL" en uppercase + `--fs-xs` para evidenciar el uso real.
+- **SpacingSection** (`id="spacing"`): 11 `TokenRow` (`--space-0` a `--space-16`). Las barras preview tienen el ancho hardcodeado en px equivalente al token (no usan `var()`) para garantizar la magnitud absoluta visualmente. `--space-0` se renderiza como una línea hairline al 50% de opacidad.
+- **RadiiSection** (`id="radii"`): dos paneles de "firma Mercury" arriba (Cards are sharp con cuadrado `--radius-lg: 0px`, Controls are pills con botón `--radius-pill: 32px`) + lista completa de los 7 tokens (`--radius-sm` a `--radius-full`) con previews proporcionales y labels para los tres con uso semántico fijo (Cards / Controls / Large CTAs / Badges, dots).
+- **i18n** (`foundations-en.json` + `foundations-es.json`):
+  - Subtitles y descriptions de typography/spacing/radii reescritos para alinearse con la prosa propuesta en el plan (más específica sobre tokens y px).
+  - Nueva clave `foundations.typography.tracking.note` añadida en EN y ES.
+  - Política híbrida confirmada: nombres de fonts (Inter, JetBrains Mono), valores (px, em, rem), tokens (`--xxx`) y términos (tracking, font-weight) en inglés en ambos idiomas.
+
+### Decisiones tomadas
+
+- **Containers de Scale, Tracking, Spacing, Radii (lista)**: todos envueltos en un panel border + `--radius-md` con `padding-x: 6` para que los `TokenRow`/`TypeSpecimen` (que usan `last:border-0`) queden visualmente enmarcados. Sin esto, las filas quedan flotando sobre el background sin afordancia de "tabla".
+- **Spacing previews con px hardcodeado**, no `var(--space-N)`. Razón: el preview comunica la magnitud absoluta del token; si el sistema redefine los px en el futuro, la imagen seguiría siendo correcta a su valor histórico.
+- **Radii previews con dos formas distintas** (cuadrados 24×24, rectángulos para pill, círculo para full): el ancho se ajusta al uso real (un pill cuadrado no leería como pill). El `border-radius` también va hardcodeado en px por la misma razón que en spacing.
+- **Weight cards renderizan "Aa" con el peso aplicado vía `font-weight` numérico**, no vía `var(--fw-*)`. Razón: necesitamos un valor numérico literal para que el navegador interpole el variable font correctamente. El nombre del token sigue mostrándose junto a la "Aa" para enseñar el binding.
+- **Pangrams en EN, no traducidos**: el patrón "The quick brown fox" es un pangram universal usado para muestras tipográficas. Traducirlo no añade valor pedagógico y rompe el patrón reconocido por diseñadores. Coherente con la política híbrida (los nombres propios y patrones técnicos van en inglés).
+
+### Verificación
+
+- `npm run lint` → 0 errores nuevos. Solo dos warnings preexistentes (no relacionados).
+- `npm run build` → 38 páginas (sin nuevas rutas, solo se enriquece `/ui/foundations`).
+
+### Deuda técnica detectada
+
+- **TOC con 3 anchors muertos restantes** (`#elevation`, `#motion`, `#iconography`). Se completan en B6a.3.
+- **`TypeSpecimen` se renderiza con `font-weight: var(--fw-*)` en `style` inline**. Esto funciona en navegadores modernos (CSS variables resuelven a número), pero es frágil con TypeScript: hay que castear `as unknown as number`. Si en el futuro se añaden más specs, considerar pasar el peso numérico directamente y dejar el token name solo como decoración.
+- **No se ha extraído la TOC a componente reusable** (decisión de B6a.1, sin cambios). La TOC sigue inline.
+
+### Estado del bloque B6a
+
+- Foundations: 5 de 8 secciones con contenido (philosophy, colors, typography, spacing, radii).
+- Pendientes: elevation, motion, iconography + integración en sidebar y `/ui` overview (B6a.3).
+
+---
+
+## [B6a.1] Foundations — setup, shell, Philosophy, Colors — 2026-05-05
+
+Primer sub-bloque de B6a (Foundations). Deja en pie el setup común, el shell de la página `/ui/foundations` (hero + TOC sticky), y dos secciones reales con contenido (Design philosophy + Colors). Las secciones Typography / Spacing / Radii (B6a.2) y Elevation / Motion / Iconography + integración (B6a.3) quedan pendientes — ya tienen entradas en la TOC y namespace i18n preparado.
+
+### Cambios
+
+- **Tokens de motion ampliados** (`src/styles/tokens.css`): añadidos `--ease-in-out: cubic-bezier(0.4, 0, 0.2, 1)` y `--dur-slow: 240ms`. Necesarios para overlays simétricos (popovers, dialogs en B6e). Documentación inline de los 5 valores se hará en B6a.3.
+- **5 componentes auxiliares de showcase** (`src/features/ui-showcase/components/`):
+  - `token-swatch.tsx` — server component. Cuadrado de color + label + descripción + var name + value opcional. Soporta tres tamaños y patrón cuadriculado para mostrar transparencias.
+  - `token-row.tsx` — server component. Fila de tabla con `--var-name`, value, preview y label. Para listar tokens en formato denso.
+  - `type-specimen.tsx` — server component. Muestra un sample de texto con sus specs (--fs-*, --lh-*, --fw-*, --tracking-*) en una columna lateral. Soporta familia mono.
+  - `accent-scope.tsx` — client component. Exporta `<AccentScope>` (provider + wrapper con `data-accent`) y `<AccentPicker>` (6 botones circulares). Comparten estado vía Context. El picker scoped solo afecta al subárbol del Scope, nunca al sidebar/topbar.
+  - `philosophy-card.tsx` — server component. Card con icon en cuadrado tinted accent, título y descripción. Usa `--radius-md` (no `nx-card` sharp) por consistencia visual con los otros paneles del showcase.
+- **Namespace i18n `foundations`** (en + es):
+  - `src/features/ui-showcase/i18n/foundations-en.json` y `foundations-es.json`
+  - Estructura completa: title, subtitle, toc (8 anchors + label), philosophy (6 principles), colors (surfaces, text, borders, semantic, accent), typography, spacing, radii, elevation, motion, iconography, localization.
+  - Política híbrida aplicada: hex, rem, px, ms, OKLCH, nombres de tokens (--xxx), nombres de fonts y de accents en inglés en ambos idiomas.
+  - Registrado como 9º namespace en `src/i18n/request.ts` siguiendo el patrón existente.
+- **Página `/ui/foundations`** (split server/client):
+  - `page.tsx` (server, 16 líneas) — exporta `generateMetadata` y renderiza `<FoundationsContent />`.
+  - `foundations-content.tsx` (client) — Hero + layout grid con TOC sticky a la derecha en lg+ y main area con las secciones. Solo Philosophy y Colors renderizan contenido; los otros 6 anchors apuntan a IDs que no existen aún (los siguientes sub-bloques los añadirán).
+- **Ruta**: `routes.ui.foundations = '/ui/foundations'` añadida en `src/config/routes.ts`. NO se ha enlazado todavía desde el sidebar ni desde el overview de `/ui` — esa integración es de B6a.3.
+
+### Decisiones tomadas durante el trabajo
+
+- **Foundations como namespace top-level** (no anidado dentro de `uiShowcase`): se carga desde un archivo separado (`foundations-{locale}.json`) en `request.ts`. Razón: la página es lo bastante densa para justificar su propio namespace, y mantenerla separada permite recargar/cachear la prosa de Foundations independientemente del resto del showcase.
+- **`AccentScope` envuelve toda la página**, no solo la subsección Accent. Razón: el toggle también re-tematiza el color del botón demo, el texto demo y los swatches accent/accent-muted que viven dentro de la sección Colors. Encapsular más arriba garantiza que cualquier uso futuro de `var(--accent)` dentro de Foundations responda al picker.
+- **`PhilosophyCard` con `--radius-md` (4px)**, no con `nx-card` (0px). El sistema base es sharp, pero los paneles internos del showcase ya usan radii suaves (ver `ShowcaseDemo` con `rounded-xl`). Mantener consistencia visual con el patrón existente del showcase pesa más que la firma sharp del sistema en este contexto documental.
+- **TOC inline dentro de `foundations-content.tsx`**, no extraído a un componente reusable: solo lo usa una página por ahora. Si en B6a.3 más páginas lo necesitan, se extrae entonces (YAGNI).
+- **Iconos para los principios**: Lucide. Para `pill_controls` usado `RectangleHorizontal` (Lucide no exporta `Pill` ni `Capsule`).
+- **`AccentPicker` con hex hardcodeados a la variante DARK** del accent: el botón debe mostrar el color de marca independientemente del tema activo (dark/light) y del accent activo. Confirmado correcto según verificación visual.
+
+### Verificación
+
+- `npm run lint` → 0 errores nuevos. Solo dos warnings preexistentes (no relacionados): `_data` unused en settings-form, `<img>` en avatar.
+- `npm run build` → 38 páginas generadas (incluye `/en/ui/foundations` y `/es/ui/foundations`).
+
+### Deuda técnica detectada
+
+- **Inconsistencia visual de radii en `/ui`**: los paneles de showcase mezclan `rounded-xl` (12px tailwind), `rounded-lg`, y ahora `--radius-md` (4px) en `PhilosophyCard`. Sería deseable unificar a una convención única (probablemente `--radius-md` para todos los paneles de showcase). NO bloqueante para B6a.1; revisitar al cerrar B6a.
+- **`AccentScope` y next-themes**: el provider no comprueba el `data-accent` de la raíz `<html>` (gestionado por `ui.store`). Esto es deliberado — el scope debe poder elegir un accent distinto al global. Si el usuario cambia el accent global mientras está en `/ui/foundations`, los dos coexisten sin sincronización. Documentar este comportamiento si se hace soporte de "reset to global accent" en el picker.
+- **TOC con anchors muertos**: los IDs `typography`, `spacing`, `radii`, `elevation`, `motion`, `iconography` aparecen en la TOC pero no existen en el DOM hasta B6a.2/B6a.3. Click hace nada. Aceptable para B6a.1 porque la TOC se completa al cerrar B6a.
+
+### Sub-bloques pendientes para cerrar B6a
+
+- **B6a.2** — Typography, Spacing, Radii.
+- **B6a.3** — Elevation, Motion, Iconography + integración: añadir `foundations` al sidebar (sección UI), incrementar el `count` de Foundations en `/ui` overview, posiblemente extraer la TOC a componente reusable, considerar `docs/foundations.md`.
+
+---
+
 ## [B6.0] Auditoría del catálogo de componentes — 2026-05-04
 
 Sub-bloque de reconocimiento previo al bloque B6 (Completar UI Showcase). Sin cambios en código de producción: solo lectura del repo y generación del documento de auditoría.
