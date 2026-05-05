@@ -1,0 +1,104 @@
+{
+  "metadata": { "title": "Users" },
+  "header": {
+    "title": "Users",
+    "subtitle": "Manage your team members and their permissions"
+  },
+  "filters": {
+    "searchPlaceholder": "Search users by name or email",
+    "roleFilter": { "all": "All roles" },
+    "statusFilter": { "all": "All statuses" },
+    "clearFilters": "Clear filters"
+  },
+  "roles": {
+    "admin": "Admin",
+    "manager": "Manager",
+    "editor": "Editor",
+    "viewer": "Viewer"
+  },
+  "statuses": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "suspended": "Suspended"
+  },
+  "columns": {
+    "user": "User",
+    "role": "Role",
+    "status": "Status",
+    "lastLogin": "Last login"
+  },
+  "actions": {
+    "newUser": "New user",
+    "delete": "Delete"
+  },
+  "empty": {
+    "noUsers": {
+      "title": "No users yet",
+      "description": "Create your first user to get started"
+    },
+    "noResults": {
+      "title": "No users found",
+      "description": "Try adjusting your filters"
+    }
+  },
+  "errors": {
+    "loadFailed": "Couldn't load users",
+    "userLoadFailed": "Couldn't load user",
+    "page": {
+      "title": "Failed to load users",
+      "description": "Something went wrong. Try again or return to the dashboard."
+    }
+  },
+  "createDialog": {
+    "title": "New user",
+    "description": "Add a new user to your workspace."
+  },
+  "deleteDialog": {
+    "title": "Delete user?",
+    "description": "\"{name}\" will be permanently deleted. This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel"
+  },
+  "toasts": {
+    "created": "User created",
+    "createFailed": "Failed to create user",
+    "deleted": "User deleted",
+    "deleteFailed": "Failed to delete user",
+    "updated": "User updated",
+    "updateFailed": "Failed to update user"
+  },
+  "validation": {
+    "nameRequired": "Name must be at least 2 characters",
+    "nameTooLong": "Name is too long",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "roleRequired": "Please select a valid role",
+    "statusRequired": "Please select a status"
+  },
+  "form": {
+    "nameLabel": "Full name",
+    "namePlaceholder": "Jane Doe",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "jane@example.com",
+    "roleLabel": "Role",
+    "statusLabel": "Status",
+    "submitLabel": "Save user",
+    "createLabel": "Create user",
+    "updateLabel": "Update user"
+  },
+  "detail": {
+    "subtitle": "User profile",
+    "fields": {
+      "joined": "Joined {date}",
+      "lastLogin": "Last login {date}"
+    },
+    "editTitle": "Edit Profile",
+    "backToUsers": "Back to users",
+    "notFound": {
+      "title": "User not found",
+      "description": "This user may have been deleted or the link is incorrect.",
+      "backToUsers": "Back to users"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "title": "Panel",
+  "subtitle": "Resumen de tus métricas principales",
+  "kpis": {
+    "deltaLabel": "vs mes anterior",
+    "error": "No se pudo cargar la métrica",
+    "totalRevenue": "Ingresos totales",
+    "activeUsers": "Usuarios activos",
+    "totalSessions": "Sesiones totales",
+    "conversionRate": "Tasa de conversión"
+  },
+  "revenueChart": {
+    "title": "Tendencia de ingresos",
+    "description": "Ingresos mensuales de los últimos 12 meses",
+    "error": "No se pudieron cargar los datos de ingresos",
+    "empty": "Sin datos para este período"
+  },
+  "sessionsChart": {
+    "title": "Sesiones por mes",
+    "description": "Total de sesiones en todos los canales",
+    "error": "No se pudieron cargar los datos de sesiones",
+    "empty": "Sin datos para este período"
+  },
+  "campaigns": {
+    "title": "Campañas principales",
+    "description": "Resumen de rendimiento por campaña",
+    "error": "No se pudieron cargar las campañas",
+    "empty": "Sin campañas todavía",
+    "columns": {
+      "campaign": "Campaña",
+      "status": "Estado",
+      "revenue": "Ingresos",
+      "conversions": "Conversiones",
+      "roi": "ROI"
+    },
+    "status": {
+      "active": "Activa",
+      "paused": "Pausada",
+      "completed": "Completada"
+    }
+  },
+  "activity": {
+    "title": "Actividad reciente",
+    "description": "Últimos eventos en la plataforma",
+    "error": "No se pudo cargar la actividad",
+    "empty": "Sin actividad reciente",
+    "justNow": "ahora mismo"
+  }
+}

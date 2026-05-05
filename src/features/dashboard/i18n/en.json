@@ -1,0 +1,49 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Overview of your key metrics",
+  "kpis": {
+    "deltaLabel": "from last month",
+    "error": "Could not load metric",
+    "totalRevenue": "Total Revenue",
+    "activeUsers": "Active Users",
+    "totalSessions": "Total Sessions",
+    "conversionRate": "Conversion Rate"
+  },
+  "revenueChart": {
+    "title": "Revenue Overview",
+    "description": "Monthly revenue for the last 12 months",
+    "error": "Could not load revenue data",
+    "empty": "No data for this period"
+  },
+  "sessionsChart": {
+    "title": "Sessions per Month",
+    "description": "Total sessions across all channels",
+    "error": "Could not load sessions data",
+    "empty": "No data for this period"
+  },
+  "campaigns": {
+    "title": "Top Campaigns",
+    "description": "Performance overview by campaign",
+    "error": "Could not load campaigns",
+    "empty": "No campaigns yet",
+    "columns": {
+      "campaign": "Campaign",
+      "status": "Status",
+      "revenue": "Revenue",
+      "conversions": "Conversions",
+      "roi": "ROI"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "completed": "Completed"
+    }
+  },
+  "activity": {
+    "title": "Recent Activity",
+    "description": "Latest events across the platform",
+    "error": "Could not load activity",
+    "empty": "No recent activity yet",
+    "justNow": "just now"
+  }
+}

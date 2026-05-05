@@ -1,0 +1,55 @@
+{
+  "title": "Analytics",
+  "subtitle": "Detailed performance metrics",
+  "dateRange": {
+    "last7d": "Last 7d",
+    "last30d": "Last 30d",
+    "last90d": "Last 90d",
+    "last12m": "12 months"
+  },
+  "kpis": {
+    "error": "Could not load metric",
+    "revenue": "Revenue",
+    "newUsers": "New Users",
+    "sessions": "Sessions",
+    "conversionRate": "Conversion Rate"
+  },
+  "revenueChart": {
+    "title": "Revenue & Users",
+    "description": "Multi-series performance over 12 months",
+    "error": "Could not load chart",
+    "empty": "No data for this period"
+  },
+  "trafficChart": {
+    "title": "Traffic Sources",
+    "description": "Distribution of visitor origins",
+    "error": "Could not load traffic data",
+    "empty": "No traffic data available",
+    "sources": {
+      "organicSearch": "Organic Search",
+      "direct": "Direct",
+      "socialMedia": "Social Media",
+      "email": "Email",
+      "referral": "Referral"
+    }
+  },
+  "errors": {
+    "page": {
+      "title": "Failed to load analytics",
+      "description": "Something went wrong. Please try again."
+    }
+  },
+  "dailyTable": {
+    "title": "Daily Breakdown",
+    "description": "Detailed metrics for the selected period",
+    "error": "Could not load daily data",
+    "empty": "No data for the selected period",
+    "columns": {
+      "date": "Date",
+      "revenue": "Revenue",
+      "users": "Users",
+      "sessions": "Sessions",
+      "conversionRate": "Conv. Rate"
+    }
+  }
+}

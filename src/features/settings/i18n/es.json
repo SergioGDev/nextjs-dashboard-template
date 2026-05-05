@@ -1,0 +1,56 @@
+{
+  "metadata": { "title": "Configuración" },
+  "header": {
+    "title": "Configuración",
+    "subtitle": "Gestiona tu cuenta y preferencias"
+  },
+  "profile": {
+    "title": "Configuración de perfil",
+    "description": "Actualiza tu información personal",
+    "form": {
+      "nameLabel": "Nombre completo",
+      "emailLabel": "Dirección de email",
+      "bioLabel": "Biografía",
+      "bioPlaceholder": "Cuéntanos algo sobre ti…",
+      "websiteLabel": "Sitio web",
+      "websitePlaceholder": "https://tusitio.com"
+    },
+    "actions": {
+      "save": "Guardar cambios",
+      "saving": "Guardando…"
+    },
+    "toasts": {
+      "saved": "Perfil actualizado",
+      "saveFailed": "Error al actualizar el perfil"
+    },
+    "validation": {
+      "nameMin": "El nombre debe tener al menos 2 caracteres",
+      "emailInvalid": "Dirección de email no válida",
+      "bioMax": "La biografía no puede superar los 200 caracteres",
+      "websiteInvalid": "URL no válida"
+    }
+  },
+  "errors": {
+    "page": {
+      "title": "Error al cargar configuración",
+      "description": "Algo salió mal. Por favor intenta de nuevo."
+    }
+  },
+  "appearance": {
+    "title": "Apariencia",
+    "description": "Personaliza el aspecto de tu panel",
+    "theme": {
+      "label": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "accent": {
+      "label": "Color de acento",
+      "description": "Elige el color de acento de la interfaz"
+    },
+    "language": {
+      "label": "Idioma",
+      "description": "Elige el idioma de visualización"
+    }
+  }
+}

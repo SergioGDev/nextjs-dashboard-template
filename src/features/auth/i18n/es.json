@@ -1,0 +1,30 @@
+{
+  "login": {
+    "title": "Bienvenido de vuelta",
+    "welcomeBack": "Bienvenido, {name}!",
+    "subtitle": "Accede a tu cuenta",
+    "form": {
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tú@empresa.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Entrar",
+      "submitting": "Entrando…"
+    },
+    "errors": {
+      "invalidCredentials": "Correo o contraseña incorrectos.",
+      "validationError": "Datos de solicitud inválidos.",
+      "connectionError": "Error de conexión. Inténtalo de nuevo.",
+      "generic": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "validation": {
+      "emailRequired": "El correo es obligatorio",
+      "emailInvalid": "Introduce un correo válido",
+      "passwordRequired": "La contraseña es obligatoria"
+    },
+    "demo": {
+      "title": "Cuentas de demostración",
+      "hint": "Usa estas credenciales para probar la plantilla:"
+    }
+  }
+}

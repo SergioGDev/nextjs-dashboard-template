@@ -25,7 +25,8 @@ src/
 │   │   ├── analytics/
 │   │   ├── reports/
 │   │   ├── settings/
-│   │   └── users/[id]/
+│   │   ├── users/[id]/
+│   │   └── ui/                  Design system reference (groups in main sidebar)
 │   ├── layout.tsx               Root layout (fonts, metadata, Providers)
 │   └── providers.tsx            QueryClient + NextThemes + AccentSync
 │
@@ -33,7 +34,8 @@ src/
 │   ├── dashboard/               KPIs, activity feed, campaigns
 │   ├── analytics/               Monthly/daily metrics, traffic sources
 │   ├── reports/                 Report list and status
-│   └── users/                   User CRUD — the most complete example
+│   ├── users/                   User CRUD — the most complete example
+│   └── ui-showcase/             Design system documentation utilities
 │       ├── api/
 │       │   ├── _mock-data.ts    Static mock fixtures (NOT exported outside feature)
 │       │   ├── users.handler.ts Handler: branches USE_MOCKS → mock or API client
@@ -74,11 +76,24 @@ src/
 │
 ├── store/                       Zustand stores — persisted UI state only
 │   ├── ui.store.ts              sidebarCollapsed, accent (persisted)
+│   ├── sidebar.store.ts         expandedGroups — which groups are open (persisted)
 │   └── user.store.ts            currentUser (session only, set after login)
+│
+├── i18n/                        next-intl wiring — locale-aware navigation + request
+│   ├── routing.ts               defineRouting (locales, prefix, cookie, detection)
+│   ├── navigation.ts            Locale-aware Link, useRouter, usePathname, redirect
+│   └── request.ts               getRequestConfig: dynamic per-locale message loading
+│
+├── messages/                    Cross-feature translation strings
+│   ├── en/common.json           Actions, status, navigation, sidebar, metadata, feedback
+│   └── es/common.json           Spanish equivalent
 │
 └── types/                       Truly global types (not owned by any feature)
     └── api.types.ts             ApiResponse<T>, PaginatedResponse<T>, PaginationParams
 ```
+
+Each feature also has its own `i18n/{locale}.json` for feature-scoped strings (see Features
+section below).
 
 ---
 
@@ -119,6 +134,38 @@ app/(dashboard)/users/page.tsx      Page renders, calls hook
 - `components/ui/` importing from `@features/*`
 - `lib/` importing from `features/`
 - Any file calling `process.env` directly (use `@config/env`)
+
+### i18n layer
+
+Internationalization is layered orthogonally to the data flow. Translation keys flow from JSON
+files to the rendered DOM:
+
+```
+src/messages/{locale}/common.json           ← global strings
+src/features/{feature}/i18n/{locale}.json   ← feature-scoped strings
+  →
+src/i18n/request.ts                          ← getRequestConfig: dynamic import
+  loadMessages(locale) → { common, auth, dashboard, analytics, users, reports, settings, uiShowcase }
+  →
+NextIntlClientProvider                       ← provided in [locale]/layout.tsx
+  →
+useTranslations('namespace')                 ← in client components
+getTranslations({ locale, namespace })       ← in server components
+  → t('key')                                 → string
+  → t.rich('key', { code, strong })          → ReactElement (with inline tags)
+  → format.number(value, options)            → locale-aware formatting
+```
+
+**Routing layer** (`src/i18n/routing.ts`, `src/proxy.ts`):
+- `localePrefix: 'always'` — every URL has a locale prefix
+- Cookie `NEXT_LOCALE` persists user choice
+- Accept-Language used as fallback when no cookie
+- Proxy composes intl middleware with auth (intl first, auth second — see `docs/i18n.md`)
+
+**Navigation wrappers** (`src/i18n/navigation.ts`): `Link`, `useRouter`, `usePathname`, `redirect`
+all locale-aware. Components must use these instead of `next/link` and `next/navigation`.
+
+Full reference: `docs/i18n.md`.
 
 ---
 
@@ -409,3 +456,92 @@ Then use `routes.things.list` and `routes.things.detail(id)` in components.
 ### Add an env var / constant
 
 → See [configuration.md](configuration.md).
+
+---
+
+## Sidebar
+
+The sidebar is **data-driven**: all items are declared in a single config file and rendered generically. Adding a nav item requires editing the config, not the component.
+
+### Structure
+
+```
+src/components/layout/sidebar/
+  sidebar.config.ts          Items config — edit this to add/change nav items
+  sidebar.types.ts           SidebarConfig, SidebarSection, SidebarItem, SidebarLink, SidebarGroup
+  sidebar.tsx                Orchestrator — reads config, renders sections
+  sidebar-section.tsx        Section with optional UPPERCASE title
+  sidebar-link.tsx           Direct navigation link (icon, badge, count, disabled)
+  sidebar-group.tsx          Collapsable group with chevron and animated children
+  sidebar-popover.tsx        Hover popover for groups in collapsed mode
+  use-expanded-groups.ts     Hook combining store + active route → effective open set
+  index.ts                   Barrel (exports Sidebar, sidebarConfig, types)
+```
+
+### Two-signal expansion
+
+Groups open when either signal is true:
+1. **Store signal**: the user manually opened the group — saved in `sidebar.store.ts`, key `nexdash-sidebar`.
+2. **Route signal**: navigating to a child of a group fires `setGroupExpanded(id, true)` via `useExpandedGroups`.
+
+When the user manually closes a group, it's removed from the store. If they later navigate to one of its children, the route signal re-opens it. This feels natural — navigating to content always shows that content in context.
+
+### Collapsed mode
+
+When `sidebarCollapsed = true` (w-16):
+- Links: icon only + tooltip on hover.
+- Groups: icon only + `SidebarPopover` on hover. Popover is portalled to `document.body`, appears to the right of the sidebar, and is keyboard-navigable (Tab between children, Escape closes).
+
+### Adding a group
+
+```ts
+// 1. src/config/routes.ts
+projects: {
+  list:     '/projects',
+  detail:   (id: string) => `/projects/${id}`,
+},
+
+// 2. src/components/layout/sidebar/sidebar.config.ts
+{
+  type: 'group',
+  label: 'Projects',
+  icon: FolderOpen,
+  children: [
+    { type: 'link', label: 'All projects', href: routes.projects.list },
+  ],
+},
+```
+
+### Sections with mixed items
+
+A section can contain any combination of direct links and collapsable groups. The current `ui` section is the canonical example: it has one direct link (Overview) followed by two collapsable groups (Components, Layout). There is no restriction on mixing types within a section.
+
+### Sub-item visual hierarchy
+
+Child links inside an expanded group show a **continuous vertical guide line** on the left (a `border-l` on the children container, positioned at ~22px to align with the parent icon center). This replaces the previous dot-bullet approach and matches the style used by Linear and Vercel. The guide line color is `var(--border-strong)` and is unaffected by the active accent color.
+
+### Depth limit
+
+Maximum 2 levels: Section → Group → Link. Groups cannot contain other groups. If a group would have more than 6–7 children, consider a dedicated page with `UiSubnav` as a secondary navigation panel (see below).
+
+### UiSubnav — alternative for secondary navigation
+
+`UiSubnav` (`src/features/ui-showcase/components/ui-subnav.tsx`) provides a secondary navigation panel rendered inside the page layout rather than the main sidebar. Use it when a section is supplementary or admin-only and adding it to the main sidebar would clutter the primary navigation. It is documented as an alternative pattern in `/ui/sidebar` but is not used in the main dashboard navigation.
+
+```tsx
+// In a section layout (e.g. src/app/(dashboard)/my-section/layout.tsx)
+import { UiSubnav } from '@features/ui-showcase';
+
+export default function SectionLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex -m-6 min-h-[calc(100vh-56px)]">
+      <aside className="w-52 shrink-0 border-r border-[var(--border)]">
+        <UiSubnav />
+      </aside>
+      <div className="flex-1 min-w-0 p-8">{children}</div>
+    </div>
+  );
+}
+```
+
+**When to use sidebar sections vs UiSubnav**: prefer sidebar sections (with collapsable groups if needed) for all primary navigation. Use UiSubnav only when the section is genuinely supplementary and adding it to the main sidebar would distract from the core product navigation.

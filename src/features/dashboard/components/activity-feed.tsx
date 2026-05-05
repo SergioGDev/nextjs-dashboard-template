@@ -1,8 +1,11 @@
+'use client';
+
+import { useState } from 'react';
+import { useTranslations, useFormatter } from 'next-intl';
 import { ShoppingCart, UserPlus, FileText, AlertTriangle, LogIn } from 'lucide-react';
 import { Avatar } from '@components/ui/avatar';
 import { Skeleton } from '@components/ui/skeleton';
 import { ActivityItem } from '../types/dashboard.types';
-import { formatRelativeTime } from '@lib/utils';
 
 const activityIcons = {
   user_signup: { icon: UserPlus, color: 'var(--success)', bg: 'var(--success-muted)' },
@@ -18,6 +21,21 @@ interface ActivityFeedProps {
 }
 
 export function ActivityFeed({ items, loading }: ActivityFeedProps) {
+  const t = useTranslations('dashboard');
+  const format = useFormatter();
+  const [mountTime] = useState(Date.now);
+
+  function fmtRelativeTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    const diff = mountTime - date.getTime();
+    const minutes = Math.floor(diff / 60_000);
+
+    if (minutes < 1) return t('activity.justNow');
+    const days = Math.floor(diff / 86_400_000);
+    if (days >= 7) return format.dateTime(date, { year: 'numeric', month: 'short', day: 'numeric' });
+    return format.relativeTime(date, mountTime);
+  }
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -53,7 +71,7 @@ export function ActivityFeed({ items, loading }: ActivityFeedProps) {
             )}
             <div className="flex-1 min-w-0">
               <p className="text-sm text-[var(--text-primary)] leading-snug">{item.message}</p>
-              <p className="text-xs text-[var(--text-muted)] mt-0.5">{formatRelativeTime(item.timestamp)}</p>
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">{fmtRelativeTime(item.timestamp)}</p>
             </div>
           </div>
         );

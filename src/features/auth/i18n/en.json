@@ -1,0 +1,30 @@
+{
+  "login": {
+    "title": "Welcome back",
+    "welcomeBack": "Welcome back, {name}!",
+    "subtitle": "Sign in to your account",
+    "form": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@company.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Sign in",
+      "submitting": "Signing in…"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password.",
+      "validationError": "Invalid request data.",
+      "connectionError": "Connection error. Please try again.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "passwordRequired": "Password is required"
+    },
+    "demo": {
+      "title": "Demo accounts",
+      "hint": "Use these credentials to test the template:"
+    }
+  }
+}

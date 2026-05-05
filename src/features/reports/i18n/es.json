@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "overview": "Informes",
+    "scheduled": "Programados",
+    "archived": "Archivados"
+  },
+  "overview": {
+    "title": "Informes",
+    "description": "{count} informes disponibles"
+  },
+  "scheduled": {
+    "title": "Informes programados",
+    "description": "Configura la generación recurrente de informes y recíbelos por email según un horario.",
+    "newSchedule": "Nuevo horario"
+  },
+  "archived": {
+    "title": "Sin informes archivados",
+    "description": "Los informes de más de 90 días se mueven aquí automáticamente."
+  },
+  "columns": {
+    "report": "Informe",
+    "type": "Tipo",
+    "status": "Estado",
+    "created": "Creado",
+    "size": "Tamaño"
+  },
+  "types": {
+    "financial": "Financiero",
+    "user": "Usuarios",
+    "analytics": "Analíticas",
+    "custom": "Personalizado"
+  },
+  "statuses": {
+    "ready": "Listo",
+    "processing": "Procesando",
+    "failed": "Error",
+    "scheduled": "Programado"
+  },
+  "errors": {
+    "loadFailed": "No se pudieron cargar los informes",
+    "page": {
+      "title": "Error al cargar informes",
+      "description": "Algo salió mal. Intenta de nuevo o vuelve al panel."
+    }
+  },
+  "actions": {
+    "download": "Descargar"
+  },
+  "toasts": {
+    "preparing": "Preparando \"{name}\"…",
+    "ready": "\"{name}\" listo"
+  }
+}

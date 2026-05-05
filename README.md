@@ -1,8 +1,8 @@
 # NexDash
 
-A Next.js 15 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API.
+A Next.js 15 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API. Multi-language ready (English + Spanish, easily extensible).
 
-> **Status**: architecture complete (B1–B2.5), auth in progress (B3). See [CHANGELOG](docs/CHANGELOG.md).
+> **Status**: B1–B5 complete (architecture, data layer, auth, UX feedback, i18n). B6 next: complete UI showcase. See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
@@ -17,6 +17,7 @@ A Next.js 15 analytics dashboard template — feature-based architecture, mock d
 | React Hook Form + Zod | Forms and validation |
 | Recharts v3 | Data visualisation |
 | next-themes | Dark/light switching without FOUC |
+| next-intl v4 | i18n: locale routing, message loading, ICU plurals |
 | Lucide React | Icons |
 
 ## Getting started
@@ -77,6 +78,16 @@ src/
 
 Two themes (dark default): **Midnight Pro** and **Arctic Light**. Six accent presets: `indigo`, `violet`, `emerald`, `rose`, `amber`, `cyan`. All colors are CSS custom properties — no hardcoded hex in components. Change theme/accent in **Settings → Appearance**.
 
+## Internationalization
+
+Two languages out of the box: **English** (default) and **Spanish**. URL prefix routing
+(`/en/...`, `/es/...`), persisted via the `NEXT_LOCALE` cookie, automatic detection from
+`Accept-Language`. Switch language from the topbar or **Settings → Appearance**. Every visible
+string lives in a JSON file under `src/messages/` or `src/features/*/i18n/` — none are hardcoded
+in components.
+
+→ Add a new language: see [docs/i18n.md](docs/i18n.md#cómo-añadir-un-idioma-nuevo).
+
 ## Development
 
 ```bash
@@ -92,6 +103,9 @@ No test suite yet — added in B6.
 - [Architecture](docs/architecture.md) — layers, features, dependency rules, decision log
 - [Data layer](docs/data-layer.md) — handler/hook/validate/keys pattern
 - [Configuration](docs/configuration.md) — env vars, constants, routes
+- [Auth](docs/auth.md) — session, middleware, login/logout flow
+- [Feedback](docs/feedback.md) — toasts, empty states, error states, skeletons
+- [i18n](docs/i18n.md) — locale routing, namespaces, adding a language, glossary
 - [Changelog](docs/CHANGELOG.md) — block-by-block history
 
 ## Roadmap
@@ -101,8 +115,9 @@ No test suite yet — added in B6.
 | B1 | ✅ Done | Cleanup: next-themes, lint fixes, dead code |
 | B2 | ✅ Done | Swappable data layer: HTTP client, USE_MOCKS, handlers |
 | B2.5 | ✅ Done | Architecture refactor: features, Zod schemas, config |
-| B3 | 🔄 Next | Auth: middleware, login/logout, cookie, 401 interceptor |
-| B4 | Pending | UX: toasts, empty states, error states, not-found |
-| B5 | Pending | DX: README final, guides for adding features/replacing mocks |
-| B6 | Pending | Quality: Vitest, Testing Library, Husky, GitHub Actions CI |
-| B7 | Pending | Polish: Framer Motion, a11y, metadata, next/image |
+| B3 | ✅ Done | Auth: middleware, login/logout, cookie, 401 interceptor |
+| B4 | ✅ Done | UX: toasts, empty states, error states, skeletons |
+| B5 | ✅ Done | i18n: next-intl, locale routing, language switcher, full translation pass |
+| B6 | 🔄 Next | Complete UI showcase: foundations, charts, data-table, remaining components |
+| B7 | Pending | Quality: Vitest, Testing Library, Husky, GitHub Actions CI |
+| B8 | Pending | Polish: Framer Motion, a11y, metadata, next/image |

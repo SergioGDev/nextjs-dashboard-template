@@ -1,0 +1,637 @@
+{
+  "metadata": {
+    "title": "UI",
+    "description": "Component library reference"
+  },
+  "common": {
+    "comingSoon": "Coming soon",
+    "copyCode": "Copy code",
+    "codeCopied": "Copied to clipboard",
+    "yes": "Yes",
+    "soon": "soon"
+  },
+  "propsTable": {
+    "columns": {
+      "prop": "Prop",
+      "type": "Type",
+      "default": "Default",
+      "required": "Required",
+      "description": "Description"
+    }
+  },
+  "subnav": {
+    "groups": {
+      "components": "COMPONENTS",
+      "layout": "LAYOUT"
+    },
+    "items": {
+      "overview": "Overview",
+      "toasts": "Toasts",
+      "emptyStates": "Empty states",
+      "errorStates": "Error states",
+      "skeletons": "Skeletons",
+      "sidebar": "Sidebar"
+    }
+  },
+  "overview": {
+    "header": {
+      "title": "UI Components",
+      "subtitle": "Component library and design system reference for the NexDash template. Browse, preview, and copy code snippets for every component."
+    },
+    "componentCount": "{count, plural, one {# component} other {# components}}",
+    "categories": {
+      "foundations": {
+        "label": "Foundations",
+        "description": "Colors, typography, spacing, icons"
+      },
+      "inputs": {
+        "label": "Inputs",
+        "description": "Buttons, inputs, selects, checkboxes"
+      },
+      "display": {
+        "label": "Display",
+        "description": "Cards, badges, avatars, dividers"
+      },
+      "feedback": {
+        "label": "Feedback",
+        "description": "Toasts, empty states, error states, skeletons"
+      },
+      "data": {
+        "label": "Data",
+        "description": "Tables, filters, pagination"
+      },
+      "charts": {
+        "label": "Charts",
+        "description": "Area, bar, line, donut charts"
+      },
+      "layout": {
+        "label": "Layout",
+        "description": "Sidebar, topbar, grids"
+      }
+    }
+  },
+  "toasts": {
+    "metadata": {
+      "title": "Toasts"
+    },
+    "header": {
+      "title": "Toasts",
+      "subtitle": "Non-blocking notifications that appear in the bottom-right corner and auto-dismiss after a configurable delay. Use toasts for transient feedback: confirmations, errors, and status updates. Avoid them for critical information that requires user action — use a dialog instead."
+    },
+    "sections": {
+      "variants": {
+        "title": "Variants",
+        "description": "Four semantic variants, each with a distinct color and icon."
+      },
+      "withDescription": {
+        "title": "With description",
+        "description": "An optional second line for additional context."
+      },
+      "withAction": {
+        "title": "With action",
+        "description": "An inline button that lets the user undo or take a follow-up action."
+      },
+      "persistent": {
+        "title": "Persistent",
+        "description": "Pass duration: 0 to disable auto-dismiss. The user must close it manually."
+      },
+      "queue": {
+        "title": "Queue overflow",
+        "description": "The queue is capped at 5 visible toasts. Older ones are removed (FIFO) when the limit is exceeded."
+      },
+      "api": {
+        "title": "API",
+        "description": "Options accepted by all toast.* methods."
+      },
+      "methods": {
+        "title": "Methods",
+        "description": "Available on the toast singleton.",
+        "columns": {
+          "method": "Method",
+          "description": "Description"
+        }
+      }
+    },
+    "demos": {
+      "success": {
+        "title": "Success",
+        "label": "Show success",
+        "message": "User created successfully"
+      },
+      "error": {
+        "title": "Error",
+        "label": "Show error",
+        "message": "Failed to delete user"
+      },
+      "warning": {
+        "title": "Warning",
+        "label": "Show warning",
+        "message": "Connection unstable"
+      },
+      "info": {
+        "title": "Info",
+        "label": "Show info",
+        "message": "New version available"
+      },
+      "withDescription": {
+        "title": "Description",
+        "label": "Show with description",
+        "message": "User created",
+        "description": "You can now assign roles"
+      },
+      "withAction": {
+        "title": "Action button",
+        "label": "Show with action",
+        "message": "Item moved to trash",
+        "actionLabel": "Undo",
+        "undoMessage": "Restored"
+      },
+      "persistent": {
+        "title": "No auto-dismiss",
+        "label": "Show persistent",
+        "message": "Important notice"
+      },
+      "queue": {
+        "title": "Spawn 10 toasts",
+        "label": "Spawn 10 toasts",
+        "messageTemplate": "Toast {n} of 10"
+      }
+    },
+    "props": {
+      "title": "Main message shown in the toast.",
+      "description": "Optional secondary line below the title.",
+      "duration": "Auto-dismiss time in ms. Pass 0 for persistent.",
+      "action": "Inline action button rendered below the title."
+    },
+    "methods": {
+      "success": "Show a green success toast.",
+      "error": "Show a red error toast (6 s default).",
+      "warning": "Show an amber warning toast (5 s default).",
+      "info": "Show a blue informational toast.",
+      "dismiss": "Start exit animation for a specific toast.",
+      "clear": "Immediately remove all toasts from the queue."
+    }
+  },
+  "emptyStates": {
+    "metadata": {
+      "title": "Empty states"
+    },
+    "header": {
+      "title": "Empty states",
+      "subtitle": "Shown when a list or content area has no items to display. An empty state sets expectations, explains why nothing is here, and gives the user a clear path forward."
+    },
+    "sections": {
+      "variants": {
+        "title": "Variants",
+        "description": "Three built-in illustrations for the most common empty-state contexts."
+      },
+      "withDescription": {
+        "title": "With description",
+        "description": "Add context to explain why the state is empty and what the user can do."
+      },
+      "withAction": {
+        "title": "With action",
+        "description": "A primary CTA gives the user a direct path to populate the empty list."
+      },
+      "withTwoActions": {
+        "title": "With two actions",
+        "description": "A secondary action offers an alternative path without competing with the primary CTA."
+      },
+      "customIcon": {
+        "title": "Custom icon",
+        "description": "Pass any React node as icon to override the built-in illustration."
+      },
+      "illustrations": {
+        "title": "Illustrations",
+        "description": "The three illustration components can be imported and used standalone.",
+        "columns": {
+          "export": "Export",
+          "variant": "Variant",
+          "preview": "Preview"
+        }
+      },
+      "api": {
+        "title": "API",
+        "description": "Props accepted by EmptyState."
+      }
+    },
+    "demos": {
+      "default": {
+        "title": "Default",
+        "stateTitle": "No items yet"
+      },
+      "search": {
+        "title": "Search",
+        "stateTitle": "No results found"
+      },
+      "error": {
+        "title": "Error",
+        "stateTitle": "Failed to load"
+      },
+      "withDescription": {
+        "title": "Description",
+        "stateTitle": "No reports yet",
+        "stateDescription": "Reports you create will appear here. Start by choosing a template."
+      },
+      "withAction": {
+        "title": "Single action",
+        "stateTitle": "No users yet",
+        "stateDescription": "Invite your team to get started.",
+        "actionLabel": "Invite user"
+      },
+      "withTwoActions": {
+        "title": "Primary + secondary",
+        "stateTitle": "No data imported",
+        "stateDescription": "Upload a CSV or connect to a data source.",
+        "actionLabel": "Upload CSV",
+        "secondaryActionLabel": "Connect source"
+      },
+      "customIcon": {
+        "title": "Lucide icon",
+        "stateTitle": "Drop files here",
+        "stateDescription": "Drag and drop files, or click to browse.",
+        "actionLabel": "Browse files"
+      }
+    },
+    "props": {
+      "title": "Primary heading text.",
+      "variant": "Selects the built-in illustration.",
+      "description": "Optional supporting sentence below the title.",
+      "icon": "Custom illustration or icon. Overrides variant.",
+      "action": "Primary CTA — typically a Button.",
+      "secondaryAction": "Secondary CTA rendered next to action.",
+      "className": "Extra classes applied to the container."
+    }
+  },
+  "errorStates": {
+    "metadata": {
+      "title": "Error states"
+    },
+    "header": {
+      "title": "Error states",
+      "subtitle": "Shown when a data fetch, mutation, or render fails. Error states replace or augment the content area so the user understands something went wrong and knows how to recover."
+    },
+    "sections": {
+      "default": {
+        "title": "Default",
+        "description": "Centered layout with icon, title, description, and optional retry button. Use inside a card or as a section replacement."
+      },
+      "compact": {
+        "title": "Compact",
+        "description": "Single-line format for inline use — inside table rows, list items, or small panels."
+      },
+      "customCopy": {
+        "title": "Custom copy",
+        "description": "Override the default title and description to match the failing context."
+      },
+      "devDetails": {
+        "title": "Dev details",
+        "description": "Pass the Error object to expose a collapsible technical detail block in development. Hidden in production."
+      },
+      "routeLevel": {
+        "title": "Route-level error",
+        "description": "Next.js error.tsx boundaries receive { error, reset } props. Use EmptyState variant=\"error\" paired with useRouter for navigation recovery."
+      },
+      "api": {
+        "title": "API",
+        "description": "Props accepted by ErrorState."
+      }
+    },
+    "demos": {
+      "withoutRetry": {
+        "title": "Without retry"
+      },
+      "withRetry": {
+        "title": "With retry"
+      },
+      "compactNoRetry": {
+        "title": "Compact, no retry",
+        "stateTitle": "Failed to load users"
+      },
+      "compactRetry": {
+        "title": "Compact with retry",
+        "stateTitle": "Failed to load users"
+      },
+      "customCopy": {
+        "title": "Custom message",
+        "stateTitle": "Couldn't load the chart",
+        "stateDescription": "The analytics service is temporarily unavailable."
+      },
+      "devDetails": {
+        "title": "With error object (dev only)",
+        "stateTitle": "Failed to load users"
+      }
+    },
+    "props": {
+      "title": "Error heading.",
+      "description": "Supporting message below the title.",
+      "onRetry": "If provided, renders a retry button.",
+      "error": "Exposes technical details in dev mode.",
+      "size": "\"compact\" collapses to a single-line inline format.",
+      "className": "Extra classes applied to the container."
+    }
+  },
+  "skeletons": {
+    "metadata": {
+      "title": "Skeletons"
+    },
+    "header": {
+      "title": "Skeletons",
+      "subtitle": "Placeholder animations shown while data is loading. Skeletons reduce perceived latency by mirroring the shape of the real content. Always match the skeleton dimensions to the real component to avoid layout shift (CLS)."
+    },
+    "sections": {
+      "primitives": {
+        "title": "Primitives — SkeletonBase",
+        "description": "Low-level building block with five preset shapes. Use for ad-hoc placeholders."
+      },
+      "kpiCard": {
+        "title": "KpiCardSkeleton",
+        "description": "Matches the KpiCard component shape. Drop in as a direct loading replacement.",
+        "demoTitle": "KPI card"
+      },
+      "chart": {
+        "title": "ChartSkeleton",
+        "description": "Four chart types: bar, line, area, donut. Set height to match the real chart container."
+      },
+      "table": {
+        "title": "TableSkeleton",
+        "description": "Mimics a data table with configurable row and column counts.",
+        "demoTitle": "Default (5 rows, 4 columns)"
+      },
+      "list": {
+        "title": "ListSkeleton",
+        "description": "Mimics an activity feed or avatar list.",
+        "demos": {
+          "withAvatar": "With avatar + secondary",
+          "noAvatar": "No avatar"
+        }
+      },
+      "form": {
+        "title": "FormSkeleton",
+        "description": "Stacked label + input pairs with an optional submit button.",
+        "demoTitle": "3 fields + button"
+      },
+      "userCard": {
+        "title": "UserCardSkeleton",
+        "description": "Avatar + name/email line + status badge. Matches the user row pattern.",
+        "demoTitle": "User card row"
+      },
+      "comparison": {
+        "title": "Skeleton vs real",
+        "description": "Toggle between the skeleton and a representative real component to verify the size match.",
+        "labels": {
+          "kpiCard": "KPI card",
+          "userCard": "User card row"
+        },
+        "buttons": {
+          "showSkeleton": "Show skeleton",
+          "showReal": "Show real"
+        },
+        "kpiDemo": {
+          "metric": "Total users",
+          "growth": "+12.4% this month"
+        },
+        "userDemo": {
+          "name": "Sergio Garcia",
+          "email": "sergiogarcia@example.com",
+          "status": "Active"
+        }
+      },
+      "apiBase": {
+        "title": "API — SkeletonBase",
+        "description": "Props for the primitive component."
+      },
+      "apiTable": {
+        "title": "API — TableSkeleton"
+      },
+      "apiChart": {
+        "title": "API — ChartSkeleton"
+      },
+      "apiList": {
+        "title": "API — ListSkeleton"
+      },
+      "apiForm": {
+        "title": "API — FormSkeleton"
+      }
+    },
+    "props": {
+      "base": {
+        "variant": "Preset shape and dimensions.",
+        "width": "Override preset width.",
+        "height": "Override preset height.",
+        "className": "Extra classes."
+      },
+      "table": {
+        "rows": "Number of body rows.",
+        "columns": "Number of columns.",
+        "showHeader": "Whether to render the header row.",
+        "className": "Extra classes."
+      },
+      "chart": {
+        "type": "Chart shape to mimic.",
+        "height": "Container height in pixels.",
+        "className": "Extra classes."
+      },
+      "list": {
+        "items": "Number of rows.",
+        "showAvatar": "Show avatar placeholder.",
+        "showSecondary": "Show secondary text line.",
+        "className": "Extra classes."
+      },
+      "form": {
+        "fields": "Number of field rows.",
+        "showButton": "Show submit button skeleton.",
+        "className": "Extra classes."
+      }
+    }
+  },
+  "sidebar": {
+    "metadata": {
+      "title": "Sidebar"
+    },
+    "header": {
+      "title": "Sidebar patterns",
+      "subtitle": "The sidebar is data-driven — all items are defined in a single config file. Supports sections with titles, direct links, and collapsable groups up to 2 levels deep."
+    },
+    "sections": {
+      "structure": {
+        "title": "Section structure",
+        "description": "Sidebar items are organised in three tiers. The maximum depth is 2 — groups cannot contain other groups.",
+        "columns": {
+          "tier": "Tier",
+          "type": "Type",
+          "description": "Description"
+        },
+        "rows": {
+          "section": {
+            "tier": "1",
+            "description": "Visual grouping with an optional UPPERCASE title. Rendered with a divider between sections."
+          },
+          "link": {
+            "tier": "2",
+            "description": "Direct navigation item with optional icon, badge, and count."
+          },
+          "group": {
+            "tier": "2",
+            "description": "Collapsable row with a chevron. Opens to reveal child SidebarLinks."
+          },
+          "child": {
+            "tier": "3 (max)",
+            "type": "SidebarLink (child)",
+            "description": "Child of a SidebarGroup. Shown indented with no icon. A vertical guide line on the left marks the group hierarchy."
+          }
+        }
+      },
+      "configuration": {
+        "title": "Configuration",
+        "description": "The full sidebarConfig shows all features: section with title, direct link, group with children, badge."
+      },
+      "persistence": {
+        "title": "Persistence behaviour",
+        "description": "The sidebar uses a two-signal approach: the Zustand store (persisted) tracks which groups the user has explicitly opened, and the active route always expands its containing group.",
+        "columns": {
+          "scenario": "Scenario",
+          "result": "Result"
+        },
+        "rows": {
+          "navigateInto": {
+            "scenario": "Navigate to /reports/scheduled",
+            "result": "Reports group auto-expands. Saved in store."
+          },
+          "navigateAway": {
+            "scenario": "Navigate away from /reports/*",
+            "result": "Reports group stays open (still in store)."
+          },
+          "userClose": {
+            "scenario": "User manually closes Reports group",
+            "result": "Group collapses. Removed from store."
+          },
+          "navigateBack": {
+            "scenario": "Navigate back to /reports/archived",
+            "result": "Reports group re-expands (route change adds to store)."
+          },
+          "openAnother": {
+            "scenario": "User opens another group while in /reports",
+            "result": "Both groups are open."
+          },
+          "refresh": {
+            "scenario": "Refresh page",
+            "result": "Store rehydrates from localStorage. Groups that were open remain open."
+          }
+        },
+        "footnote": "Store key: <code>nexdash-sidebar</code> in localStorage. Implemented in <code>src/store/sidebar.store.ts</code>."
+      },
+      "collapsed": {
+        "title": "Collapsed mode",
+        "description": "When the sidebar is collapsed to icon-only width (w-16), groups show a hover popover instead of expanding inline.",
+        "columns": {
+          "element": "Element",
+          "behavior": "Collapsed behaviour"
+        },
+        "rows": {
+          "link": "Icon only. Tooltip with label on hover (side=\"right\").",
+          "group": "Icon only. Hover shows SidebarPopover to the right — a floating panel with group title and all child links.",
+          "section": {
+            "element": "Section title",
+            "behavior": "Hidden."
+          },
+          "popover": "Portal to document.body. Appears on mouseEnter/focus, stays open while cursor is on it (150ms close delay). Escape closes and returns focus to trigger."
+        }
+      },
+      "addingGroup": {
+        "title": "Adding a collapsable group",
+        "description": "Two-step process: add routes, then add the group to sidebarConfig.",
+        "footnote": "The group ID is computed as <code>'{sectionId}.{kebab-label}'</code> — e.g. <code>workspace.projects</code>. This ID is what gets stored in <code>expandedGroups</code>."
+      },
+      "apiSection": {
+        "title": "API — SidebarSection",
+        "description": "Top-level config container."
+      },
+      "apiLink": {
+        "title": "API — SidebarLink",
+        "description": "Direct navigation item."
+      },
+      "apiGroup": {
+        "title": "API — SidebarGroup",
+        "description": "Collapsable group with child links."
+      },
+      "subnav": {
+        "title": "Alternative: in-page sub-navigation",
+        "description": "If your section has many sub-pages and you don't want to expand the main sidebar, you can use the UiSubnav pattern as in-page secondary navigation. This was the original approach of /ui before being replaced by the main sidebar's collapsible groups.",
+        "demoTitle": "UiSubnav — live preview",
+        "demoDescription": "Currently active based on the page you're on. In production, it would drive navigation within a section.",
+        "whenToUse": "<strong>When to use UiSubnav vs sidebar sections:</strong> Use sidebar sections (this page) when the items belong in the primary navigation. Use UiSubnav when the section is supplementary (e.g. an admin-only area) and adding it to the main sidebar would distract from the core product navigation."
+      }
+    },
+    "props": {
+      "section": {
+        "id": "Unique section identifier. Used as React key and for group IDs.",
+        "title": "Label shown in uppercase above section items.",
+        "items": "Array of SidebarLink or SidebarGroup items."
+      },
+      "link": {
+        "type": "Discriminant — identifies this as a direct navigation item.",
+        "label": "Text shown in the nav item.",
+        "href": "Route target. Must be in routes.ts.",
+        "icon": "Icon component (not JSX). Shown when sidebar is expanded.",
+        "badge": "Small pill badge rendered to the right of the label.",
+        "count": "Numeric value rendered to the right (monospace).",
+        "disabled": "Renders as non-interactive with reduced opacity."
+      },
+      "group": {
+        "type": "Discriminant — identifies this as a collapsable group.",
+        "label": "Group heading and popover title.",
+        "icon": "Icon shown on the group header (and in collapsed popover).",
+        "children": "Child links (max depth 2 — no nested groups).",
+        "badge": "Badge on the group header.",
+        "defaultOpen": "Pre-expand on first render (before any user interaction)."
+      }
+    }
+  },
+  "i18n": {
+    "metadata": {
+      "title": "i18n"
+    },
+    "header": {
+      "title": "Language Switcher",
+      "subtitle": "Switches the active locale and persists it in the <code>NEXT_LOCALE</code> cookie. Locale change uses <code>router.replace</code> so it does not add a browser history entry. Two variants: <strong>compact</strong> for the topbar and <strong>full</strong> for settings pages."
+    },
+    "sections": {
+      "compact": {
+        "title": "Compact",
+        "description": "Dropdown button showing the current locale flag and code. Used in the topbar, between Search and the notification bell.",
+        "demos": {
+          "default": "Default (compact)",
+          "topbar": "Topbar placement",
+          "topbarHint": "…topbar…"
+        }
+      },
+      "full": {
+        "title": "Full",
+        "description": "Pill buttons listing all available locales. Used in the Settings → Appearance → Language section.",
+        "demoTitle": "Full variant"
+      },
+      "hook": {
+        "title": "useLocaleSwitch hook",
+        "description": "The underlying hook. Use it directly if you need to build a custom switcher UI."
+      },
+      "behavior": {
+        "title": "Behavior",
+        "description": "How locale switching works end-to-end."
+      },
+      "api": {
+        "title": "API",
+        "description": "Props accepted by LanguageSwitcher."
+      }
+    },
+    "props": {
+      "variant": "\"compact\" renders a dropdown button for topbar use. \"full\" renders pill buttons for settings pages.",
+      "className": "Extra classes applied to the container."
+    }
+  },
+  "localizationNote": {
+    "title": "Localization",
+    "description": "All visible strings should be wrapped with useTranslations from next-intl. The snippets above show literal strings for clarity, but in production code use t() to support multiple languages.",
+    "linkLabel": "See the i18n guide"
+  }
+}

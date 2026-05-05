@@ -1,0 +1,105 @@
+{
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "retry": "Try again",
+    "goHome": "Go home"
+  },
+  "status": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "empty": "Nothing here yet"
+  },
+  "navigation": {
+    "searchPlaceholder": "Search…",
+    "notifications": "Notifications"
+  },
+  "sidebar": {
+    "sections": {
+      "workspace": "Workspace",
+      "ui": "UI"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "analytics": "Analytics",
+      "reports": "Reports",
+      "reportsOverview": "Overview",
+      "reportsScheduled": "Scheduled",
+      "reportsArchived": "Archived",
+      "users": "Users",
+      "settings": "Settings",
+      "uiOverview": "Overview",
+      "uiComponents": "Components",
+      "uiLayout": "Layout",
+      "toasts": "Toasts",
+      "emptyStates": "Empty states",
+      "errorStates": "Error states",
+      "skeletons": "Skeletons",
+      "i18n": "i18n",
+      "uiSidebar": "Sidebar"
+    },
+    "actions": {
+      "expand": "Expand sidebar",
+      "collapse": "Collapse sidebar",
+      "logOut": "Log out"
+    }
+  },
+  "userMenu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…"
+  },
+  "theme": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "metadata": {
+    "title": "NexDash",
+    "description": "Modern analytics dashboard"
+  },
+  "table": {
+    "empty": "No data found",
+    "showing": "{start}–{end} of {total}"
+  },
+  "feedback": {
+    "emptyState": {
+      "default": {
+        "title": "Nothing here yet",
+        "description": "There's nothing to show at the moment."
+      },
+      "search": {
+        "title": "No results found",
+        "description": "Try adjusting your search or filters."
+      },
+      "error": {
+        "title": "Something went wrong",
+        "description": "An error occurred. Please try again."
+      }
+    },
+    "errorState": {
+      "title": "Couldn't load data",
+      "description": "Something went wrong. Try again in a moment.",
+      "retry": "Retry",
+      "tryAgain": "Try again",
+      "technicalDetails": "Technical details"
+    }
+  },
+  "toast": {
+    "close": "Dismiss"
+  },
+  "errors": {
+    "page": {
+      "title": "Something went wrong",
+      "description": "An error occurred while rendering this page.",
+      "technicalDetails": "Technical details"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you're looking for doesn't exist or has been moved."
+    }
+  }
+}

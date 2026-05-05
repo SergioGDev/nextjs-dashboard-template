@@ -1,0 +1,105 @@
+{
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "retry": "Intentar de nuevo",
+    "goHome": "Ir al inicio"
+  },
+  "status": {
+    "loading": "Cargando…",
+    "error": "Algo salió mal",
+    "empty": "Nada aquí todavía"
+  },
+  "navigation": {
+    "searchPlaceholder": "Buscar…",
+    "notifications": "Notificaciones"
+  },
+  "sidebar": {
+    "sections": {
+      "workspace": "Espacio de trabajo",
+      "ui": "UI"
+    },
+    "items": {
+      "dashboard": "Panel",
+      "analytics": "Analíticas",
+      "reports": "Informes",
+      "reportsOverview": "Resumen",
+      "reportsScheduled": "Programados",
+      "reportsArchived": "Archivados",
+      "users": "Usuarios",
+      "settings": "Configuración",
+      "uiOverview": "Resumen",
+      "uiComponents": "Componentes",
+      "uiLayout": "Diseño",
+      "toasts": "Toasts",
+      "emptyStates": "Estados vacíos",
+      "errorStates": "Estados de error",
+      "skeletons": "Esqueletos",
+      "i18n": "i18n",
+      "uiSidebar": "Barra lateral"
+    },
+    "actions": {
+      "expand": "Expandir barra lateral",
+      "collapse": "Colapsar barra lateral",
+      "logOut": "Cerrar sesión"
+    }
+  },
+  "userMenu": {
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión…"
+  },
+  "theme": {
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro"
+  },
+  "metadata": {
+    "title": "NexDash",
+    "description": "Panel de analíticas moderno"
+  },
+  "table": {
+    "empty": "Sin datos",
+    "showing": "{start}–{end} de {total}"
+  },
+  "feedback": {
+    "emptyState": {
+      "default": {
+        "title": "Nada aquí todavía",
+        "description": "No hay nada que mostrar en este momento."
+      },
+      "search": {
+        "title": "Sin resultados",
+        "description": "Intenta ajustar tu búsqueda o filtros."
+      },
+      "error": {
+        "title": "Algo salió mal",
+        "description": "Ocurrió un error. Por favor intenta de nuevo."
+      }
+    },
+    "errorState": {
+      "title": "No se pudo cargar",
+      "description": "Algo salió mal. Intenta de nuevo en un momento.",
+      "retry": "Reintentar",
+      "tryAgain": "Intentar de nuevo",
+      "technicalDetails": "Detalles técnicos"
+    }
+  },
+  "toast": {
+    "close": "Descartar"
+  },
+  "errors": {
+    "page": {
+      "title": "Algo salió mal",
+      "description": "Ocurrió un error al cargar esta página.",
+      "technicalDetails": "Detalles técnicos"
+    },
+    "notFound": {
+      "title": "Página no encontrada",
+      "description": "La página que buscas no existe o fue movida."
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "metadata": { "title": "Usuarios" },
+  "header": {
+    "title": "Usuarios",
+    "subtitle": "Gestiona los miembros de tu equipo y sus permisos"
+  },
+  "filters": {
+    "searchPlaceholder": "Buscar usuarios por nombre o email",
+    "roleFilter": { "all": "Todos los roles" },
+    "statusFilter": { "all": "Todos los estados" },
+    "clearFilters": "Borrar filtros"
+  },
+  "roles": {
+    "admin": "Administrador",
+    "manager": "Manager",
+    "editor": "Editor",
+    "viewer": "Visor"
+  },
+  "statuses": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "pending": "Pendiente",
+    "suspended": "Suspendido"
+  },
+  "columns": {
+    "user": "Usuario",
+    "role": "Rol",
+    "status": "Estado",
+    "lastLogin": "Último acceso"
+  },
+  "actions": {
+    "newUser": "Nuevo usuario",
+    "delete": "Eliminar"
+  },
+  "empty": {
+    "noUsers": {
+      "title": "Sin usuarios",
+      "description": "Crea el primer usuario para comenzar"
+    },
+    "noResults": {
+      "title": "Sin resultados",
+      "description": "Prueba ajustando los filtros"
+    }
+  },
+  "errors": {
+    "loadFailed": "No se pudieron cargar los usuarios",
+    "userLoadFailed": "No se pudo cargar el usuario",
+    "page": {
+      "title": "Error al cargar usuarios",
+      "description": "Algo salió mal. Intenta de nuevo o vuelve al panel."
+    }
+  },
+  "createDialog": {
+    "title": "Nuevo usuario",
+    "description": "Añade un nuevo usuario a tu espacio de trabajo."
+  },
+  "deleteDialog": {
+    "title": "¿Eliminar usuario?",
+    "description": "\"{name}\" se eliminará de forma permanente. Esta acción no se puede deshacer.",
+    "confirm": "Eliminar",
+    "cancel": "Cancelar"
+  },
+  "toasts": {
+    "created": "Usuario creado",
+    "createFailed": "Error al crear el usuario",
+    "deleted": "Usuario eliminado",
+    "deleteFailed": "Error al eliminar el usuario",
+    "updated": "Usuario actualizado",
+    "updateFailed": "Error al actualizar el usuario"
+  },
+  "validation": {
+    "nameRequired": "El nombre debe tener al menos 2 caracteres",
+    "nameTooLong": "El nombre es demasiado largo",
+    "emailRequired": "El email es requerido",
+    "emailInvalid": "Dirección de email no válida",
+    "roleRequired": "Selecciona un rol válido",
+    "statusRequired": "Selecciona un estado"
+  },
+  "form": {
+    "nameLabel": "Nombre completo",
+    "namePlaceholder": "Jane Doe",
+    "emailLabel": "Dirección de email",
+    "emailPlaceholder": "jane@ejemplo.com",
+    "roleLabel": "Rol",
+    "statusLabel": "Estado",
+    "submitLabel": "Guardar usuario",
+    "createLabel": "Crear usuario",
+    "updateLabel": "Actualizar usuario"
+  },
+  "detail": {
+    "subtitle": "Perfil de usuario",
+    "fields": {
+      "joined": "Miembro desde {date}",
+      "lastLogin": "Último acceso {date}"
+    },
+    "editTitle": "Editar perfil",
+    "backToUsers": "Volver a usuarios",
+    "notFound": {
+      "title": "Usuario no encontrado",
+      "description": "Este usuario puede haber sido eliminado o el enlace es incorrecto.",
+      "backToUsers": "Volver a usuarios"
+    }
+  }
+}

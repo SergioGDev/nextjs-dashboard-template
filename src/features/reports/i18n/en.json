@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "overview": "Reports",
+    "scheduled": "Scheduled",
+    "archived": "Archived"
+  },
+  "overview": {
+    "title": "Reports",
+    "description": "{count} reports available"
+  },
+  "scheduled": {
+    "title": "Scheduled reports",
+    "description": "Set up recurring report generation and receive them by email on a schedule.",
+    "newSchedule": "New schedule"
+  },
+  "archived": {
+    "title": "No archived reports",
+    "description": "Reports older than 90 days are automatically moved here."
+  },
+  "columns": {
+    "report": "Report",
+    "type": "Type",
+    "status": "Status",
+    "created": "Created",
+    "size": "Size"
+  },
+  "types": {
+    "financial": "Financial",
+    "user": "User",
+    "analytics": "Analytics",
+    "custom": "Custom"
+  },
+  "statuses": {
+    "ready": "Ready",
+    "processing": "Processing",
+    "failed": "Failed",
+    "scheduled": "Scheduled"
+  },
+  "errors": {
+    "loadFailed": "Couldn't load reports",
+    "page": {
+      "title": "Failed to load reports",
+      "description": "Something went wrong. Try again or return to the dashboard."
+    }
+  },
+  "actions": {
+    "download": "Download"
+  },
+  "toasts": {
+    "preparing": "Preparing \"{name}\"…",
+    "ready": "\"{name}\" is ready"
+  }
+}

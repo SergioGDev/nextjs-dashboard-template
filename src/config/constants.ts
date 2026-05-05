@@ -20,3 +20,18 @@ export const THEME = {
   DEFAULT_ACCENT: 'indigo',
   ACCENTS: ['indigo', 'violet', 'emerald', 'rose', 'amber', 'cyan'] as const,
 } as const;
+
+export const SIDEBAR = {
+  STORAGE_KEY: 'nexdash-sidebar',
+} as const;
+
+export const TOAST = {
+  MAX_VISIBLE: 5,
+  EXIT_DURATION_MS: 300,
+  DURATION: {
+    success: 4000,
+    error: 6000,
+    warning: 5000,
+    info: 4000,
+  },
+} as const;

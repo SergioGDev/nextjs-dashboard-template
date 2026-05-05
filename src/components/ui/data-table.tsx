@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useTranslations } from 'next-intl';
 import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './table';
 import { Skeleton } from './skeleton';
@@ -36,8 +37,9 @@ export function DataTable<T extends object>({
   selectable,
   getRowId,
   className,
-  emptyMessage = 'No data found.',
+  emptyMessage,
 }: DataTableProps<T>) {
+  const t = useTranslations('common');
   const [sortKey, setSortKey] = React.useState<string | null>(null);
   const [sortDir, setSortDir] = React.useState<SortDir>(null);
   const [page, setPage] = React.useState(1);
@@ -130,7 +132,7 @@ export function DataTable<T extends object>({
                 colSpan={columns.length + (selectable ? 1 : 0)}
                 className="text-center text-[var(--text-muted)] py-12"
               >
-                {emptyMessage}
+                {emptyMessage ?? t('table.empty')}
               </TableCell>
             </TableRow>
           ) : (
@@ -163,7 +165,7 @@ export function DataTable<T extends object>({
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-2 pt-4">
           <p className="text-sm text-[var(--text-muted)]">
-            {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, data.length)} of {data.length}
+            {t('table.showing', { start: (page - 1) * pageSize + 1, end: Math.min(page * pageSize, data.length), total: data.length })}
           </p>
           <div className="flex items-center gap-1">
             <Button

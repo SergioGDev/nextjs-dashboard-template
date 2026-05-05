@@ -1,0 +1,55 @@
+{
+  "title": "Analíticas",
+  "subtitle": "Métricas detalladas de rendimiento",
+  "dateRange": {
+    "last7d": "Últimos 7d",
+    "last30d": "Últimos 30d",
+    "last90d": "Últimos 90d",
+    "last12m": "12 meses"
+  },
+  "kpis": {
+    "error": "No se pudo cargar la métrica",
+    "revenue": "Ingresos",
+    "newUsers": "Usuarios nuevos",
+    "sessions": "Sesiones",
+    "conversionRate": "Tasa de conversión"
+  },
+  "revenueChart": {
+    "title": "Revenue & Users",
+    "description": "Rendimiento en series múltiples en 12 meses",
+    "error": "No se pudo cargar el gráfico",
+    "empty": "Sin datos para este período"
+  },
+  "trafficChart": {
+    "title": "Fuentes de tráfico",
+    "description": "Distribución de los orígenes de visitantes",
+    "error": "No se pudieron cargar los datos de tráfico",
+    "empty": "Sin datos de tráfico disponibles",
+    "sources": {
+      "organicSearch": "Búsqueda orgánica",
+      "direct": "Directo",
+      "socialMedia": "Redes sociales",
+      "email": "Correo electrónico",
+      "referral": "Referencia"
+    }
+  },
+  "errors": {
+    "page": {
+      "title": "Error al cargar analíticas",
+      "description": "Algo salió mal. Por favor intenta de nuevo."
+    }
+  },
+  "dailyTable": {
+    "title": "Desglose diario",
+    "description": "Métricas detalladas del período seleccionado",
+    "error": "No se pudieron cargar los datos diarios",
+    "empty": "Sin datos para el período seleccionado",
+    "columns": {
+      "date": "Fecha",
+      "revenue": "Ingresos",
+      "users": "Usuarios",
+      "sessions": "Sesiones",
+      "conversionRate": "T. conversión"
+    }
+  }
+}

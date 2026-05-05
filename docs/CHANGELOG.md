@@ -6,6 +6,1658 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6.0] Auditoría del catálogo de componentes — 2026-05-04
+
+Sub-bloque de reconocimiento previo al bloque B6 (Completar UI Showcase). Sin cambios en código de producción: solo lectura del repo y generación del documento de auditoría.
+
+### Salida
+
+- Nuevo: [`docs/B6-audit.md`](./B6-audit.md) — matriz completa por categoría (Foundations, Inputs básicos, Inputs avanzados, Display, Feedback, Data, Charts, Layout) con estado EXISTS / EXISTS_PARTIAL / EXISTS_UNUSED / TO BUILD para cada entrada del catálogo objetivo.
+
+### Recuento ejecutivo
+
+- 32 componentes/patterns React encontrados en el repo (sin contar showcase utilities, providers, ni form compositions).
+- 59 entradas en el catálogo objetivo de B6.
+- 5 ya documentados en `/ui` (Toasts, Empty states, Error states, Skeletons, Sidebar).
+- 22 existen y solo necesitan página de showcase.
+- 32 a construir (incluye los 7 de Foundations).
+- 7 componentes encontrados fuera del catálogo objetivo (ThemeToggle, LanguageSwitcher, ActivityFeed, 3 forms, SessionProvider). Recomendación: INCLUDE para ThemeToggle y LanguageSwitcher; SKIP para forms/provider; REVIEW para ActivityFeed.
+
+### Deuda técnica detectada (a resolver durante B6)
+
+15 puntos identificados; los más relevantes:
+
+- Avatar usa `useState` sin `'use client'` (frágil).
+- Card no expone prop `variant` pese a tener clases CSS `nx-card--raised`/`--interactive`.
+- DataTable: selección y paginación internas no extraíbles; Pagination debe extraerse como componente independiente.
+- KPICard vive en `features/dashboard/` y debe relocarse antes de documentarse en `/ui`.
+- Componentes definidos pero sin uso real: Checkbox, Switch, Label (validar API en su primer caso de uso real durante B6).
+- Spinner inlineado en Button — extraer para reutilización.
+- Tooltip sin portal (recortado en contenedores con overflow).
+- DropdownMenu sin keyboard navigation completo.
+- Inconsistencia de API entre charts (color como string vs series[] vs color por datum).
+- Native `<select>` vs design system "premium" — decidir si documentar como "nativo intencional" o construir Select avanzado.
+- `.nx-kbd`/`.nx-divider`/`.nx-dot` solo CSS; sin React component.
+
+### Recomendaciones para sub-bloques B6a–B6h
+
+- Documento propone orden: Foundations → Inputs básicos → Display → Inputs avanzados (parte 1) → Feedback → Data → Charts → Layout, con Inputs avanzados parte 2 (Date/Time/File/Dropzone) como sub-bloque separado o fuera de B6.
+- Foundations en una única página `/ui/foundations` con secciones internas, no 7 páginas separadas.
+- Pre-work bloqueante por sub-bloque (Card variant antes de B6c, Avatar `'use client'` antes de B6c, KPICard relocation antes de B6g) listado en el documento.
+- Riesgo principal identificado: Date picker. Recomendación: adoptar `react-day-picker` y wrappear, reservar custom para bloque posterior.
+
+### Estado al cerrar el sub-bloque
+
+- `npm run lint` → sin cambios respecto a antes (no se modificó código de producción).
+- `npm run build` → sin cambios.
+- Archivos nuevos en `docs/`: 1 (`B6-audit.md`).
+
+---
+
+## [B5 — Cierre del bloque] Sistema i18n completo — 2026-05-04
+
+### Resumen ejecutivo
+
+Cierre formal del bloque B5. NexDash incorpora un sistema de internacionalización completo basado
+en next-intl, con dos idiomas iniciales (en, es), routing localizado con prefijo siempre presente,
+detección automática + cookie persistente, y selector de idioma con dos variantes. Toda la app —
+páginas, componentes, formularios, mensajes de feedback, metadata, error boundaries — funciona
+en ambos idiomas con cambio inmediato sin recarga.
+
+### Componentes y patrones implementados (B5a → B5c.5b)
+
+- **next-intl v4 con App Router**: routing `localePrefix: 'always'`, `getRequestConfig` carga
+  mensajes por locale + feature, proxy compone middleware intl con auth.
+- **2 idiomas iniciales** (en, es) con guía documentada para añadir más.
+- **Detección automática + cookie**: `NEXT_LOCALE` (gestionada por next-intl), Accept-Language
+  como fallback, `defaultLocale` como último recurso.
+- **LanguageSwitcher con dos variants**: `compact` (topbar, dropdown) y `full` (settings, pill
+  buttons). Hook `useLocaleSwitch` reutilizable para switchers personalizados.
+- **Política híbrida**: jerga técnica de design systems en inglés (Toast, Sidebar, Skeleton,
+  Variants, Props, API), prosa traducida.
+- **Schema Zod factory pattern** para validaciones traducidas: `createXSchema(messages)` recibe
+  los mensajes como parámetro y los inyecta en el schema.
+- **Localized formatting** vía `useFormatter`: números, monedas, fechas, plurales ICU
+  (`{count, plural, one {# component} other {# components}}`).
+- **Strings por defecto centralizados** en `common.feedback.*` (EmptyState, ErrorState).
+- **Bilingüe en `global-error.tsx`**: estilos inline + claves de traducción duplicadas (no puede
+  acceder al CSS ni al provider de next-intl).
+- **Snippets vs demos en /ui**: duplicación intencional — snippets de código en inglés hardcoded
+  como referencia copy-paste; demos disparan strings traducidos al locale activo.
+- **Sección "Localization" al final** de cada página /ui, con link a `/ui/i18n`.
+- **PropsTable híbrida**: identificadores de código en inglés, descriptions traducidas, headers
+  de columna traducidos.
+
+### Métricas
+
+- **18 rutas × 2 locales = 36 páginas** generadas en `npm run build`.
+- **Archivos JSON de traducción**: 16 (1 common × 2 locales + 7 features × 2 locales).
+- **Namespaces**: 8 (`common`, `auth`, `dashboard`, `analytics`, `users`, `reports`, `settings`,
+  `uiShowcase`).
+- **`uiShowcase` namespace**: ~480 líneas por locale, cubre el showcase completo (overview, toasts,
+  empty states, error states, skeletons, sidebar, i18n, plus el subnav, props table, localization
+  note y los componentes genéricos).
+- **`common.json`**: ~106 líneas por locale.
+- **0 errores de lint** (`npm run lint`).
+- **0 errores de build** (`npm run build`).
+
+### Limitaciones conocidas y deuda técnica
+
+- **Skeleton aria-labels** (`Loading table`, `Loading list`, etc.) permanecen en inglés. Razón:
+  los componentes son server-renderable y añadir `useTranslations` los forzaría a client. La
+  alternativa (prop opcional con fallback en cada call site) tiene un coste de invasividad alto
+  para un string brevemente audible solo a usuarios de screen reader. Aceptable como deuda
+  técnica documentada hasta que aparezca un caso de uso que lo justifique.
+- **Los snippets de código en /ui** muestran strings de ejemplo hardcoded en inglés
+  ("User created successfully", "Failed to load users", etc.). Esto es **intencional** — el
+  desarrollador que copia el snippet añadirá `t()` en su propio código. La demo asociada al botón
+  sí usa `t()` para mostrar el toast en el idioma activo.
+- **No se ha añadido un tercer idioma para validar la guía**. La guía está documentada en
+  `docs/i18n.md#cómo-añadir-un-idioma-nuevo`, pero no se ha probado en producción.
+
+### Estado del repo al cierre
+
+```
+Routes (App Router):
+├ /[locale]                       (dashboard home)
+├ /[locale]/login
+├ /[locale]/analytics
+├ /[locale]/reports               + /scheduled, /archived
+├ /[locale]/settings
+├ /[locale]/users                 + /[id]
+└ /[locale]/ui                    + /toasts, /empty-states, /error-states,
+                                    /skeletons, /sidebar, /i18n
+```
+
+`npm run lint` → 0 errores · 2 warnings preexistentes ajenos al bloque B5.
+`npm run build` → OK, 36 páginas generadas, sin errores de TypeScript.
+
+### Pendiente — Bloque B6
+
+Completar UI Showcase con foundations, charts, data-table y los componentes restantes.
+
+---
+
+## [B5c.5b] Sección /ui — 3 páginas restantes + auditoría transversal — 2026-05-04
+
+### Resumen ejecutivo
+
+Segundo y último sub-bloque del refactor de la sección `/ui`. Se localizan las 3 páginas
+restantes (`/ui/skeletons`, `/ui/sidebar`, `/ui/i18n`), se aplican las convenciones establecidas
+en B5c.5a, se realiza una auditoría transversal de toda la app en ambos idiomas y se documenta
+el cierre formal del bloque B5.
+
+### Páginas refactorizadas
+
+Las tres páginas siguen el patrón split server/client cuando hay `generateMetadata` + interactividad:
+
+- `src/app/[locale]/(dashboard)/ui/skeletons/page.tsx` (server, metadata) +
+  `skeletons-content.tsx` (`'use client'`, contiene `useState` para el toggle real/skeleton)
+- `src/app/[locale]/(dashboard)/ui/sidebar/page.tsx` (server completo, async, usa `getTranslations`
+  y `t.rich` para los footnotes con código inline)
+- `src/app/[locale]/(dashboard)/ui/i18n/page.tsx` (server, metadata) +
+  `i18n-content.tsx` (`'use client'`, contiene `LanguageSwitcher` y `t.rich` para el header)
+
+### Texto enriquecido con `t.rich` y tags inline
+
+Las descripciones que mezclan prosa con identificadores de código (`<code>`) o énfasis
+(`<strong>`) usan `t.rich` con callbacks que producen los elementos React:
+
+```tsx
+const code = (chunks: React.ReactNode) => (
+  <code className="font-mono bg-[var(--surface-raised)] px-1 py-0.5 rounded">{chunks}</code>
+);
+{t.rich('sections.persistence.footnote', { code })}
+```
+
+JSON correspondiente:
+```json
+"footnote": "Store key: <code>nexdash-sidebar</code> in localStorage. Implemented in <code>src/store/sidebar.store.ts</code>."
+```
+
+### ICU escape para llaves literales
+
+Para mostrar literalmente texto con llaves (`{sectionId}.{kebab-label}`) que de otro modo serían
+interpretadas como placeholders de ICU MessageFormat, se usan single quotes:
+
+```json
+"<code>'{sectionId}.{kebab-label}'</code>"
+```
+
+Las single quotes activan modo literal en ICU; el resultado renderizado es
+`<code>{sectionId}.{kebab-label}</code>`.
+
+### Resultado de la auditoría transversal
+
+**Inconsistencias encontradas y resueltas:**
+
+1. **Dashboard KPI titles** (`dashboard-content.tsx`): "Total Revenue", "Active Users",
+   "Total Sessions", "Conversion Rate" estaban hardcoded. Añadidos a
+   `dashboard.kpis.{totalRevenue,activeUsers,totalSessions,conversionRate}`.
+2. **Dashboard table headers** (`dashboard-content.tsx`): columnas "Revenue", "Conversions", "ROI"
+   estaban hardcoded. Añadidas a `dashboard.campaigns.columns.{revenue,conversions,roi}`.
+3. **Analytics KPI titles** (`analytics-content.tsx`): "Revenue", "New Users", "Sessions",
+   "Conversion Rate" hardcoded. Añadidos a
+   `analytics.kpis.{revenue,newUsers,sessions,conversionRate}`.
+4. **Analytics daily table headers**: "Revenue", "Users", "Sessions", "Conv. Rate" hardcoded.
+   Añadidos a `analytics.dailyTable.columns.{revenue,users,sessions,conversionRate}`.
+5. **Toaster aria-label** (`toaster.tsx`): "Notifications" hardcoded. Refactorizado a
+   `useTranslations('common.navigation').notifications`.
+
+**Inconsistencias documentadas como deuda técnica aceptable:**
+
+1. **Skeleton aria-labels** ("Loading table", "Loading list", "Loading form", "Loading metric",
+   "Loading chart", "Loading user"): permanecen en inglés. Componentes server-renderable;
+   añadir `useTranslations` los forzaría a `'use client'` solo para un string brevemente audible
+   a usuarios de screen reader.
+
+**Patrones verificados sin issues:**
+
+- Todos los `placeholder=` usan `t()`.
+- Todos los `header:` en columnas de DataTable usan `t()`.
+- Todos los status mappings (`row.status`) pasan por `t(...status.{value})`.
+- Forms (login, settings, user) totalmente traducidos vía Zod factory pattern.
+- Topbar, sidebar, breadcrumbs traducidos.
+- `error.tsx`, `loading.tsx`, `not-found.tsx`, `global-error.tsx` traducidos.
+
+### Card de Feedback en /ui
+
+- `feedback.count = 4` (toasts, empty states, error states, skeletons) — verificado.
+- `layout.count = 1` con `href = routes.ui.sidebar` — actualizado: previamente era
+  `count: 0, href: null` con badge "Coming soon". Ahora la card de Layout es navegable y muestra
+  "1 component" / "1 componente".
+- `i18n` no aparece en cards del overview por decisión del bloque (es un sistema, no un
+  componente). Sí está en el sidebar bajo `UI`.
+
+### Archivos modificados
+
+**Páginas refactorizadas:**
+- `src/app/[locale]/(dashboard)/ui/skeletons/page.tsx` (split) + `skeletons-content.tsx` (nuevo)
+- `src/app/[locale]/(dashboard)/ui/sidebar/page.tsx` (refactor completo, server async)
+- `src/app/[locale]/(dashboard)/ui/i18n/page.tsx` (split) + `i18n-content.tsx` (nuevo)
+- `src/app/[locale]/(dashboard)/ui/page.tsx` (layout count + href)
+
+**Archivos de traducción ampliados:**
+- `src/features/ui-showcase/i18n/en.json` — namespaces `skeletons`, `sidebar`, `i18n`
+- `src/features/ui-showcase/i18n/es.json` — equivalentes en español
+- `src/features/dashboard/i18n/{en,es}.json` — kpis y columns adicionales
+- `src/features/analytics/i18n/{en,es}.json` — kpis y dailyTable.columns adicionales
+
+**Componentes touched durante la auditoría:**
+- `src/app/[locale]/(dashboard)/dashboard-content.tsx` — KPI titles + table headers vía `t()`
+- `src/app/[locale]/(dashboard)/analytics/analytics-content.tsx` — KPI titles + daily columns vía `t()`
+- `src/components/feedback/toast/toaster.tsx` — aria-label vía `useTranslations`
+
+### Verificación
+
+- `npm run lint` → 0 errores
+- `npm run build` → OK, 36 páginas generadas
+- Test programático del ICU escape: `'{sectionId}.{kebab-label}'` → `{sectionId}.{kebab-label}` ✓
+
+---
+
+## [B5c.5a] Sección /ui — componentes ui-showcase + 4 páginas — 2026-05-04
+
+### Resumen ejecutivo
+
+Primera parte del refactor de la sección `/ui` (showcase del sistema de diseño). Se localizan los
+componentes genéricos del feature `ui-showcase` (`ShowcaseDemo`, `PropsTable`, `UiSubnav`) y las
+páginas `/ui` (overview), `/ui/toasts`, `/ui/empty-states`, `/ui/error-states`. Se establece la
+convención específica de la sección y la duplicación intencional entre snippet y demo.
+
+### Política de traducción para la sección /ui
+
+Términos que se mantienen en inglés (no se traducen):
+- Nombres de componentes: Toast, Empty state, Error state, Sidebar, Dropdown, Popover, Dialog
+- Jerga universal de design systems: Variants, Props, API, Methods, States
+- Términos técnicos por convención: Hook, Component, Utility, Token
+- Nombres de propiedades, métodos, variables y tipos en snippets de código
+
+Términos que se traducen:
+- Títulos descriptivos de página y subtítulos explicativos
+- Descripciones de cada section, demo y prop individual
+- Labels de los botones de las demos ("Show success" → "Mostrar success")
+- Textos de status como "Coming soon"
+- Mensajes ejemplo dentro de las demos cuando son prosa visible al usuario
+
+### Decisión clave: snippets en inglés vs demos en idioma activo
+
+Las páginas de showcase tienen demos donde se renderizan los componentes con strings de ejemplo.
+La decisión adoptada introduce una **duplicación intencional**:
+
+- Los snippets de código visibles permanecen **en inglés hardcoded** (referencia copy-paste para
+  el desarrollador). Si copia el snippet, lo envuelve con `t()` en su propio código.
+- La demo asociada al botón usa `t()` y muestra el texto traducido al locale activo.
+
+Ejemplo en `/ui/toasts`:
+
+```tsx
+// Snippet (visible en inglés siempre)
+code={`toast.success('User created successfully');`}
+
+// Demo (texto traducido al locale activo)
+<Button onClick={() => toast.success(t('demos.success.message'))}>
+  {t('demos.success.label')}
+</Button>
+```
+
+Razón: el snippet es educativo (muestra cómo se escribe el código), mientras que la demo es
+funcional (muestra cómo se ve el componente al usuario final). Mezclarlos confundiría al
+desarrollador que clona la plantilla.
+
+### Decisión: nombres de componentes en metadata
+
+Los `<title>` de pestaña mantienen el nombre del componente:
+- `Toasts` en ambos locales
+- `Empty states` / `Estados vacíos`
+- `Error states` / `Estados de error`
+
+Regla: si es un nombre propio del componente del design system, queda en inglés (Toasts).
+Si es un concepto genérico traducible, se traduce (Empty states).
+
+### Estructura del namespace `uiShowcase`
+
+```
+metadata.{title,description}
+common.{comingSoon,copyCode,codeCopied,yes,soon}
+propsTable.columns.{prop,type,default,required,description}
+subnav.groups.{components,layout}
+subnav.items.{overview,toasts,emptyStates,errorStates,skeletons,sidebar}
+overview.header.{title,subtitle}
+overview.componentCount             ← plural ICU: {count, plural, one {# component} other {# components}}
+overview.categories.{key}.{label,description}
+toasts.metadata.title
+toasts.header.{title,subtitle}
+toasts.sections.{variants,withDescription,withAction,persistent,queue,api,methods}.{title,description}
+toasts.demos.{success,error,warning,info,withDescription,withAction,persistent,queue}.{title,label,message,...}
+toasts.props.{title,description,duration,action}
+toasts.methods.{success,error,warning,info,dismiss,clear}
+emptyStates.* (mismo patrón)
+errorStates.* (mismo patrón)
+localizationNote.{title,description,linkLabel}
+```
+
+### Componentes refactorizados
+
+- `src/features/ui-showcase/components/showcase-demo.tsx`
+  - `aria-label="Copy code"` → `t('common.copyCode')`
+  - `toast.success('Copied to clipboard')` → `t('common.codeCopied')`
+- `src/features/ui-showcase/components/props-table.tsx`
+  - Headers de columnas (Prop, Type, Default, Required, Description) → `t('propsTable.columns.*')`
+  - `'Yes'` → `t('common.yes')`
+- `src/features/ui-showcase/components/ui-subnav.tsx`
+  - `NAV_ITEMS` ahora contiene claves de traducción en lugar de strings literales (mismo patrón que
+    `sidebar.config.ts`). El componente resuelve cada `label` y `group` con `useTranslations`.
+  - `'soon'` → `t('common.soon')`
+- `ShowcaseSection` y `ShowcaseGrid` no requieren cambios (no contienen strings hardcoded).
+
+### Páginas refactorizadas
+
+Las cuatro páginas se dividieron en dos archivos para soportar `generateMetadata` localizada:
+
+- `src/app/[locale]/(dashboard)/ui/page.tsx` — server component, async, con `generateMetadata`
+- `src/app/[locale]/(dashboard)/ui/toasts/page.tsx` + `toasts-content.tsx` (`'use client'`)
+- `src/app/[locale]/(dashboard)/ui/empty-states/page.tsx` + `empty-states-content.tsx`
+- `src/app/[locale]/(dashboard)/ui/error-states/page.tsx` + `error-states-content.tsx`
+
+Mismo patrón ya consolidado en `settings/page.tsx` y `reports/page.tsx`.
+
+### Sección "Localization" al final de cada página
+
+Se añade un `<ShowcaseSection title={tNote('title')}>` al final de cada página de showcase con
+una descripción que recuerda al desarrollador que en producción los strings deben envolverse en
+`t()`, y un `Link` a `/ui/i18n` ("See the i18n guide" / "Ver la guía de i18n"). Patrón a aplicar
+también en B5c.5b para las páginas restantes.
+
+### PropsTable: política mixta
+
+`PropsTable` traduce únicamente los **headers de columna** y la celda `Yes`. Los valores de las
+celdas (nombres de props, tipos, valores por defecto) **nunca se traducen**: son identificadores
+de código. Los `description` de cada `PropDoc` se construyen desde el componente padre con `t()`,
+de modo que el array `props` se crea dentro del componente cliente, no en el module scope.
+
+### Plural ICU para el contador de componentes
+
+`overview.componentCount` usa formato ICU plural:
+
+```json
+"componentCount": "{count, plural, one {# component} other {# components}}"
+```
+
+```tsx
+t('overview.componentCount', { count })
+// count=1 → "1 component"
+// count=4 → "4 components"
+```
+
+Equivalente en español con la misma forma plural (`# componente` / `# componentes`).
+
+### Archivos modificados
+
+- `src/features/ui-showcase/i18n/en.json` — namespace expandido (~210 líneas)
+- `src/features/ui-showcase/i18n/es.json` — equivalente en español
+- `src/features/ui-showcase/components/showcase-demo.tsx`
+- `src/features/ui-showcase/components/props-table.tsx`
+- `src/features/ui-showcase/components/ui-subnav.tsx`
+- `src/app/[locale]/(dashboard)/ui/page.tsx`
+- `src/app/[locale]/(dashboard)/ui/toasts/page.tsx` + `toasts-content.tsx` (nuevo)
+- `src/app/[locale]/(dashboard)/ui/empty-states/page.tsx` + `empty-states-content.tsx` (nuevo)
+- `src/app/[locale]/(dashboard)/ui/error-states/page.tsx` + `error-states-content.tsx` (nuevo)
+
+### Verificación
+
+- `npm run lint` → 0 errores (2 warnings preexistentes ajenos al bloque)
+- `npm run build` → OK, las 36 páginas se generan (18 rutas × 2 locales)
+- Cambio de idioma desde topbar en cualquier página `/ui/*`: header, sections, demos y subnav se
+  actualizan inmediatamente. Snippets permanecen en inglés (intencional).
+- Disparar cada demo de toast/empty/error en `/es/*` produce strings en español; en `/en/*`, en inglés.
+- `<title>` de pestaña localizado por página.
+
+### Pendiente — B5c.5b
+
+Páginas `/ui/skeletons`, `/ui/sidebar`, `/ui/i18n` + cierre del bloque B5.
+
+---
+
+## [B5c.1] Chrome global + auth — strings hardcodeados — 2026-05-04
+
+### Resumen ejecutivo
+
+Extracción de todos los strings visibles de los componentes de layout (sidebar, topbar, breadcrumbs,
+theme-toggle) y de la página y formulario de login. Tras este bloque, el cambio de idioma es inmediato
+y consistente en todo el chrome del dashboard: sidebar, topbar, breadcrumbs y login.
+
+### Convenciones de naming establecidas
+
+Las claves de traducción siguen estructura jerárquica `namespace.categoria.elemento`:
+
+- `common.actions.*` — acciones genéricas (save, cancel, delete…)
+- `common.status.*` — estados de carga/error/vacío
+- `common.navigation.*` — search placeholder, notification labels
+- `common.sidebar.sections.*` — títulos de secciones del sidebar
+- `common.sidebar.items.*` — labels de items de navegación
+- `common.sidebar.actions.*` — expand/collapse/logOut del sidebar
+- `common.userMenu.*` — profile, settings, signOut, signingOut
+- `common.theme.*` — switchToLight, switchToDark
+- `common.metadata.*` — title, description para `<head>`
+- `auth.login.*` — todo el namespace del formulario de login
+
+### Patrón sidebar.config.ts — Opción A (claves en lugar de strings)
+
+Los labels en `sidebar.config.ts` son ahora claves de traducción relativas al namespace `common`:
+
+```ts
+// Antes
+{ type: 'link', label: 'Dashboard', href: routes.dashboard, icon: LayoutDashboard }
+
+// Después
+{ type: 'link', label: 'sidebar.items.dashboard', href: routes.dashboard, icon: LayoutDashboard }
+```
+
+El componente que renderiza resuelve la clave con `useTranslations('common')`. El config sigue siendo
+una constante estática — no necesita ser función ni recibir `t` como parámetro.
+
+### Patrón useTranslations vs getTranslations
+
+- Client components (ya marcados `'use client'`): `useTranslations('namespace')`
+- Server components: `getTranslations({ locale, namespace: 'ns' })` (async)
+- No se añade `'use client'` solo para traducir — se convierte en async server component
+
+Componentes que se marcaron `'use client'` para poder usar el hook: `sidebar-link.tsx`, `sidebar-section.tsx`.
+
+### Patrón Zod con mensajes traducidos
+
+El schema de login se convierte en factory que recibe los mensajes traducidos:
+
+```ts
+// lib/validators/auth.schema.ts
+export function createLoginSchema(messages: { emailRequired: string; emailInvalid: string; passwordRequired: string }) {
+  return z.object({ email: z.string().min(1, messages.emailRequired).email(messages.emailInvalid), ... });
+}
+
+// login-form.tsx (client component)
+const t = useTranslations('auth');
+const schema = createLoginSchema({
+  emailRequired: t('login.validation.emailRequired'),
+  emailInvalid: t('login.validation.emailInvalid'),
+  passwordRequired: t('login.validation.passwordRequired'),
+});
+```
+
+### Metadata localizada
+
+`[locale]/layout.tsx` añade `generateMetadata` con title template:
+```ts
+title: { default: t('metadata.title'), template: `%s · ${t('metadata.title')}` }
+```
+
+`(auth)/login/page.tsx` tiene su propio `generateMetadata` con título del locale activo.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/messages/en/common.json` | Añadidas secciones `navigation`, `sidebar`, `userMenu`, `theme`, `metadata` |
+| `src/messages/es/common.json` | Idem en español |
+| `src/features/auth/i18n/en.json` | Expandido con `form`, `errors`, `validation`, `demo`, `welcomeBack` |
+| `src/features/auth/i18n/es.json` | Idem en español |
+| `src/lib/validators/auth.schema.ts` | Schema → factory `createLoginSchema(messages)` |
+| `src/components/layout/sidebar/sidebar.config.ts` | Labels → claves de traducción |
+| `src/components/layout/sidebar/sidebar-link.tsx` | `'use client'` + `useTranslations` |
+| `src/components/layout/sidebar/sidebar-group.tsx` | `useTranslations` |
+| `src/components/layout/sidebar/sidebar-section.tsx` | `'use client'` + `useTranslations` |
+| `src/components/layout/sidebar/sidebar-popover.tsx` | `useTranslations` |
+| `src/components/layout/sidebar/sidebar.tsx` | `useTranslations` para aria-labels |
+| `src/components/layout/breadcrumbs.tsx` | `useTranslations`; labels → claves |
+| `src/components/layout/topbar.tsx` | `useTranslations`; pageTitles → claves; search placeholder; user menu |
+| `src/components/layout/theme-toggle.tsx` | `useTranslations`; tooltip traducido |
+| `src/app/[locale]/layout.tsx` | `generateMetadata` con title template localizado |
+| `src/app/[locale]/(auth)/login/page.tsx` | Server component async; `getTranslations`; subtitle traducido |
+| `src/components/forms/login-form.tsx` | `useTranslations('auth')`; schema dinámico; todos los strings |
+
+### Build
+
+36 páginas, TypeScript: sin errores.
+
+---
+
+## [B5b] Selector de idioma + integración en UI — 2026-05-04
+
+### Resumen ejecutivo
+
+Se implementa el componente `LanguageSwitcher` con dos variantes (compact para topbar, full para
+Settings). Se añade la showcase page `/ui/i18n`. La infraestructura de i18n queda integrada
+visualmente: el usuario puede cambiar de idioma tanto desde el topbar como desde Settings → Appearance.
+
+### Decisiones clave
+
+**Dos variantes en un componente**: `compact` (dropdown con flag + código de locale en topbar) y
+`full` (pill buttons para Settings). Un solo componente con un prop `variant` evita duplicar la
+lógica del hook y mantiene un único punto de importación.
+
+**`router.replace` en lugar de `router.push`**: El cambio de idioma no añade entrada al historial del
+navegador. Si el usuario pulsa "Atrás" no vuelve al idioma anterior — eso sería desorientador.
+
+**Sin toast en cambio de idioma**: El cambio es instantáneo y visible (toda la UI cambia de idioma).
+Un toast sería redundante y en cualquier caso estaría en el idioma recién seleccionado, no en el
+anterior. Consistente con cómo lo hacen la mayoría de productos.
+
+**Cookie gestionada por next-intl**: No se escribe la cookie `NEXT_LOCALE` manualmente. next-intl
+la actualiza automáticamente al navegar a una ruta con prefijo diferente. El hook solo llama a
+`router.replace(pathname, { locale: newLocale })`.
+
+**Strings de Language en `settings` namespace**: Las etiquetas de la sección Language en Settings
+("Language", "Choose your display language") van en `src/features/settings/i18n/{locale}.json` bajo
+`appearance.language.*`. Consistente con el patrón de namespace por feature.
+
+### Archivos creados
+
+| Archivo | Descripción |
+|---|---|
+| `src/components/i18n/language-switcher/use-locale-switch.ts` | Hook: `useLocale` + `router.replace` |
+| `src/components/i18n/language-switcher/language-switcher.tsx` | Componente con variantes compact/full |
+| `src/components/i18n/language-switcher/index.ts` | Barrel de exports |
+| `src/app/[locale]/(dashboard)/ui/i18n/page.tsx` | Showcase page del LanguageSwitcher |
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/components/layout/topbar.tsx` | Añadido `<LanguageSwitcher variant="compact" />` antes del bell |
+| `src/app/[locale]/(dashboard)/settings/page.tsx` | Añadida sección Language en Appearance card |
+| `src/features/settings/i18n/en.json` | Añadido `appearance.language.{label,description}` |
+| `src/features/settings/i18n/es.json` | Idem en español |
+| `src/config/routes.ts` | Añadido `ui.i18n: '/ui/i18n'` |
+| `src/components/layout/sidebar/sidebar.config.ts` | Añadido link i18n en UI → Components |
+| `src/components/layout/breadcrumbs.tsx` | Añadido `i18n` en routeLabels y uiGroupLabel |
+
+### Build
+
+36 páginas generadas (34 de B5a + `/[locale]/ui/i18n` × 2 locales). TypeScript: sin errores.
+
+---
+
+## [B5a] Infraestructura i18n — 2026-05-04
+
+### Resumen ejecutivo
+
+Se instala y configura next-intl v4 con App Router. Se establece el routing con prefijo de
+locale siempre presente (`/en/*`, `/es/*`), se integra el middleware de i18n con la lógica
+de auth existente, y se crea la estructura completa de archivos de traducción por feature.
+No se extraen strings reales — solo se valida el sistema end-to-end con strings de prueba.
+
+### Decisiones clave
+
+**`localePrefix: 'always'`**: Todas las URLs llevan prefijo, incluyendo el locale por defecto.
+Razón: URLs consistentes, mejor SEO, sin ambigüedad. Alternativa `'as-needed'` omite el
+prefijo del locale por defecto (`/` para inglés) pero complica el proxy y el matching.
+
+**next-intl v4 (4.11.0)**: Versión instalada. API compatible con la spec:
+`requestLocale: Promise<string|undefined>` en `getRequestConfig`, `createMiddleware(routing)`,
+`createNavigation(routing)`, `defineRouting(config)`.
+
+**Namespaces por feature**: Los strings de cada feature viven en su directorio `i18n/` junto
+al código del feature. `common.json` solo para strings verdaderamente transversales. Esta
+organización evita el archivo monolítico de traducciones y mantiene cohesión feature/texto.
+
+**Composición de proxy (intl primero, auth después)**: El middleware de next-intl resuelve
+el locale antes de aplicar auth. Si el usuario visita `/users` sin sesión, el intl middleware
+detectaría que `/users` necesita prefijo, pero la auth intercepta antes de esa redirección
+para ir directamente a `/en/login`. Evita el doble redirect (`/` → `/en/` → `/en/login`).
+
+**`localeDetection: true`**: Detecta locale de cookie `NEXT_LOCALE` y header `Accept-Language`.
+El usuario nuevo sin cookie obtiene el locale del browser. El usuario recurrente recibe su
+preferencia guardada. B5b añadirá el selector manual en la UI.
+
+**Páginas como `ƒ (Dynamic)`**: Las páginas eran `○ (Static)` en B4. Con i18n, `getMessages()`
+en el layout y `cookies()` en el root layout las convierte en dinámicas. Esperado y aceptable
+para un dashboard autenticado.
+
+### Archivos creados
+
+| Archivo | Descripción |
+|---|---|
+| `src/config/i18n.ts` | `locales`, `defaultLocale`, `LOCALE_COOKIE`, labels, flags |
+| `src/i18n/routing.ts` | `defineRouting` con locales, prefix, cookie, detection |
+| `src/i18n/navigation.ts` | `Link`, `useRouter`, `usePathname`, `redirect` localizados |
+| `src/i18n/request.ts` | `getRequestConfig` que carga mensajes de todos los features |
+| `src/messages/en/common.json` | Strings transversales en inglés |
+| `src/messages/es/common.json` | Strings transversales en español |
+| `src/features/{feature}/i18n/en.json` | Strings de prueba en inglés (×7 features) |
+| `src/features/{feature}/i18n/es.json` | Strings de prueba en español (×7 features) |
+| `src/app/[locale]/layout.tsx` | Layout del locale: NextIntlClientProvider + Providers |
+| `docs/i18n.md` | Documentación completa del sistema i18n |
+| `.claude/rules/i18n.md` | Reglas de navegación, strings y namespaces para el agente |
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `next.config.ts` | `createNextIntlPlugin('./src/i18n/request.ts')` |
+| `src/config/index.ts` | Re-exporta `src/config/i18n.ts` |
+| `src/app/layout.tsx` | Root layout: async, lee locale de cookie para `<html lang>` |
+| `src/proxy.ts` | Compone `createMiddleware(routing)` + lógica de auth |
+| `src/app/[locale]/*` | Todos los archivos de `(auth)/` y `(dashboard)/` movidos aquí |
+| `src/components/layout/sidebar/sidebar-link.tsx` | `Link` de `@/i18n/navigation` |
+| `src/components/layout/sidebar/sidebar-popover.tsx` | `Link` de `@/i18n/navigation` |
+| `src/components/layout/sidebar/sidebar.tsx` | `usePathname` de `@/i18n/navigation` |
+| `src/components/layout/sidebar/use-expanded-groups.ts` | `usePathname` de `@/i18n/navigation` |
+| `src/components/layout/breadcrumbs.tsx` | `usePathname`, `Link` de `@/i18n/navigation` |
+| `src/components/layout/topbar.tsx` | `usePathname` de `@/i18n/navigation` |
+| `src/components/auth/session-provider.tsx` | `useRouter` de `@/i18n/navigation` |
+| `src/components/forms/login-form.tsx` | `useRouter` de `@/i18n/navigation` |
+| `src/hooks/use-logout-action.ts` | `useRouter` de `@/i18n/navigation` |
+| `src/features/ui-showcase/components/ui-subnav.tsx` | `Link`, `usePathname` de `@/i18n/navigation` |
+| Todos los `error.tsx` del dashboard | `useRouter` de `@/i18n/navigation` |
+| `[locale]/(dashboard)/page.tsx` | `useTranslations('dashboard')` para verificación e2e |
+
+### Verificación
+
+```
+npm run lint  → 0 errores (2 warnings pre-existentes)
+npm run build → 34 páginas generadas (17 rutas × 2 locales), sin errores
+```
+
+Build route map:
+- `/[locale]` → dashboard, `/[locale]/analytics`, `/[locale]/login`, `/[locale]/reports/*`
+- `/[locale]/settings`, `/[locale]/ui/*`, `/[locale]/users`, `/[locale]/users/[id]`
+- `/api/auth/*` permanece fuera del segmento `[locale]`
+
+---
+
+## [B4 — Cierre del bloque] Sistema de feedback completo — 2026-05-04
+
+### Resumen ejecutivo
+
+B4 cubre el diseño, construcción e integración completa del sistema de feedback visual de NexDash.
+
+**Componentes construidos (B4a–B4c):**
+- `Toast` — singleton con 4 variantes, duración configurable, hover-pause, cola FIFO, animaciones entrada/salida
+- `EmptyState` — 3 variantes (default, search, error) con ilustraciones SVG adaptables a theme y accent
+- `ErrorState` — 2 tamaños (default, compact) con detalles técnicos en dev mode
+- Skeletons tipados: `KpiCardSkeleton`, `ChartSkeleton`, `TableSkeleton`, `ListSkeleton`, `FormSkeleton`, `UserCardSkeleton`
+- Sidebar avanzado: guía vertical continua en sub-items, sección UI unificada con grupos colapsables, breadcrumbs virtuales
+
+**Páginas integradas (B4d):**
+- Dashboard home: KPIs, AreaChart, DataTable de campaigns, ActivityFeed
+- Analytics: KPIs, LineChart, DonutChart, tabla diaria con filtros de rango
+- Users list: tabla con filtros, EmptyState search/default, confirmación Dialog en delete, toasts CRUD
+- Users detail: UserCardSkeleton + FormSkeleton, EmptyState not-found, toast en update
+- Reports: TableSkeleton, ErrorState, toast simulado para descarga
+- Settings: FormSkeleton, toast en profile update, Appearance sin toast (cambio síncrono)
+- Login: errores inline (no toast), welcome toast en login, signed-out toast en logout
+
+**Patrones establecidos:**
+1. `isLoading → TypedSkeleton` / `isError → ErrorState` / `!data → EmptyState` / datos → contenido
+2. Toast en el componente, nunca en el hook; mensajes en pasado y concisos
+3. Errores de validación inline; errores de auth inline (no toast)
+4. Acciones destructivas con Dialog de confirmación antes de mutación
+5. `mutateAsync` + try/catch para dialogs que quedan abiertos en error; `mutate` + callbacks para fire-and-forget
+6. `error.tsx` de ruta → `EmptyState variant="error"` + useRouter; `loading.tsx` → skeletons tipados
+7. Skeletons con `aria-busy="true"`, ErrorState con `role="alert"`, EmptyState con `role="status"`
+
+**Estado al cierre:** lint 0 errores (2 warnings pre-existentes), build verde, 20 páginas generadas.
+
+---
+
+## [B4d.3] Integración de feedback — Settings + Login + Revisión final — 2026-05-04
+
+### Resumen ejecutivo
+
+Tercer y último sub-bloque de B4d. Integración de feedback en Settings y Login (formularios con
+particularidades propias), seguida de una revisión transversal de todo el bloque B4 para detectar
+y resolver inconsistencias. Cierre formal del bloque.
+
+### Settings
+
+**Profile section**: el `SettingsForm` tenía un `onSubmit` simulado (sleep 500ms) sin feedback.
+Se añaden `toast.success('Profile updated')` en éxito y `toast.error('Failed to update profile')` en error.
+El try/catch ya está preparado para el reemplazo por una mutation real.
+
+**Appearance section**: no se añaden toasts. El theme toggle y el accent picker son cambios síncronos
+en localStorage/next-themes — el feedback es el propio cambio visual inmediato. Un toast de "Accent changed"
+sería ruido sin aporte informativo.
+
+**`settings/loading.tsx`**: reescrito con `FormSkeleton fields={4} showButton` para la sección Profile y
+skeletons específicos para los controles de Appearance (swatches de tema + círculos de accent).
+
+**`settings/error.tsx`**: reescrito con `EmptyState variant="error"` + `useRouter` (estándar de route-level errors).
+Antes usaba un layout custom con `AlertTriangle` inline.
+
+### Login
+
+**Errores de autenticación**: ya estaban inline con `AlertCircle` desde B3c. Correcto — los errores de auth
+no van a toast porque el mensaje debe persistir hasta el siguiente intento, no desaparecer automáticamente.
+
+**Button loading**: ya tenía `loading={isPending}` desde B3c. No hay cambios.
+
+**Welcome toast**: se añade `toast.success(\`Welcome back, ${session.user.name}!\`)` en el callback `onSuccess`
+de `login.mutate()`. El `Toaster` está montado en `providers.tsx` (root layout), por lo que el toast
+persiste a través de la navegación cliente-side al dashboard.
+`authHandler.login()` devuelve `AuthSession` con `user.name`, disponible directamente en el callback.
+
+**Signed-out toast**: se añade `toast.info('Signed out')` en `use-logout-action.ts` antes de `router.push(routes.login)`.
+Misma garantía de persistencia — el Toaster está en el root layout, no en el layout del dashboard.
+Se descartó la técnica de query param `?goodbye=true` por complejidad innecesaria.
+
+### Revisión transversal
+
+Inconsistencias detectadas y resueltas:
+
+| Inconsistencia | Archivo | Resolución |
+|---|---|---|
+| `analytics/error.tsx` usaba layout custom (`AlertTriangle` inline) | `analytics/error.tsx` | Reescrito con `EmptyState variant="error"` + `useRouter` |
+| `analytics/loading.tsx` usaba raw Skeleton blobs para charts y KPIs | `analytics/loading.tsx` | Reescrito con `KpiCardSkeleton`, `ChartSkeleton`, `TableSkeleton` tipados |
+| `(dashboard)/loading.tsx` (home) usaba raw blobs para charts y custom para KPIs | `loading.tsx` | Reescrito con `KpiCardSkeleton`, `ChartSkeleton`, `TableSkeleton`, `ListSkeleton` |
+
+Sin inconsistencias en:
+- Toasts en componentes (no en hooks) ✓
+- Mensajes en pasado y concisos ✓
+- Errores de validación inline (react-hook-form) ✓
+- Errores de auth inline (login-form) ✓
+- `aria-busy` en todos los skeletons tipados ✓
+- `role="alert"` en ErrorState ✓
+- `role="status"` en EmptyState ✓
+- Dialog de confirmación antes de delete ✓
+- Invalidación de queries en todas las mutations ✓
+
+### Deuda técnica pospuesta (B5+)
+
+- El `SettingsForm` simula la mutation con `sleep(500)` — no hay handler ni hook real para settings.
+  Cuando se conecte la API, crear `settingsHandler.updateProfile()` + `useUpdateProfile()` siguiendo
+  el patrón establecido. El toast ya está en el componente.
+- `UserCardSkeleton` (avatar h-10 + texto pequeño) no coincide exactamente con el perfil xl del
+  usuario en `users/[id]/page.tsx` (avatar xl + h2 + badges). Riesgo de CLS menor. Resolver
+  creando un `UserProfileSkeleton` dedicado cuando haya ancho de banda.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/components/forms/settings-form.tsx` | Toast.success/error en onSubmit |
+| `src/app/(dashboard)/settings/loading.tsx` | FormSkeleton + skeletons específicos para Appearance |
+| `src/app/(dashboard)/settings/error.tsx` | EmptyState variant="error" + useRouter |
+| `src/components/forms/login-form.tsx` | Welcome toast en onSuccess de login |
+| `src/hooks/use-logout-action.ts` | toast.info('Signed out') antes de router.push |
+| `src/app/(dashboard)/analytics/error.tsx` | EmptyState variant="error" + useRouter (era custom inline) |
+| `src/app/(dashboard)/analytics/loading.tsx` | KpiCardSkeleton + ChartSkeleton + TableSkeleton (eran blobs) |
+| `src/app/(dashboard)/loading.tsx` | KpiCardSkeleton + ChartSkeleton + TableSkeleton + ListSkeleton (eran blobs) |
+
+### Verificación
+
+```
+npm run lint  → 0 errores (2 warnings pre-existentes sin cambio)
+npm run build → 20 páginas generadas, sin errores
+```
+
+---
+
+## [B4d.2] Integración de feedback — Users + Reports — 2026-05-04
+
+### Resumen ejecutivo
+
+Se conectan los componentes de feedback con las páginas de Users (list, detail) y Reports
+(overview). A diferencia de B4d.1, estas páginas tienen mutations de CRUD, por lo que se
+integra el sistema de toasts en todas las acciones: create, update, delete. Se añade
+confirmación de acciones destructivas (delete user) mediante Dialog. Se corrigen las
+inconsistencias previas en loading/error de route-level.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/app/(dashboard)/users/page.tsx` | TableSkeleton, ErrorState, EmptyState (search/default), delete confirmación con Dialog, toasts en create y delete. |
+| `src/app/(dashboard)/users/[id]/page.tsx` | UserCardSkeleton + FormSkeleton en loading, EmptyState variant="error" en not-found, ErrorState para isError, toast en update. |
+| `src/app/(dashboard)/reports/page.tsx` | TableSkeleton, ErrorState, handleDownload con toast.info + toast.success secuencial. |
+| `src/app/(dashboard)/users/error.tsx` | Reescrito con EmptyState variant="error" + useRouter (estándar de route-level errors). |
+| `src/app/(dashboard)/reports/error.tsx` | Reescrito con EmptyState variant="error" + useRouter. |
+| `src/app/(dashboard)/users/loading.tsx` | TableSkeleton en lugar de raw Skeleton bars. |
+| `src/app/(dashboard)/reports/loading.tsx` | TableSkeleton en lugar de raw Skeleton bars. |
+| `src/components/feedback/skeleton/form-skeleton.tsx` | Añadido `aria-busy="true"` y `aria-label="Loading form"` (omitido en B4d.1). |
+| `src/components/feedback/skeleton/user-card-skeleton.tsx` | Añadido `aria-busy="true"` y `aria-label="Loading user"` (omitido en B4d.1). |
+| `docs/feedback.md` | Nueva sección "Mutations and toasts". |
+| `.claude/rules/feedback.md` | Reglas de mutations y toasts. |
+
+### Inconsistencias previas detectadas y corregidas
+
+1. **Mutations sin feedback** — `deleteUser.mutate(row.id)` ejecutaba el delete silenciosamente. `createUser.mutateAsync(values)` y `updateUser.mutateAsync(...)` tampoco mostraban feedback. Todas las mutations tienen ahora toasts de éxito y error.
+
+2. **Delete sin confirmación** — El botón Trash2 ejecutaba el delete directamente. Corregido: click en Trash2 → `setDeleteTarget(row)` → Dialog de confirmación con descripción del usuario → `confirmDelete()` con toast.
+
+3. **Detail page con skeletons hardcodeados** — La página `/users/[id]` tenía un skeleton inline con `Skeleton` primitivos en lugar de `UserCardSkeleton` y `FormSkeleton`. Corregido.
+
+4. **"User not found" con UI custom** — La página de detalle usaba un `<div>` custom en lugar de `EmptyState variant="error"`. Corregido.
+
+5. **isError sin manejar en users y reports** — Si las queries fallaban, las páginas mostraban el estado de DataTable con datos vacíos (`data ?? []`). Corregido con `ErrorState` y `onRetry`.
+
+6. **error.tsx con UI custom** — `users/error.tsx` y `reports/error.tsx` tenían inline icons y divs. Corregido con `EmptyState variant="error"` según el estándar del feedback.md.
+
+7. **loading.tsx con raw Skeleton bars** — Ambos `loading.tsx` usaban `h-11 w-full` bars apiladas en lugar de `TableSkeleton`. Corregido.
+
+8. **FormSkeleton y UserCardSkeleton sin aria-busy** — Omitido en B4d.1. Corregido en este bloque.
+
+9. **Download button con onClick vacío** — `onClick={() => {}}`. Corregido con `handleDownload(row)` que dispara `toast.info` seguido de `toast.success` tras 1.5s.
+
+### Decisiones técnicas
+
+**Toast en componente, no en hook** — Los toasts viven en los componentes de página (`users/page.tsx`, `users/[id]/page.tsx`), no en `use-users.ts`. Esto permite que distintos consumidores del mismo hook usen mensajes diferentes. Los hooks solo gestionan `invalidateQueries` en `onSuccess`.
+
+**mutateAsync + try/catch para create** — Al crear un usuario, el dialog debe cerrarse SOLO si la operación tiene éxito. Si falla, el dialog permanece abierto y el user puede reintentar. Por eso se usa `mutateAsync` con try/catch en lugar de `mutate` con callbacks.
+
+**mutate + callbacks para delete** — El delete usa `mutate` con `onSuccess`/`onError` porque no hay estado de UI que preservar según el resultado (el dialog de confirmación se cierra en ambos casos).
+
+**Download como mutation simulada** — Los reports usan mocks. El download se implementa con `toast.info` + `setTimeout(1500ms) + toast.success` para simular una operación async. Decisión: preferible a un link directo (que no tendría feedback) o a no implementarlo. Se documenta como patrón de demo.
+
+**EmptyState variant="search" con clearFilters** — La página de users detecta `hasFilters = search || roleFilter || statusFilter` para distinguir entre "no users" y "no matches". `clearFilters()` resetea los tres filtros simultáneamente.
+
+**No hay delete en detail page** — La página de detalle no tiene botón de delete. El delete se gestiona desde la lista. No se añade porque no existe en el diseño actual.
+
+**UserCardSkeleton vs perfil real** — `UserCardSkeleton` está diseñado para filas de lista (avatar h-10, nombre h-4). El profile card real usa avatar xl (h-16), nombre h2, y múltiples badges/metadata. La tarea pide usar `UserCardSkeleton` — se usa, documentando que hay una discrepancia visual menor. El perfil de detalle podría tener su propio skeleton en el futuro si el CLS es relevante.
+
+**Query invalidation verificada** — `useCreateUser`, `useUpdateUser`, y `useDeleteUser` ya tienen `invalidateQueries` en `onSuccess` en el hook. No se requirió modificación.
+
+---
+
+## [B4d.1] Integración de feedback — Dashboard home + Analytics — 2026-05-04
+
+### Resumen ejecutivo
+
+Se conectan los componentes de feedback (skeletons, ErrorState, EmptyState) con las páginas
+`/dashboard` y `/analytics`. Todas las secciones con datos asíncronos implementan el patrón
+estándar loading → error → empty → success. Se corrigen inconsistencias previas (texto
+"Loading…" en charts) y se añaden atributos de accesibilidad a los componentes base.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/app/(dashboard)/page.tsx` | Integración completa: skeleton, error y empty en todos los slots. |
+| `src/app/(dashboard)/analytics/page.tsx` | Integración completa: skeleton, error y empty en todos los slots. |
+| `src/components/feedback/error-state/error-state.tsx` | Añadido `role="alert"` en ambas variantes (default y compact). |
+| `src/components/feedback/empty-state/empty-state.tsx` | Añadido `role="status"`. |
+| `src/components/feedback/skeleton/kpi-card-skeleton.tsx` | Añadido `aria-busy="true"` y `aria-label="Loading metric"`. |
+| `src/components/feedback/skeleton/chart-skeleton.tsx` | Añadido `aria-busy="true"` y `aria-label="Loading chart"` en ambas ramas (donut y resto). |
+| `src/components/feedback/skeleton/table-skeleton.tsx` | Añadido `aria-busy="true"` y `aria-label="Loading table"`. |
+| `src/components/feedback/skeleton/list-skeleton.tsx` | Añadido `aria-busy="true"` y `aria-label="Loading list"`. |
+| `docs/feedback.md` | Nueva sección "Pattern of use" con patrón estándar y tabla de slot mapping. |
+| `.claude/rules/feedback.md` | Reglas del patrón estándar al inicio del archivo. |
+
+### Patrón estándar adoptado
+
+Orden invariante: `isLoading` → `isError` → `!data?.length` → render real.
+
+Cada sección gestiona sus tres estados localmente. Cuando múltiples slots comparten una
+sola query (los 4 KPI de `useDashboardKPIs`, los 4 de `useAnalyticsMonthly`), el error se
+muestra como un estado compartido que cubre todos los slots con `ErrorState size="compact"`
+dentro de cada card — un error por query, no un error por KPI.
+
+### Inconsistencias previas detectadas y corregidas
+
+1. **Charts con "Loading…" en texto plano** — Dashboard y Analytics usaban `<div className="h-56 … text-sm">Loading…</div>` en lugar del skeleton tipado. Corregido: `ChartSkeleton type="area|bar|line|donut"`.
+
+2. **`isError` ignorado en todas las queries** — Ninguna sección manejaba el estado de error. Queries fallidas producían secciones en blanco sin feedback. Corregido: todas las secciones muestran `ErrorState` con `onRetry`.
+
+3. **`isError` en analytics KPIs mostraba valores falsos** — Si `useAnalyticsMonthly` fallaba, los KPI mostraban '—' con 0% de crecimiento (valores engañosos) en lugar de un estado de error. Corregido: error en monthly → 4 cards con `ErrorState compact`.
+
+4. **DataTable con skeleton de barras horizontales en lugar de tabla** — El loading interno de `DataTable` mostraba `h-11` bars apiladas. En las páginas de Dashboard y Analytics, se reemplazó por `TableSkeleton` externo (que muestra estructura real de tabla con header y celdas). El prop `loading` de DataTable se mantiene disponible para otros usos.
+
+5. **ActivityFeed sin estado vacío** — Si `activity` era un array vacío, `ActivityFeed` renderizaba un div vacío sin feedback. Corregido: `!activityLoading && !activity?.length` → `EmptyState variant="default" title="No recent activity yet"`.
+
+6. **Accesibilidad ausente en componentes base** — Ningún skeleton tenía `aria-busy`, `ErrorState` no tenía `role="alert"`, `EmptyState` no tenía `role="status"`. Corregido en todos los componentes base.
+
+### Decisiones técnicas
+
+**Toasts en estas páginas** — No se añaden toasts para fallos de carga en páginas read-only. Razón: el `ErrorState` dentro de cada sección ya proporciona feedback visual contextual. Un toast adicional en el mismo momento sería redundante y ruidoso (el usuario ya ve el error state en el slot afectado). Los toasts de error se reservan para mutaciones y acciones explícitas del usuario (B4d.2).
+
+**DataTable loading → TableSkeleton externo** — En lugar de modificar el loading interno de DataTable (que violaría la regla `components/ui/ → solo @lib/utils`), se controla el estado externamente: si `loading`, mostrar `TableSkeleton`; si no, renderizar `DataTable`. El prop `loading` de DataTable se omite en estos casos.
+
+**EmptyState en tabla diaria de Analytics** — La tabla diaria usa el `emptyMessage` nativo de `DataTable` ("No data found.") para el estado vacío, ya que el componente ya incluye este comportamiento. Añadir `EmptyState` externo requeriría duplicar la lógica. Documentado como excepción válida en `.claude/rules/feedback.md`.
+
+**Accesibilidad: role="alert" vs aria-live="polite"** — Se usa `role="alert"` en `ErrorState` (ambas variantes) porque los errores de carga son condiciones importantes que merecen anuncio inmediato por AT. El `role="status"` en `EmptyState` es polite porque un estado vacío no es urgente.
+
+---
+
+## [B4c.5 Refinement] Línea guía vertical + sección UI unificada — 2026-05-04
+
+### Resumen ejecutivo
+
+Refinamiento visual de los sub-items del sidebar (línea vertical guía en lugar de
+punto) y reorganización de las secciones UI en una sola sección con grupos colapsables
+`Components` y `Layout`.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/components/layout/sidebar/sidebar-group.tsx` | Contenedor de hijos con `ml-[22px] border-l border-[var(--border-strong)]` como línea guía continua. |
+| `src/components/layout/sidebar/sidebar-link.tsx` | Eliminado el dot indicator (`<span className="w-1 h-1 rounded-full …" />`). Eliminado `pl-8` de sub-items (la indentación la aporta el contenedor del grupo). |
+| `src/components/layout/sidebar/sidebar.config.ts` | Secciones `ui-components`, `ui-layout`, `reference` eliminadas. Nueva sección única `ui` con link `Overview` + grupos `Components` y `Layout`. |
+| `src/components/layout/breadcrumbs.tsx` | Inyección de segmento virtual entre `/ui` y sus sub-páginas: `Dashboard / UI / Components / Toasts`. El segmento de grupo es texto plano (sin ruta). |
+| `src/app/(dashboard)/ui/sidebar/page.tsx` | Actualizado CONFIG_EXAMPLE, descripción de Tier 3 y sección UiSubnav. |
+| `docs/architecture.md` | Nueva sección "Sections with mixed items" y "Sub-item visual hierarchy". |
+| `.claude/rules/sidebar.md` | Añadidas reglas: mezcla de links/grupos en sección, línea guía como estándar. |
+
+### Decisiones técnicas
+
+**Línea guía vs dot** — La línea vertical continua (`border-l` en el contenedor de
+hijos) ofrece una jerarquía visual más clara que el punto por ítem. Referencia: Linear,
+Vercel, Notion usan este patrón. La línea está en `var(--border-strong)` (nunca en el
+color accent) para que sea sutil y no compita con el estado activo del ítem.
+
+**Implementación como border-l del contenedor** — En lugar de añadir un pseudo-elemento
+o un `div` decorativo por ítem, el `border-l` en el div contenedor de hijos genera la
+línea de una vez. Esto simplifica el DOM y garantiza que la línea es continua entre ítems.
+El margen `ml-[22px]` alinea el borde con el centro del icono del grupo padre
+(`px-3 = 12px + icon_center = 9px = 21px`).
+
+**Estado activo vs línea guía** — El ítem activo muestra `bg-[var(--accent-muted)]` con
+`rounded-lg`. La línea guía pasa detrás del background del ítem activo (visible en los
+gaps entre ítems). Decisión: no interrumpir la línea — la continuidad es más premium que
+el estilo "indicador lateral izquierdo con línea cortada". El background del ítem activo
+ya es suficiente indicador visual sin necesidad de un marcador lateral adicional.
+
+**Sub-items en modo colapsado (popover)** — El SidebarPopover renderiza sus propios links
+sin pasar por el contenedor de hijos de `SidebarGroup`. Por tanto, la línea guía no
+aparece en el popover, que tiene su propio estilo de navegación secundaria.
+
+**Sección UI unificada** — Tres secciones separadas (`UI · Components`, `UI · Layout`,
+`Reference`) se consolidan en una sola sección `UI` con link suelto `Overview` y dos
+grupos colapsables `Components` (4 ítems) y `Layout` (1 ítem). El modelo de datos ya
+soporta mezcla de links y grupos en una sección — no se requirió ningún cambio de tipos.
+
+**Breadcrumbs con segmento virtual** — Los grupos `Components` y `Layout` no tienen ruta
+propia (`/ui/components` no existe). El breadcrumb inyecta un segmento virtual no-linkable
+entre `/ui` y la sub-página. Esto mantiene la trazabilidad sin crear rutas ficticias.
+Implementado con un map `uiGroupLabel` y un `splice` post-procesado en el array de crumbs.
+Solo aplica a paths con exactamente 2 segmentos donde el primero es `ui`.
+
+**Iconos de grupos Components y Layout** — `Layers` (Components) y `PanelLeft` (Layout).
+Ambos ya estaban disponibles en lucide-react y usados en `ui/page.tsx`. `Overview` reutiliza
+`Sparkles` del anterior nodo Reference.
+
+### Descartado
+
+- **Interrumpir la línea guía en ítem activo**: requería estado adicional y CSS más complejo.
+  El resultado visual con línea continua + background accent es más limpio.
+- **Añadir un indicador lateral izquierdo (type left-bar)**: el background con `rounded-lg`
+  es el estándar del design system; un indicador lateral añade inconsistencia.
+- **Virtual route `/ui/components`**: crear una ruta vacía solo para el breadcrumb añade
+  mantenimiento sin valor. El segmento inyectado como texto plano es suficiente.
+
+---
+
+## [B4c.5 Cleanup] Unificación de navegación UI — 2026-05-03
+
+### Resumen ejecutivo
+
+Se elimina el sub-sidebar interno de la sección `/ui` y se reemplaza con
+secciones propias del sidebar principal (`UI · Components`, `UI · Layout`).
+El patrón `UiSubnav` se conserva como documentación de alternativa.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/components/layout/sidebar/sidebar.config.ts` | Añadidas secciones `ui-components` y `ui-layout` (sin iconos). Sección `template` renombrada a `reference`. |
+| `src/components/layout/sidebar/sidebar-link.tsx` | Dot fallback en modo collapsed cuando el link no tiene icono. |
+| `src/app/(dashboard)/ui/layout.tsx` | Eliminado — las páginas /ui usan el layout estándar del dashboard. |
+| `src/app/(dashboard)/ui/sidebar/page.tsx` | Añadida sección "Alternative: in-page sub-navigation" con demo de UiSubnav. |
+
+### Decisiones técnicas
+
+**Secciones propias vs grupo único** — Se eligió separar los items de UI en
+secciones propias (`UI · Components`, `UI · Layout`) en lugar de un único grupo
+colapsable tipo "UI ▾". Razón: con 5 items en total no hay ganancia en colapsarlos,
+y las secciones separadas son más escaneables visualmente.
+
+**Sin iconos en secciones UI** — Los items de `UI · Components` y `UI · Layout`
+no tienen icono. El contraste visual entre "Workspace" (iconos) y "UI sections"
+(texto) diferencia navegación de producto de navegación de template. En modo
+collapsed, los items sin icono muestran un pequeño punto (fallback añadido a
+`sidebar-link.tsx`).
+
+**Breadcrumbs sin cambio** — Los breadcrumbs se derivan naturalmente del path URL.
+`/ui/toasts` → Dashboard / UI / Toasts. No se añade un nivel "Components"
+intermedio porque añadiría complejidad especial que no refleja la URL real. La
+jerarquía del sidebar (sección, ítem) es navegación visual, no jerárquica de URLs.
+
+**UiSubnav conservado como patrón** — En lugar de eliminar el componente, se
+documenta en `/ui/sidebar` como alternativa para secciones que no deben ocupar
+espacio en el sidebar principal (e.g., sección admin avanzada en un producto real).
+El demo renderiza el componente real (no una maqueta), con el ítem activo según la
+ruta actual.
+
+### Descartado
+
+- **Grupo colapsable "UI ▾" en Template**: con solo 5 items y sin justificación
+  de colapso, un grupo sería ruido. Las secciones planas son más directas.
+- **Reinsertar el sub-sidebar en /ui**: su utilidad era cuando no existía el
+  sidebar principal con secciones. Con el nuevo modelo, el sub-sidebar duplica
+  información y consume espacio.
+
+---
+
+## [B4c.5] Sidebar avanzado — 2026-05-03
+
+### Resumen ejecutivo
+
+El sidebar pasa de un array hardcodeado a un modelo de datos declarativo. Soporta
+secciones con título, links directos, y grupos colapsables con hasta 2 niveles.
+La expansión de grupos es persistente y se combina con auto-expansión por ruta.
+En modo colapsado, los grupos muestran un popover al hover en lugar de expandirse
+inline.
+
+### Archivos creados / modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/config/constants.ts` | Añadido `SIDEBAR.STORAGE_KEY` |
+| `src/config/routes.ts` | `reports` pasa de string a objeto `{overview, scheduled, archived}`. Añadida `ui.sidebar`. |
+| `src/store/sidebar.store.ts` | Nuevo store: `expandedGroups: string[]`, `toggleGroup`, `setGroupExpanded`. Persiste en `nexdash-sidebar`. |
+| `src/components/layout/sidebar/sidebar.types.ts` | Tipos: `SidebarBadge`, `SidebarLink`, `SidebarGroup`, `SidebarItem`, `SidebarSection`, `SidebarConfig`. |
+| `src/components/layout/sidebar/sidebar.config.ts` | Config con secciones "Workspace" (con grupo "Reports") y "Template". |
+| `src/components/layout/sidebar/use-expanded-groups.ts` | Hook: combina store + pathname activo para calcular el set efectivo de grupos abiertos. |
+| `src/components/layout/sidebar/sidebar-link.tsx` | Link con soporte de badge, count, disabled, y modo child (indentado). |
+| `src/components/layout/sidebar/sidebar-group.tsx` | Grupo colapsable: cabecera con chevron + animación `grid-template-rows`. En collapsed: delega a `SidebarPopover`. |
+| `src/components/layout/sidebar/sidebar-popover.tsx` | Popover portalled a `document.body`, posicionado a la derecha del sidebar, hover+focus activado, Escape cierra. |
+| `src/components/layout/sidebar/sidebar-section.tsx` | Sección con título opcional + renders de links y grupos. |
+| `src/components/layout/sidebar/sidebar.tsx` | Componente principal refactorizado (orquestador). |
+| `src/components/layout/sidebar/index.ts` | Barrel público. |
+| `src/components/layout/sidebar.tsx` | Eliminado (reemplazado por el directorio). |
+| `src/app/(dashboard)/reports/scheduled/page.tsx` | Placeholder para la nueva ruta. |
+| `src/app/(dashboard)/reports/archived/page.tsx` | Placeholder para la nueva ruta. |
+| `src/styles/components.css` | Añadidas animaciones: `.nx-sidebar-collapse` (grid-rows), `.nx-popover-in` (scale-in). |
+| `src/components/layout/breadcrumbs.tsx` | Añadidas labels: `sidebar`, `scheduled`, `archived`. |
+| `src/components/layout/topbar.tsx` | Añadidos titles: `/reports/scheduled`, `/reports/archived`. |
+| `src/features/ui-showcase/components/ui-subnav.tsx` | Añadido ítem "Sidebar" en grupo "LAYOUT". |
+| `src/app/(dashboard)/ui/sidebar/page.tsx` | Página de showcase: estructura, configuración, persistencia, collapsed mode, API tables. |
+| `docs/architecture.md` | Añadida sección "Sidebar": estructura, dos señales, collapsed mode, cómo añadir un grupo. |
+| `.claude/rules/sidebar.md` | Reglas para futuras sesiones. |
+
+### Decisiones técnicas
+
+**`grid-template-rows` para la animación de colapso** — Se eligió la técnica
+moderna `grid-template-rows: 0fr → 1fr` en lugar de `max-height` calculado.
+Ventajas: no requiere medir el contenido en JS, la transición es suave (sin
+"snap" al llegar al final), y funciona con contenido dinámico. El único requisito
+es `min-height: 0; overflow: hidden` en el elemento hijo. Compatible con React
+Compiler (cero estado local en el componente de animación).
+
+**Dos señales de expansión** — La persistencia combinada usa `expandedGroups` en
+el store para la elección manual, y una llamada a `setGroupExpanded` en
+`useEffect` dentro de `useExpandedGroups` para la auto-expansión por ruta. Al
+navegar a la ruta activa, el grupo se guarda en el store. Al cerrar el grupo
+manualmente (mientras se está en esa ruta), se elimina del store. Si se regresa
+a esa ruta, el cambio de pathname dispara de nuevo la auto-expansión. Este
+comportamiento es natural: "estás en un sitio → su sección aparece abierta".
+
+**Profundidad máxima 2 niveles** — Grupos dentro de grupos crea UX confusa y
+complica la lógica de expansión. Si un dominio tiene muchos sub-ítems, la señal
+correcta es una página dedicada con sub-sidebar (patrón `/ui`). La regla está
+documentada en `sidebar.config.ts` y en las reglas de Claude.
+
+**Popover portalled** — El popover se renderiza en `document.body` para evitar
+clipping por `overflow: hidden` del layout. Usa el mismo `createPortal` +
+SSR-guard que el Toaster. El delay de 150ms para cerrar permite mover el cursor
+del icono al popover sin que desaparezca.
+
+**Config en archivo separado vs. inline** — Separar `sidebar.config.ts` del
+componente permite: (1) cambiar el sidebar sin tocar ningún componente, (2) tipo-
+checking de la config frente al schema, (3) reutilizar la config en la página de
+showcase y tests futuros.
+
+### Descartado
+
+- **`max-height` con valor fijo**: `max-height: 500px` con transición es un hack
+  (el timing no es lineal porque el CSS no sabe la altura real). Se descartó en
+  favor de `grid-template-rows`.
+- **Grupos recursivos**: se descartó permitir grupos dentro de grupos. El modelo
+  de 2 niveles es suficiente para el 99% de los casos y es mucho más fácil de
+  mantener y documentar.
+- **Estado `userClosed` para la auto-expansión**: se consideró trackear si el
+  usuario había cerrado explícitamente el grupo activo. Se simplificó: navegar a
+  una ruta re-expande su grupo siempre. Este comportamiento es más predecible y
+  coincide con lo que hacen Linear y Vercel.
+
+---
+
+## [B4c] Empty states + Error states + Skeletons — 2026-05-03
+
+### Resumen ejecutivo
+
+Tercer bloque del sistema de feedback visual. Tres familias de componentes que
+cubren los estados de vacío, error y carga de cualquier sección de la UI.
+Además: actualización del `error.tsx` de ruta, creación de `global-error.tsx`,
+y tres páginas de showcase en `/ui/`.
+
+### Archivos creados / modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/components/feedback/empty-state/empty-state.types.ts` | Props de `EmptyState` |
+| `src/components/feedback/empty-state/illustrations/empty-default.tsx` | SVG inline: documento + bandeja |
+| `src/components/feedback/empty-state/illustrations/empty-search.tsx` | SVG inline: lupa |
+| `src/components/feedback/empty-state/illustrations/empty-error.tsx` | SVG inline: triángulo de advertencia |
+| `src/components/feedback/empty-state/illustrations/index.ts` | Barrel de ilustraciones |
+| `src/components/feedback/empty-state/empty-state.tsx` | Componente `EmptyState` |
+| `src/components/feedback/empty-state/index.ts` | Barrel público |
+| `src/components/feedback/error-state/error-state.types.ts` | Props de `ErrorState` |
+| `src/components/feedback/error-state/error-state.tsx` | Componente `ErrorState` (default + compact) |
+| `src/components/feedback/error-state/index.ts` | Barrel público |
+| `src/components/feedback/skeleton/skeleton-base.tsx` | Primitiva con 5 variantes |
+| `src/components/feedback/skeleton/kpi-card-skeleton.tsx` | Placeholder de KpiCard |
+| `src/components/feedback/skeleton/chart-skeleton.tsx` | Placeholder de gráficos (bar/line/area/donut) |
+| `src/components/feedback/skeleton/table-skeleton.tsx` | Placeholder de DataTable |
+| `src/components/feedback/skeleton/list-skeleton.tsx` | Placeholder de listas/feeds |
+| `src/components/feedback/skeleton/form-skeleton.tsx` | Placeholder de formularios |
+| `src/components/feedback/skeleton/user-card-skeleton.tsx` | Placeholder de filas de usuario |
+| `src/components/feedback/skeleton/index.ts` | Barrel público |
+| `src/app/(dashboard)/error.tsx` | Reemplazado con `EmptyState variant="error"` + `useRouter` |
+| `src/app/global-error.tsx` | Creado: HTML inline sin dependencias del design system |
+| `src/features/ui-showcase/components/ui-subnav.tsx` | Eliminado `disabled: true` de 3 items |
+| `src/app/(dashboard)/ui/page.tsx` | Feedback count 1→4, descripción actualizada |
+| `src/app/(dashboard)/ui/empty-states/page.tsx` | Página de showcase: variantes, acciones, ilustraciones, API |
+| `src/app/(dashboard)/ui/error-states/page.tsx` | Página de showcase: default, compact, dev details, snippet error.tsx |
+| `src/app/(dashboard)/ui/skeletons/page.tsx` | Página de showcase: primitivas, compuestos, toggle skeleton/real, 5 tablas API |
+| `docs/feedback.md` | Añadidas secciones empty states, error states, skeletons |
+| `.claude/rules/feedback.md` | Añadidas reglas para los nuevos componentes |
+
+### Decisiones técnicas
+
+**Ilustraciones inline vs PNG/SVG externo** — Se eligieron componentes React con
+SVG inline. Ventaja: las ilustraciones usan `fill="var(--accent)"` y otros CSS
+custom properties, adaptándose automáticamente a los 6 temas de acento y a
+light/dark mode. Con SVG externo (como `<img>`) no sería posible.
+
+**`EmptyState` vs `ErrorState` para error.tsx** — `error.tsx` usa `EmptyState variant="error"`
+(no `ErrorState`) porque el error de ruta necesita botones de navegación ("Go home")
+además de retry, y `EmptyState` es más flexible para eso. `ErrorState` es mejor
+para errores inline dentro de secciones de datos.
+
+**`global-error.tsx` con inline styles** — Next.js's global error boundary se
+renderiza antes de que el árbol CSS esté disponible. Los CSS custom properties
+de Tailwind v4 dependen del HTML raíz con sus atributos `data-theme` y `data-accent`.
+En un error crítico de React, esas clases no existen. Por eso se usan inline
+styles puros con valores hardcoded.
+
+**Toggle skeleton/real en showcase** — La página de skeletons incluye un
+componente `ToggleComparison` (`'use client'`) que permite alternar entre el
+skeleton y una representación del componente real para verificar visualmente
+que no hay CLS. La `'use client'` en toda la página es el coste de esta feature.
+
+**`SkeletonBase` con presets** — Los 5 presets (text, title, avatar, btn, card)
+cubren la mayoría de los casos ad-hoc. Para casos específicos se pasan `width`
+y `height` directamente. Los skeletons compuestos (TableSkeleton, etc.) comparten
+el mismo `<Skeleton>` primitivo de shadcn/ui para consistencia visual.
+
+### Descartado
+
+- **Shimmer direccional**: se consideró un shimmer de izquierda a derecha
+  (como Facebook/LinkedIn) en lugar del `animate-pulse` de Tailwind. Se descartó
+  porque `animate-pulse` ya está configurado en el design system y añadir un
+  shimmer custom requiere un `::before` con `translateX` que no funciona bien
+  con `border-radius` variable.
+- **`ErrorState` para error.tsx**: ver nota arriba — `EmptyState variant="error"`
+  es más adecuado para errores de página completa.
+
+---
+
+## [B4b] Shell sección UI + página Toasts — 2026-05-03
+
+### Resumen ejecutivo
+
+Se crea la sección `/ui` del dashboard como documentación viva del design
+system. Cada componente nuevo que se construya en el proyecto tendrá su página
+dedicada aquí. La primera página documentada es el sistema de toasts (B4a).
+
+### Archivos creados / modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/config/routes.ts` | Rutas `ui.*` con todos los paths futuros pre-registrados |
+| `src/components/layout/breadcrumbs.tsx` | Labels para segmentos `ui`, `toasts`, etc. |
+| `src/components/layout/topbar.tsx` | Título "UI" para rutas `/ui*` |
+| `src/components/layout/sidebar.tsx` | Grupo "Template" con ítem "UI" (icono Sparkles) |
+| `src/components/feedback/toast/toast.types.ts` | Añadido `ToastAction` y campo `action` |
+| `src/components/feedback/toast/toast.tsx` | Render del botón de acción inline |
+| `src/features/ui-showcase/types/showcase.types.ts` | Tipos `PropDoc`, `SubnavItem` |
+| `src/features/ui-showcase/components/showcase-section.tsx` | Agrupador de demos con título + separador |
+| `src/features/ui-showcase/components/showcase-demo.tsx` | Demo individual: preview + snippet + copy |
+| `src/features/ui-showcase/components/showcase-grid.tsx` | Rejilla de variantes (1–3 cols) |
+| `src/features/ui-showcase/components/props-table.tsx` | Tabla de props: Prop/Type/Default/Required/Description |
+| `src/features/ui-showcase/components/ui-subnav.tsx` | Sub-navegación lateral con grupos y estados disabled |
+| `src/features/ui-showcase/index.ts` | Barrel público |
+| `src/app/(dashboard)/ui/layout.tsx` | Layout de la sección: sub-sidebar + contenido |
+| `src/app/(dashboard)/ui/page.tsx` | Overview: grid de categorías con estado "Coming soon" |
+| `src/app/(dashboard)/ui/toasts/page.tsx` | Página de referencia completa del sistema de toasts |
+| `docs/architecture.md` | Menciona `/ui` y `ui-showcase` |
+
+### Decisiones técnicas
+
+**Sub-sidebar vs tabs** — Se eligió sub-sidebar (izquierda fija, 208px).
+Razón: el número de items va a crecer (~10 categorías en B5). Los tabs
+horizontales se quedan cortos en width. Es el patrón estándar en Storybook,
+Radix docs, shadcn/ui docs. Permite grupos con encabezados ("COMPONENTS",
+"FOUNDATIONS", etc.).
+
+**Sin syntax highlighting** — Los code snippets usan `<pre><code>` plano sin
+shiki/prism. Motivo: ~200 LOC de implementación ahorrados, 0 dependencias
+añadidas. Si en el futuro se quiere highlighting, se cambia en un solo sitio
+(`ShowcaseDemo`).
+
+**`action` en toasts** — La primera página de documentación reveló que el
+campo `action` (especificado en el diseño de B4b) faltaba en la implementación
+B4a. Se añadió de forma no-breaking: `ToastOptions.action` es opcional.
+
+**Sub-sidebar sticky** — Usa `position: sticky; top: 0; self-start` dentro de
+`main` (el scrolling container). Como `main` tiene `overflow-y: auto`, el
+sticky es relativo a él, quedando justo bajo la topbar al hacer scroll.
+
+**Rutas pre-registradas** — Se añaden a `routes.ui` todas las rutas futuras
+(`emptyStates`, `errorStates`, `skeletons`) aunque las páginas no existan.
+Ventaja: cuando se creen en B4c, no hay que tocar `routes.ts` ni `UiSubnav`.
+
+**Categorías "Coming soon" en el overview** — Las categorías sin páginas se
+renderizan como `<div>` (no `<Link>`) con `opacity-60`. No se usa `disabled`
+en nada — los elementos simplemente no son interactivos.
+
+### Patrón de página de componente
+
+Cada página de showcases sigue esta estructura:
+
+1. **Header**: título, descripción, import statement copiable
+2. **Variants** (ShowcaseSection + ShowcaseGrid): 2 columnas con las variantes del componente
+3. **Secciones opcionales**: with description, with action, states especiales
+4. **API** (PropsTable): tabla de opciones/props
+5. **Methods** (tabla manual): métodos del singleton o API del componente
+
+---
+
+## [B4a] Sistema de toasts propio — 2026-05-03
+
+### Resumen ejecutivo
+
+Sistema de notificaciones (toasts) implementado desde cero sin dependencias
+externas. API de singleton `toast.success/error/warning/info` invocable
+desde cualquier punto del código (dentro y fuera de React).
+
+### Archivos creados / modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/components/feedback/toast/toast.types.ts` | Tipos: `ToastItem`, `ToastVariant`, `ToastOptions` |
+| `src/components/feedback/toast/toast.store.ts` | Zustand store: add/remove/clear, cola FIFO limitada a MAX_VISIBLE |
+| `src/components/feedback/toast/toast.api.ts` | Singleton `toast`: accede al store via `getState()` |
+| `src/components/feedback/toast/toast.tsx` | Componente individual: icono, border-left, hover-pause timer |
+| `src/components/feedback/toast/toaster.tsx` | Portal a `document.body`, gestiona `exitingIds` para animación de salida |
+| `src/components/feedback/toast/use-toast.ts` | Hook `useToast()` → `{ toasts, toast }` |
+| `src/components/feedback/toast/index.ts` | Barrel público |
+| `src/config/constants.ts` | Añadido `TOAST`: `MAX_VISIBLE`, `EXIT_DURATION_MS`, `DURATION` per variant |
+| `src/styles/components.css` | Keyframes `nx-toast-in` / `nx-toast-out` + clases con timing |
+| `src/app/providers.tsx` | `<Toaster />` registrado globalmente |
+| `docs/feedback.md` | Documentación del sistema de toasts |
+| `.claude/rules/feedback.md` | Reglas para futuras sesiones |
+
+### Decisiones técnicas
+
+**Sin Sonner ni react-hot-toast** — Se implementó desde cero para mantener
+coherencia total con el design system y evitar una dependencia para ~200 LOC.
+
+**Singleton fuera de React** — `toast.api.ts` usa `useToastStore.getState()`,
+que es un acceso directo al store de Zustand sin necesidad de hooks. Permite
+llamar `toast.success(...)` desde handlers HTTP, callbacks de mutations, etc.
+
+**`exitingIds` en Toaster** — El store solo sabe qué toasts existen. La lógica
+de animación de salida vive en el Toaster: al querer eliminar un toast, primero
+se añade su id a `exitingIds` (trigger de `nx-toast-out`), y 300ms después se
+llama `removeFromStore`. Este tiempo debe coincidir con `TOAST.EXIT_DURATION_MS`.
+
+**`useCallback` para timer** — React Compiler/`react-hooks/refs` prohíbe
+`ref.current = value` en render body. Se solvió usando `useCallback` con deps
+explícitas (`item.id`, `item.duration`, `onRemove`) en lugar del patrón
+ref-sync. Como `onRemove` es `useCallback([stableZustandAction])` en Toaster,
+todos los deps son estables y el efecto solo se ejecuta al montar.
+
+**Animación de salida con colapso de altura** — `nx-toast-out` anima en dos
+fases: 0–60% slide a la derecha + fade, 60–100% colapso de `max-height`. Esto
+evita que los toasts restantes "salten" cuando uno desaparece.
+
+### Descartado
+
+- **Sonner**: librería excelente pero innecesaria para un template sin Framer
+  Motion. Añadiría 15 KB y estilos que no siguen los tokens del proyecto.
+- **`onAnimationEnd`**: se consideró usar el evento `animationend` del DOM para
+  saber cuándo quitar el toast. Se descartó en favor del `setTimeout` fijo ya
+  que es más predecible y no depende de eventos del DOM que podrían no dispararse
+  si el tab está en segundo plano.
+- **"Remaining time" en hover-pause**: calcular el tiempo restante exacto
+  (pausar en t=2300ms, reanudar con 1700ms) añade complejidad sin beneficio
+  real para un template. Al deshovear se reinicia el timer completo.
+
+---
+
+## [B3] Cierre del bloque de auth — 2026-05-03
+
+### Resumen ejecutivo
+
+En tres sub-bloques consecutivos (B3a→c), NexDash pasó de no tener
+autenticación a tener un sistema completo con cookies HttpOnly, protección de
+rutas, hidratación del store y UI funcional.
+
+**Lo conseguido:**
+1. **Mock backend completo** (B3a) — 3 route handlers (`login`, `logout`, `me`)
+   con sesiones en memoria, cookie HttpOnly y validación Zod en frontera.
+2. **Proxy + hidratación** (B3b) — `proxy.ts` protege rutas, `SessionProvider`
+   sincroniza la sesión con el store global (Zustand) via TanStack Query.
+3. **UI funcional** (B3c) — formulario de login con validación y manejo de
+   errores, botones de logout en topbar y sidebar, interceptor 401, resolución
+   del limbo de cookie inválida.
+
+**Las 3 capas de protección (independientes y complementarias):**
+- `proxy.ts` — sin cookie → redirect login (Edge Runtime, rápido)
+- `SessionProvider` — cookie inválida (me=null) → redirect login (React)
+- Interceptor 401 — sesión expirada mid-session → logout automático
+
+### Limitaciones conocidas
+
+- Sesiones en memoria: se pierden al reiniciar el dev server (solo en mock mode)
+- Sin refresh tokens: la sesión expira a los 7 días cuando el browser descarta
+  la cookie (sin opción de renovar)
+- Sin protección contra ataques (rate limiting, CSRF, brute force): son
+  responsabilidad del backend real, no del template
+- El modo `USE_MOCKS=false` requiere que el backend respete el contrato de API
+  documentado en `docs/auth.md`
+
+### Estado al cerrar B3
+
+- `npm run lint` → **0 errores**, 2 warnings (pre-existentes)
+- `npm run build` → ✓ 11 rutas + Proxy
+- Flujos 1-6 verificados
+
+---
+
+## [B3c] Login form + logout + interceptor 401 — 2026-05-03
+
+Cierra el flujo end-to-end de auth: formulario funcional, logout en topbar y
+sidebar, interceptor que detecta sesiones expiradas, y resolución del "limbo"
+de cookie inválida pendiente de B3b.
+
+### Login form funcional
+
+`LoginForm` reemplaza el `sleep(600)` mock por `useLogin()` real. Cambios:
+- Usa `useLogin()` de `@features/auth` para la mutación
+- Mantiene `loginSchema` de `@lib/validators/auth.schema` para validación de
+  formulario (mensajes UX: "required", "must be at least 6 chars")
+- Errores de API mapeados a mensajes claros (401 → "Invalid email or password",
+  status 0 → "Connection error", resto → "Something went wrong")
+- Hint de cuentas demo visible solo cuando `USE_MOCKS=true` — desaparece
+  automáticamente al conectar backend real sin cambio de código
+- Se eliminó el texto "Enter any email and password" de `login/page.tsx`
+
+### Logout funcional
+
+`useLogoutAction()` en `src/hooks/` encapsula `useLogout()` + `router.push`.
+Reutilizado en topbar y sidebar (2 usos actuales, preparado para settings page).
+El `useLogout()` de features/auth ya llama a `queryClient.clear()` para limpiar
+el cache de cualquier dato sensible.
+
+### Interceptor 401
+
+Registrado en `providers.tsx` via `addResponseInterceptor()`. Detecta respuestas
+401 en cualquier ruta EXCEPTO:
+- `/auth/me` — un 401 legítimo significa "no hay sesión", no "sesión expirada"
+- `/auth/login` — un 401 es "credenciales incorrectas", no un problema de sesión
+
+Cuando detecta un 401 inesperado, despacha `CustomEvent('nexdash:auth:logout')`.
+`SessionProvider` escucha el evento y ejecuta: `setUser(null)` + `queryClient.clear()` + `router.push(routes.login)`.
+
+Decisión: `CustomEvent` en lugar de `window.location.href` para preservar el
+estado de React y evitar un full reload. El event bus desacopla el cliente HTTP
+(fuera del árbol React) del `SessionProvider` (dentro de React).
+
+### Resolución del limbo de cookie inválida (B3b pendiente)
+
+`SessionProvider` detecta cuando `session === null` (cookie presente pero
+session no encontrada en el store) y redirige a `/login`. Esto cubre el caso de
+dev server reiniciado con cookies vivas en el navegador.
+
+### Archivos creados/modificados
+
+```
+src/lib/auth-events.ts                     Constante AUTH_LOGOUT_EVENT compartida
+src/hooks/use-logout-action.ts             Hook: useLogout + router.push encapsulados
+src/components/forms/login-form.tsx        Conectado a useLogin, errores, mock hint
+src/app/(auth)/login/page.tsx              Eliminado texto "any email and password"
+src/app/providers.tsx                      Interceptor 401 registrado (AuthInterceptor)
+src/components/auth/session-provider.tsx   Limbo resuelto + listener de logout forzado
+src/components/layout/topbar.tsx           Logout conectado
+src/components/layout/sidebar.tsx          Logout conectado
+```
+
+### Estado al cerrar el sub-bloque
+
+- `npm run lint` → **0 errores**, 2 warnings (pre-existentes, 1 menos que en B3b)
+- `npm run build` → ✓ 11 rutas + Proxy, sin warnings
+
+---
+
+## [B3b] Middleware + hidratación del store — 2026-05-03
+
+Conecta la capa de auth de B3a con la app. La app redirige
+correctamente según el estado de sesión, y sidebar/topbar muestran
+los datos del usuario autenticado. No se ha tocado el formulario de
+login ni el flujo de logout — eso es B3c.
+
+### Estrategia del proxy (middleware)
+
+`src/proxy.ts` (Next.js 16 renombró `middleware.ts` → `proxy.ts`)
+comprueba únicamente la **presencia** de la cookie `nexdash_session`.
+No valida que la sesión sea válida en el `sessionStore` porque:
+
+1. El proxy corre en Edge Runtime, sin acceso a memoria del servidor.
+2. La validación profunda la hace `GET /api/auth/me` cuando la app carga.
+3. Si la cookie existe pero la sesión expiró, `/me` devuelve 401 → B3c se
+   encargará del logout automático.
+
+Flujo de redirección:
+- Sin cookie + ruta protegida → 307 `/login`
+- Con cookie + `/login` → 307 `/`
+- Resto → `NextResponse.next()`
+
+El matcher excluye `api/`, `_next/`, y archivos estáticos.
+
+### Decisión: useSession ↔ user.store
+
+Dos fuentes de verdad para la sesión:
+- `useSession()` (TanStack Query) — fuente de verdad **en la red**. Fetch,
+  refetch, invalidación. Solo se usa en `SessionProvider`.
+- `useUserStore` (Zustand) — fuente de verdad **en la UI**. Síncrono, barato,
+  sin suscripciones adicionales. Todos los componentes leen de aquí.
+
+El `SessionProvider` hace de bridge: sincroniza `query.data → store` cuando la
+query resuelve. Esto evita que cada componente llame a `useSession()` con sus
+propias suscripciones. Un solo observer, propagación via store global.
+
+### Política de skeleton vs hardcoded
+
+Antes: sidebar y topbar mostraban `Aria Blackwood` hardcodeada (desde el store
+persistido). Ahora:
+- El store arranca con `user: null`.
+- Mientras `/me` resuelve, sidebar y topbar muestran un skeleton animado
+  (`animate-pulse`).
+- Cuando la query resuelve (< 1s en local), el store se actualiza y los
+  componentes re-renderizan con datos reales.
+- No hay pantalla de carga bloqueante — la app se siente instantánea.
+
+### Fix del user.store
+
+El store tenía `persist()` lo que es incorrecto para estado de sesión (la
+referencia en `state.md` ya lo documentaba como "No persistido"). Se eliminó
+`persist`, se removió el usuario hardcodeado inicial, y se actualizó la
+interfaz para usar `AuthUser` de `@features/auth`:
+
+```
+Antes: currentUser: CurrentUser | null  (hardcoded Aria Blackwood, persistido)
+Ahora: user: AuthUser | null            (null inicial, no persistido)
+```
+
+Además: `setCurrentUser` → `setUser`, `logout()` eliminado (reemplazado por
+`setUser(null)` que B3c usará).
+
+### Fix de Next.js 16: middleware → proxy
+
+Next.js 16 deprecó la convención `middleware.ts` en favor de `proxy.ts`. La
+función se renombra de `export function middleware()` a `export function proxy()`.
+El build emitía warning hasta aplicar el cambio.
+
+### Archivos creados/modificados
+
+```
+src/proxy.ts                               Protección de rutas (presencia de cookie)
+src/components/auth/session-provider.tsx   Bridge useSession → user.store
+src/app/(dashboard)/layout.tsx             Monta SessionProvider
+src/store/user.store.ts                    Removido persist, tipo AuthUser, user null inicial
+src/components/layout/sidebar.tsx          Usa user del store, skeleton si null
+src/components/layout/topbar.tsx           Usa user del store, skeleton avatar si null
+src/components/forms/settings-form.tsx     Renombrado currentUser → user
+```
+
+### Limitación conocida
+
+Cookie válida en navegador pero sesión expirada en `sessionStore` (p.ej. tras
+reinicio del dev server): el proxy deja pasar al usuario (solo comprueba
+presencia de cookie), `/me` devuelve 401, el store queda `null`, los slots de
+usuario muestran skeleton indefinidamente. El usuario queda en "limbo" hasta
+que B3c implemente el interceptor 401 y el logout automático.
+
+### Verificación manual (6/6)
+
+| # | Escenario | Resultado |
+|---|---|---|
+| 1 | Sin cookie → `/` | 307 → `/login` ✓ |
+| 2 | Sin cookie → `/users` | 307 → `/login` ✓ |
+| 3 | Con cookie válida → `/` | 200 ✓ |
+| 4 | Con cookie válida → `/login` | 307 → `/` ✓ |
+| 5 | Cookie borrada → `/` | 307 → `/login` ✓ |
+| 6 | Cookie inválida → `/` | 200 (proxy deja pasar, `/me` → 401) ✓ |
+
+### Estado al cerrar el sub-bloque
+
+- `npm run lint` → **0 errores**, 3 warnings (pre-existentes)
+- `npm run build` → ✓ 11 rutas + Proxy, sin warnings
+
+---
+
+## [B3a] Feature auth + mock backend — 2026-05-03
+
+Capa de datos completa para autenticación. Crea `features/auth/` y los route
+handlers `app/api/auth/*` que simulan el backend en modo `USE_MOCKS`. La UI
+existente no se ha tocado. B3b (middleware + hidratación del store) y B3c
+(login form conectado) son los siguientes sub-bloques.
+
+### Decisión arquitectónica: cookies HttpOnly vía route handlers
+
+El token de sesión vive exclusivamente en una cookie `HttpOnly`. El cliente JS
+nunca lo lee ni lo almacena. En modo mock, los route handlers de Next.js actúan
+como backend; en producción real se reemplaza flipeando `USE_MOCKS=false` y
+apuntando `NEXT_PUBLIC_API_URL` al backend externo. El código del cliente (hooks,
+handler) no cambia.
+
+Alternativa descartada: JWT en localStorage. Descartada por seguridad (XSS) y
+porque no aporta nada en un template — la cookie HttpOnly es el estándar de la
+industria.
+
+### Estructura creada
+
+```
+src/features/auth/
+  schemas/auth.schemas.ts     LoginInputSchema, AuthUserSchema, AuthSessionSchema, LoginResponseSchema
+  types/auth.types.ts         LoginInput, AuthUser, AuthSession (z.infer<>)
+  api/_mock-data.ts           AuthUser[] sin contraseñas (documentación / referencia)
+  api/auth.keys.ts            authKeys.session() — key factory interna
+  api/auth.handler.ts         login / logout / me con USE_MOCKS branching
+  api/use-auth.ts             useSession, useLogin, useLogout
+  index.ts                    Barrel público (hooks + tipos)
+
+src/app/api/auth/
+  _mock-store.ts              sessionStore Map + credenciales mock + findMockUser()
+  login/route.ts              POST: valida creds → sessionId → cookie → { session }
+  logout/route.ts             POST: borra del Map → cookie maxAge=0
+  me/route.ts                 GET: lee cookie → Map → { user, expiresAt } | 401
+```
+
+### Política de la cookie
+
+| Atributo | Valor |
+|---|---|
+| Nombre | `nexdash_session` |
+| Valor | UUID v4 (sessionId) |
+| HttpOnly | `true` |
+| Secure | `true` producción, `false` desarrollo |
+| SameSite | `lax` |
+| Path | `/` |
+| MaxAge | 604800 (7 días) |
+
+### Mock data: usuarios disponibles
+
+| Email | Contraseña | Rol |
+|---|---|---|
+| `admin@nexdash.com` | `admin123` | `admin` |
+| `user@nexdash.com` | `user123` | `user` |
+
+### Limitación conocida
+
+El `sessionStore` es un Map en memoria del proceso Node.js. **Todas las sesiones
+se pierden al reiniciar el dev server.** Los usuarios verán un 401 en `/me` aunque
+la cookie siga en el navegador. Comportamiento esperado — el middleware (B3b)
+redirigirá al login automáticamente.
+
+### Verificación manual
+
+Con `npm run dev` corriendo:
+
+```bash
+# 1. Login → debe devolver 200 + session + cookie nexdash_session
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@nexdash.com","password":"admin123"}' \
+  -c /tmp/cookies.txt -v 2>&1 | grep -E 'HTTP|Set-Cookie|session'
+
+# 2. /me con cookie → 200 + { user, expiresAt }
+curl http://localhost:3000/api/auth/me -b /tmp/cookies.txt
+
+# 3. Logout → 200 + cookie limpiada
+curl -X POST http://localhost:3000/api/auth/logout -b /tmp/cookies.txt
+
+# 4. /me sin cookie → 401 + { message, code }
+curl http://localhost:3000/api/auth/me
+```
+
+### Fix colateral
+
+`src/components/layout/theme-toggle.tsx` tenía el error de lint
+`react-hooks/set-state-in-effect` (introducido por actualización de
+`eslint-config-next`). El patrón `useEffect(() => setMounted(true), [])` es el
+guard de hidratación canónico de Next.js. Se añadió `eslint-disable-next-line`
+con comentario explicativo.
+
+### Documentación creada
+
+```
+docs/auth.md               Flujo login→cookie, mock vs real, contrato API, limitaciones
+.claude/rules/auth.md      Invariantes de auth para futuras sesiones de Claude
+```
+
+### Estado al cerrar el sub-bloque
+
+- `npm run lint` → **0 errores**, 3 warnings (pre-existentes)
+- `npm run build` → ✓ 11 rutas (9 anteriores + 3 nuevas API routes)
+- Verificación manual 4/4 escenarios pasan
+- La UI existente no se ha modificado (solo theme-toggle.tsx con lint disable)
+- B3b (middleware + store hidration) puede arrancar
+
+---
+
 ## [B2.5e] Documentación final y cierre del refactor — 2026-05-02
 
 Consolidación de la arquitectura: documento maestro, auditoría de reglas y

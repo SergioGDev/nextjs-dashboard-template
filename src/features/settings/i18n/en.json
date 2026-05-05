@@ -1,0 +1,56 @@
+{
+  "metadata": { "title": "Settings" },
+  "header": {
+    "title": "Settings",
+    "subtitle": "Manage your account and preferences"
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "description": "Update your personal information",
+    "form": {
+      "nameLabel": "Full name",
+      "emailLabel": "Email address",
+      "bioLabel": "Bio",
+      "bioPlaceholder": "Tell us about yourself…",
+      "websiteLabel": "Website",
+      "websitePlaceholder": "https://yoursite.com"
+    },
+    "actions": {
+      "save": "Save changes",
+      "saving": "Saving…"
+    },
+    "toasts": {
+      "saved": "Profile updated",
+      "saveFailed": "Failed to update profile"
+    },
+    "validation": {
+      "nameMin": "Name must be at least 2 characters",
+      "emailInvalid": "Invalid email address",
+      "bioMax": "Bio must be under 200 characters",
+      "websiteInvalid": "Invalid URL"
+    }
+  },
+  "errors": {
+    "page": {
+      "title": "Failed to load settings",
+      "description": "Something went wrong. Please try again."
+    }
+  },
+  "appearance": {
+    "title": "Appearance",
+    "description": "Customize the look of your dashboard",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "accent": {
+      "label": "Accent Color",
+      "description": "Choose your interface accent color"
+    },
+    "language": {
+      "label": "Language",
+      "description": "Choose your display language"
+    }
+  }
+}

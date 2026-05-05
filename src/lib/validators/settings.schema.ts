@@ -1,11 +1,32 @@
 import { z } from 'zod';
 
-export const profileSettingsSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  bio: z.string().max(200, 'Bio must be under 200 characters').optional(),
-  website: z.string().url('Invalid URL').optional().or(z.literal('')),
-});
+export type ProfileSettingsValues = {
+  name: string;
+  email: string;
+  bio?: string;
+  website?: string;
+};
+
+export type NotificationSettingsValues = {
+  emailNotifications: boolean;
+  pushNotifications: boolean;
+  weeklyDigest: boolean;
+  marketingEmails: boolean;
+};
+
+export function createProfileSettingsSchema(messages: {
+  nameMin: string;
+  emailInvalid: string;
+  bioMax: string;
+  websiteInvalid: string;
+}) {
+  return z.object({
+    name: z.string().min(2, messages.nameMin),
+    email: z.string().email(messages.emailInvalid),
+    bio: z.string().max(200, messages.bioMax).optional(),
+    website: z.string().url(messages.websiteInvalid).optional().or(z.literal('')),
+  });
+}
 
 export const notificationSettingsSchema = z.object({
   emailNotifications: z.boolean(),
@@ -13,6 +34,3 @@ export const notificationSettingsSchema = z.object({
   weeklyDigest: z.boolean(),
   marketingEmails: z.boolean(),
 });
-
-export type ProfileSettingsValues = z.infer<typeof profileSettingsSchema>;
-export type NotificationSettingsValues = z.infer<typeof notificationSettingsSchema>;
