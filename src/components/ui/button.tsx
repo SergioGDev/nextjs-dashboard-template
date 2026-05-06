@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Spinner, type SpinnerSize } from './spinner';
 
 export type ButtonVariant = 'default' | 'secondary' | 'ghost' | 'outline' | 'destructive' | 'link';
-export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
+export type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonBaseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -38,10 +38,9 @@ const sizeClasses: Record<ButtonSize, string> = {
   sm: 'h-8 px-3 text-xs gap-1.5',
   md: 'h-9 px-4 text-sm gap-2',
   lg: 'h-11 px-6 text-base gap-2',
-  icon: 'h-9 w-9 p-0',
 };
 
-const iconOnlyClasses: Record<Exclude<ButtonSize, 'icon'>, string> = {
+const iconOnlyClasses: Record<ButtonSize, string> = {
   sm: 'h-8 w-8 p-0',
   md: 'h-9 w-9 p-0',
   lg: 'h-11 w-11 p-0',
@@ -51,7 +50,6 @@ const spinnerSizeFor: Record<ButtonSize, SpinnerSize> = {
   sm: 'xs',
   md: 'sm',
   lg: 'md',
-  icon: 'sm',
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -69,9 +67,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const computedSizeClass = iconOnly && size !== 'icon'
-      ? iconOnlyClasses[size]
-      : sizeClasses[size];
+    const computedSizeClass = iconOnly ? iconOnlyClasses[size] : sizeClasses[size];
 
     return (
       <button

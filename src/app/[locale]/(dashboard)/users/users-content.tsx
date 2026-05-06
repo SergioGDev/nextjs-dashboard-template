@@ -135,14 +135,16 @@ export function UsersContent() {
       render: (row) => (
         <div className="flex items-center gap-1 justify-end">
           <Link href={routes.users.detail(row.id)}>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Button variant="ghost" iconOnly size="sm" aria-label={t('actions.edit')}>
               <Pencil size={14} />
             </Button>
           </Link>
           <Button
             variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-[var(--error)] hover:bg-[var(--error-muted)]"
+            iconOnly
+            size="sm"
+            aria-label={t('actions.delete')}
+            className="text-[var(--error)] hover:bg-[var(--error-muted)]"
             onClick={() => setDeleteTarget(row)}
           >
             <Trash2 size={14} />

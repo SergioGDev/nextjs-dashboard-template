@@ -6,6 +6,44 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6b.2] Input + Textarea showcase + migración size="icon" — 2026-05-06
+
+Segundo sub-bloque de B6b (Inputs básicos). Cierra la migración de `size="icon"` a `iconOnly`, extiende `Input` y `Textarea` con props de tamaño y texto de ayuda, los migra a las clases `nx-*` de `components.css`, y añade sus páginas de showcase completas incluyendo el patrón Search.
+
+### Componentes
+
+- **`Input` refactor** (`src/components/ui/input.tsx`): añade `size?: 'sm' | 'md' | 'lg'` (soluciona conflicto con el `size?: number` nativo via `Omit`), `helperText?: string` (texto bajo el campo sin estado de error), y migra el markup interno a clases `nx-*`: `nx-field` (wrapper), `nx-label`, `nx-input` + modificadores `nx-input--sm/lg`, `nx-input-slot--leading/trailing`, `nx-help`. Mantiene `leftIcon`/`rightIcon` como nombres (en uso en `login-form.tsx`).
+- **`Textarea` refactor** (`src/components/ui/textarea.tsx`): añade `size?: 'sm' | 'md' | 'lg'` y `helperText?: string`, migra a `nx-textarea` + `nx-textarea--sm/lg`.
+- **`Button` — eliminación de `size="icon"`**: se elimina del union `ButtonSize` tras migrar todos los usages (6 en 3 ficheros). `iconOnlyClasses` pasa de `Record<Exclude<ButtonSize, 'icon'>, string>` a `Record<ButtonSize, string>`. `computedSizeClass` simplificado.
+- **`components.css`**: `nx-input` height corregida 34px → 36px; `nx-field` añade `width: 100%`; nuevas clases `nx-input--sm`, `nx-input--lg`, `nx-input-wrapper`, `nx-input-slot`, `nx-input-slot--leading/trailing`, `nx-input.has-leading/has-trailing`; nuevo bloque `nx-textarea` con variantes y estados.
+
+### Migración `size="icon"` → `iconOnly`
+
+- `theme-toggle.tsx`: `size="icon"` → `iconOnly` (aria-label ya existía via `{tooltipLabel}`).
+- `data-table.tsx`: prev/next paginación → `iconOnly aria-label={t('table.previousPage|nextPage')}`. Botones de número de página → `size="sm" className="h-8 w-8 p-0"` (tienen texto — no son icon-only).
+- `users-content.tsx`: edit/delete de fila → `iconOnly size="sm" aria-label={t('actions.edit|delete')}`. Se añaden `actions.edit` a los ficheros i18n de users (en/es) con texto descriptivo ("Edit user"/"Editar usuario").
+
+### Showcase
+
+- `/ui/inputs` — Header + Anatomy (label + leading + field + trailing + helper) + States (default, helper, error, disabled) + Sizes (sm/md/lg) + With icons (leading, password toggle) + Search pattern (leftIcon + clear button reactivo) + PropsTable + Localization.
+- `/ui/textarea` — Header + Anatomy (label + field + helper) + States + Sizes + PropsTable + Localization.
+- Overview `/ui/page.tsx`: inputs count 2 → 4.
+- `buttons-content.tsx` PropsTable: `size` type corregido a `'sm' | 'md' | 'lg'`.
+
+### i18n / Config
+
+- `common.json` (en/es): `table.previousPage`, `table.nextPage`, `sidebar.items.uiInput`, `sidebar.items.uiTextarea`.
+- `request.ts`: namespaces `inputs`, `textarea`.
+- `routes.ts`: `ui.inputs`, `ui.textarea`.
+- `sidebar.config.ts`: Input y Textarea en el grupo Components, entre ButtonsGroup y Toasts.
+
+### Build
+
+- Lint: 0 errores nuevos. 4 warnings (2 preexistentes × 2 por worktree incluido en eslint scope).
+- Build: 48 páginas (era 44; +4 = 2 nuevas × 2 locales).
+
+---
+
 ## [B6b.1] Button + ButtonsGroup + Spinner extracción — 2026-05-05
 
 Primer sub-bloque de B6b (Inputs básicos). Introduce el patrón de showcase canónico para todo B6 (Anatomy → Variants → … → PropsTable → Localization), extrae `Spinner` como componente independiente, refactoriza `Button` para consumirlo internamente, añade un modificador ortogonal `iconOnly` y crea el componente nuevo `ButtonsGroup`.

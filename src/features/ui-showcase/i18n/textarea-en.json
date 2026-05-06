@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Textarea"
+  },
+  "header": {
+    "title": "Textarea",
+    "subtitle": "Multi-line text field for longer form inputs. Supports labels, helper text, error states, and resize control."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A textarea is composed of an optional label, the multi-line text field, and optional helper or error text.",
+    "parts": {
+      "label": "Identifies the field. Rendered as a <label> with matching htmlFor. Optional but recommended for accessibility.",
+      "field": "The native <textarea> element. Accepts all standard HTML textarea attributes.",
+      "helper": "Helper or error message rendered below the field. Error text takes precedence over helper text."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "The textarea inherits border and shadow from the design token system. Error state overrides the border and focus ring in red."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Three min-height presets. Use sm for compact note fields and lg when expecting longer input."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native <textarea> attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "labelMessage": "Message",
+    "placeholderMessage": "Type your message…",
+    "helperMessage": "Be as detailed as possible.",
+    "errorMessage": "Message cannot be empty.",
+    "disabledLabel": "Disabled field",
+    "disabledPlaceholder": "Not editable"
+  },
+  "props": {
+    "label": "Label displayed above the field.",
+    "size": "Min-height preset: sm (64px), md (80px, default), lg (120px).",
+    "error": "Error message shown in red below the field.",
+    "helperText": "Hint shown below the field when there is no error.",
+    "disabled": "Standard HTML disabled attribute.",
+    "placeholder": "Placeholder text shown when the field is empty.",
+    "extendsNote": "Extends all native <textarea> attributes (rows, cols, maxLength, …)."
+  }
+}

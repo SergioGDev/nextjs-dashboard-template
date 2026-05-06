@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "title": "Input"
+  },
+  "header": {
+    "title": "Input",
+    "subtitle": "Single-line text field for forms and search patterns. Supports labels, helper text, error states, and leading/trailing icon slots."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "An input field is composed of an optional label, an optional leading icon, the text field, an optional trailing icon, and optional helper or error text.",
+    "parts": {
+      "label": "Identifies the field. Rendered as a <label> with matching htmlFor. Optional but recommended for accessibility.",
+      "leading": "Left-side icon slot. Decorative — pointer events are disabled.",
+      "field": "The native <input> element. Accepts all standard HTML input attributes.",
+      "trailing": "Right-side icon slot. Interactive — useful for clear buttons or status indicators.",
+      "helper": "Helper or error message rendered below the field. Error text takes precedence over helper text."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "The input inherits border and shadow from the design token system. Error state overrides the border and focus ring in red."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Three height presets. The default is md. Use sm in dense toolbars and lg for prominent standalone fields."
+    },
+    "withIcons": {
+      "title": "With icons",
+      "description": "Attach a leading icon for context or a trailing icon for actions like clearing. Both slots can be active simultaneously."
+    },
+    "searchPattern": {
+      "title": "Search pattern",
+      "description": "Combine leftIcon with a trailing clear button — the most common icon pairing.",
+      "note": "The clear button in the trailing slot is a plain <button> with pointer-events enabled. The leftIcon slot disables pointer events by default."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native <input> attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "labelEmail": "Email address",
+    "placeholderEmail": "you@example.com",
+    "helperEmail": "We'll never share your email.",
+    "errorEmail": "Enter a valid email address.",
+    "labelName": "Full name",
+    "placeholderName": "Jane Smith",
+    "disabledLabel": "Disabled field",
+    "disabledPlaceholder": "Not editable",
+    "searchPlaceholder": "Search…",
+    "clearLabel": "Clear"
+  },
+  "props": {
+    "label": "Label displayed above the field. Generates an id automatically.",
+    "size": "Height preset: sm (32px), md (36px, default), lg (44px).",
+    "error": "Error message shown in red below the field. Also applies error styling to the border.",
+    "helperText": "Hint shown below the field when there is no error.",
+    "leftIcon": "ReactNode displayed in the leading slot. Pointer events disabled.",
+    "rightIcon": "ReactNode displayed in the trailing slot. Interactive.",
+    "disabled": "Standard HTML disabled attribute.",
+    "placeholder": "Placeholder text shown when the field is empty.",
+    "extendsNote": "Extends all native <input> attributes (type, name, autoComplete, …)."
+  }
+}

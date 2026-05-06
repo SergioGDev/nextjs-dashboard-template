@@ -43,7 +43,9 @@
       "errorStates": "Error states",
       "skeletons": "Skeletons",
       "i18n": "i18n",
-      "uiSidebar": "Sidebar"
+      "uiSidebar": "Sidebar",
+      "uiInput": "Input",
+      "uiTextarea": "Textarea"
     },
     "actions": {
       "expand": "Expand sidebar",
@@ -67,7 +69,9 @@
   },
   "table": {
     "empty": "No data found",
-    "showing": "{start}–{end} of {total}"
+    "showing": "{start}–{end} of {total}",
+    "previousPage": "Previous page",
+    "nextPage": "Next page"
   },
   "feedback": {
     "emptyState": {

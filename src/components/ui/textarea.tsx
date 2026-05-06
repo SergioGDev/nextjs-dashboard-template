@@ -3,18 +3,28 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
+export type TextareaSize = 'sm' | 'md' | 'lg';
+
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
+  helperText?: string;
   error?: string;
+  size?: TextareaSize;
 }
 
+const sizeClass: Record<TextareaSize, string> = {
+  sm: 'nx-textarea--sm',
+  md: '',
+  lg: 'nx-textarea--lg',
+};
+
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, error, id, ...props }, ref) => {
+  ({ className, label, helperText, error, size = 'md', id, ...props }, ref) => {
     const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-');
     return (
-      <div className="flex flex-col gap-1.5 w-full">
+      <div className="nx-field">
         {label && (
-          <label htmlFor={textareaId} className="text-sm font-medium text-[var(--text-primary)]">
+          <label htmlFor={textareaId} className="nx-label">
             {label}
           </label>
         )}
@@ -22,20 +32,18 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={textareaId}
           className={cn(
-            'w-full min-h-20 rounded-lg border bg-[var(--surface)] text-[var(--text-primary)] text-sm px-3 py-2',
-            'placeholder:text-[var(--text-muted)] transition-colors resize-y',
-            'focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent',
-            'disabled:opacity-40 disabled:cursor-not-allowed',
-            error
-              ? 'border-[var(--error)]'
-              : 'border-[var(--border)] hover:border-[var(--border-strong)]',
-            className
+            'nx-textarea',
+            sizeClass[size],
+            error && 'is-error',
+            className,
           )}
           {...props}
         />
-        {error && <p className="text-xs text-[var(--error)]">{error}</p>}
+        {(error || helperText) && (
+          <p className={cn('nx-help', error && 'is-error')}>{error ?? helperText}</p>
+        )}
       </div>
     );
-  }
+  },
 );
 Textarea.displayName = 'Textarea';

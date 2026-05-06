@@ -18,6 +18,8 @@ export const routes = {
     buttons: '/ui/buttons',
     buttonsGroup: '/ui/buttons-group',
     spinner: '/ui/spinner',
+    inputs: '/ui/inputs',
+    textarea: '/ui/textarea',
     toasts: '/ui/toasts',
     emptyStates: '/ui/empty-states',
     errorStates: '/ui/error-states',

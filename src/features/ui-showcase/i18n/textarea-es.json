@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Textarea"
+  },
+  "header": {
+    "title": "Textarea",
+    "subtitle": "Campo de texto multilínea para entradas de formulario más largas. Admite etiquetas, texto de ayuda y estados de error."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "Un textarea se compone de una etiqueta opcional, el campo de texto multilínea y texto de ayuda o error opcional.",
+    "parts": {
+      "label": "Identifica el campo. Se renderiza como <label> con htmlFor correspondiente. Opcional pero recomendado para accesibilidad.",
+      "field": "El elemento nativo <textarea>. Acepta todos los atributos HTML estándar.",
+      "helper": "Mensaje de ayuda o error bajo el campo. El texto de error tiene prioridad sobre el texto de ayuda."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "El textarea hereda el borde y la sombra del sistema de tokens. El estado de error sobreescribe el borde y el anillo de foco en rojo."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Tres presets de altura mínima. Usa sm para notas compactas y lg cuando se espera una entrada más larga."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de <textarea>. Props específicos del componente listados abajo."
+    }
+  },
+  "demos": {
+    "labelMessage": "Mensaje",
+    "placeholderMessage": "Escribe tu mensaje…",
+    "helperMessage": "Sé lo más detallado posible.",
+    "errorMessage": "El mensaje no puede estar vacío.",
+    "disabledLabel": "Campo desactivado",
+    "disabledPlaceholder": "No editable"
+  },
+  "props": {
+    "label": "Etiqueta mostrada sobre el campo.",
+    "size": "Preset de altura mínima: sm (64px), md (80px, por defecto), lg (120px).",
+    "error": "Mensaje de error mostrado en rojo bajo el campo.",
+    "helperText": "Texto de ayuda mostrado bajo el campo cuando no hay error.",
+    "disabled": "Atributo HTML disabled estándar.",
+    "placeholder": "Texto de placeholder mostrado cuando el campo está vacío.",
+    "extendsNote": "Extiende todos los atributos nativos de <textarea> (rows, cols, maxLength, …)."
+  }
+}

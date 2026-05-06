@@ -24,9 +24,9 @@ export function ThemeToggle() {
     <Tooltip content={tooltipLabel}>
       <Button
         variant="ghost"
-        size="icon"
-        onClick={() => setTheme(isDark ? 'light' : 'dark')}
+        iconOnly
         aria-label={tooltipLabel}
+        onClick={() => setTheme(isDark ? 'light' : 'dark')}
       >
         {isDark ? <Sun size={16} /> : <Moon size={16} />}
       </Button>

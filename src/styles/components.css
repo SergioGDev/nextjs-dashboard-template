@@ -91,7 +91,7 @@
 .nx-input {
   display: block;
   width: 100%;
-  height: 34px;
+  height: 36px;
   padding: 0 var(--space-3);
   background: var(--surface);
   color: var(--text-primary);
@@ -119,11 +119,47 @@
 .nx-input.is-error:focus {
   box-shadow: 0 0 0 3px var(--error-muted);
 }
+.nx-input--sm {
+  height: 32px;
+  font-size: var(--fs-xs);
+}
+.nx-input--lg {
+  height: 44px;
+  font-size: var(--fs-base);
+}
+.nx-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.nx-input-slot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+.nx-input-slot--leading {
+  left: var(--space-3);
+  pointer-events: none;
+}
+.nx-input-slot--trailing {
+  right: var(--space-3);
+}
+.nx-input.has-leading {
+  padding-left: 36px;
+}
+.nx-input.has-trailing {
+  padding-right: 36px;
+}
 
 .nx-field {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  width: 100%;
 }
 .nx-label {
   font: var(--fw-medium) var(--fs-sm)/1.2 var(--font-sans);
@@ -135,6 +171,48 @@
 }
 .nx-help.is-error {
   color: var(--error);
+}
+
+/* ===== Textarea ===== */
+.nx-textarea {
+  display: block;
+  width: 100%;
+  min-height: 80px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font: var(--fw-regular) var(--fs-sm)/1.5 var(--font-sans);
+  transition:
+    border-color var(--dur-fast),
+    box-shadow var(--dur-fast);
+  resize: vertical;
+}
+.nx-textarea::placeholder {
+  color: var(--text-muted);
+}
+.nx-textarea:hover {
+  border-color: var(--text-muted);
+}
+.nx-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.nx-textarea.is-error {
+  border-color: var(--error);
+}
+.nx-textarea.is-error:focus {
+  box-shadow: 0 0 0 3px var(--error-muted);
+}
+.nx-textarea--sm {
+  min-height: 64px;
+  font-size: var(--fs-xs);
+}
+.nx-textarea--lg {
+  min-height: 120px;
+  font-size: var(--fs-base);
 }
 
 /* ===== Card ===== */

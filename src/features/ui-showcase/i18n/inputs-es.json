@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "title": "Input"
+  },
+  "header": {
+    "title": "Input",
+    "subtitle": "Campo de texto de una línea para formularios y patrones de búsqueda. Admite etiquetas, texto de ayuda, estados de error y slots de iconos."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "Un campo de texto se compone de una etiqueta opcional, un icono inicial opcional, el campo, un icono final opcional y texto de ayuda o error.",
+    "parts": {
+      "label": "Identifica el campo. Se renderiza como <label> con htmlFor correspondiente. Opcional pero recomendado para accesibilidad.",
+      "leading": "Slot de icono izquierdo. Decorativo — los eventos de puntero están desactivados.",
+      "field": "El elemento nativo <input>. Acepta todos los atributos HTML estándar.",
+      "trailing": "Slot de icono derecho. Interactivo — útil para botones de limpiar o indicadores de estado.",
+      "helper": "Mensaje de ayuda o error bajo el campo. El texto de error tiene prioridad sobre el texto de ayuda."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "El input hereda el borde y la sombra del sistema de tokens. El estado de error sobreescribe el borde y el anillo de foco en rojo."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Tres presets de altura. El valor por defecto es md. Usa sm en toolbars compactos y lg para campos destacados."
+    },
+    "withIcons": {
+      "title": "With icons",
+      "description": "Añade un icono inicial para contexto o uno final para acciones como limpiar. Ambos slots pueden estar activos a la vez."
+    },
+    "searchPattern": {
+      "title": "Search pattern",
+      "description": "Combina leftIcon con un botón de limpiar en el slot trailing — el emparejamiento de iconos más habitual.",
+      "note": "El botón de limpiar en el slot trailing es un <button> con pointer-events activos. El slot leftIcon desactiva los eventos de puntero por defecto."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de <input>. Props específicos del componente listados abajo."
+    }
+  },
+  "demos": {
+    "labelEmail": "Correo electrónico",
+    "placeholderEmail": "tú@ejemplo.com",
+    "helperEmail": "Nunca compartiremos tu correo.",
+    "errorEmail": "Introduce un correo válido.",
+    "labelName": "Nombre completo",
+    "placeholderName": "Ana García",
+    "disabledLabel": "Campo desactivado",
+    "disabledPlaceholder": "No editable",
+    "searchPlaceholder": "Buscar…",
+    "clearLabel": "Limpiar"
+  },
+  "props": {
+    "label": "Etiqueta mostrada sobre el campo. Genera un id automáticamente.",
+    "size": "Preset de altura: sm (32px), md (36px, por defecto), lg (44px).",
+    "error": "Mensaje de error mostrado en rojo bajo el campo. También aplica el estilo de error al borde.",
+    "helperText": "Texto de ayuda mostrado bajo el campo cuando no hay error.",
+    "leftIcon": "ReactNode mostrado en el slot inicial. Eventos de puntero desactivados.",
+    "rightIcon": "ReactNode mostrado en el slot final. Interactivo.",
+    "disabled": "Atributo HTML disabled estándar.",
+    "placeholder": "Texto de placeholder mostrado cuando el campo está vacío.",
+    "extendsNote": "Extiende todos los atributos nativos de <input> (type, name, autoComplete, …)."
+  }
+}

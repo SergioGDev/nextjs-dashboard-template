@@ -170,7 +170,8 @@ export function DataTable<T extends object>({
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
-              size="icon"
+              iconOnly
+              aria-label={t('table.previousPage')}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
             >
@@ -182,9 +183,9 @@ export function DataTable<T extends object>({
                 <Button
                   key={p}
                   variant={page === p ? 'default' : 'ghost'}
-                  size="icon"
+                  size="sm"
                   onClick={() => setPage(p)}
-                  className="text-xs h-8 w-8"
+                  className="h-8 w-8 p-0"
                 >
                   {p}
                 </Button>
@@ -192,7 +193,8 @@ export function DataTable<T extends object>({
             })}
             <Button
               variant="ghost"
-              size="icon"
+              iconOnly
+              aria-label={t('table.nextPage')}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
             >

@@ -30,7 +30,8 @@
   },
   "actions": {
     "newUser": "Nuevo usuario",
-    "delete": "Eliminar"
+    "edit": "Editar usuario",
+    "delete": "Eliminar usuario"
   },
   "empty": {
     "noUsers": {

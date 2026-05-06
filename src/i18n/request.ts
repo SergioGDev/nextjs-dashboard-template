@@ -28,6 +28,8 @@ async function loadMessages(locale: string) {
     buttons,
     buttonsGroup,
     spinner,
+    inputs,
+    textarea,
   ] = await Promise.all([
     import(`../messages/${locale}/common.json`).then((m) => m.default),
     import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
@@ -41,6 +43,8 @@ async function loadMessages(locale: string) {
     import(`../features/ui-showcase/i18n/buttons-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/buttons-group-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/spinner-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/inputs-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/textarea-${locale}.json`).then((m) => m.default),
   ]);
 
   return {
@@ -56,5 +60,7 @@ async function loadMessages(locale: string) {
     buttons,
     buttonsGroup,
     spinner,
+    inputs,
+    textarea,
   };
 }

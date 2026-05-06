@@ -3,51 +3,59 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  error?: string;
+export type InputSize = 'sm' | 'md' | 'lg';
+
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
+  helperText?: string;
+  error?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  size?: InputSize;
 }
 
+const sizeClass: Record<InputSize, string> = {
+  sm: 'nx-input--sm',
+  md: '',
+  lg: 'nx-input--lg',
+};
+
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, error, label, leftIcon, rightIcon, id, ...props }, ref) => {
+  ({ className, label, helperText, error, leftIcon, rightIcon, size = 'md', id, ...props }, ref) => {
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
     return (
-      <div className="flex flex-col gap-1.5 w-full">
+      <div className="nx-field">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-[var(--text-primary)]">
+          <label htmlFor={inputId} className="nx-label">
             {label}
           </label>
         )}
-        <div className="relative flex items-center">
+        <div className="nx-input-wrapper">
           {leftIcon && (
-            <span className="absolute left-3 text-[var(--text-muted)] pointer-events-none">{leftIcon}</span>
+            <span className="nx-input-slot nx-input-slot--leading">{leftIcon}</span>
           )}
           <input
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full h-9 rounded-lg border bg-[var(--surface)] text-[var(--text-primary)] text-sm',
-              'placeholder:text-[var(--text-muted)] transition-colors',
-              'focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent',
-              'disabled:opacity-40 disabled:cursor-not-allowed',
-              error
-                ? 'border-[var(--error)] focus:ring-[var(--error)]'
-                : 'border-[var(--border)] hover:border-[var(--border-strong)]',
-              leftIcon ? 'pl-9' : 'pl-3',
-              rightIcon ? 'pr-9' : 'pr-3',
-              className
+              'nx-input',
+              sizeClass[size],
+              leftIcon && 'has-leading',
+              rightIcon && 'has-trailing',
+              error && 'is-error',
+              className,
             )}
             {...props}
           />
           {rightIcon && (
-            <span className="absolute right-3 text-[var(--text-muted)]">{rightIcon}</span>
+            <span className="nx-input-slot nx-input-slot--trailing">{rightIcon}</span>
           )}
         </div>
-        {error && <p className="text-xs text-[var(--error)]">{error}</p>}
+        {(error || helperText) && (
+          <p className={cn('nx-help', error && 'is-error')}>{error ?? helperText}</p>
+        )}
       </div>
     );
-  }
+  },
 );
 Input.displayName = 'Input';

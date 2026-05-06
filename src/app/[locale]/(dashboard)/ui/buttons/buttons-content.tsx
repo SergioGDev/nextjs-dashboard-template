@@ -35,7 +35,7 @@ export function ButtonsContent() {
 
   const props: PropDoc[] = [
     { prop: 'variant', type: "'default' | 'secondary' | 'ghost' | 'outline' | 'destructive' | 'link'", default: "'default'", description: t('props.variant') },
-    { prop: 'size', type: "'sm' | 'md' | 'lg' | 'icon'", default: "'md'", description: t('props.size') },
+    { prop: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t('props.size') },
     { prop: 'iconOnly', type: 'boolean', default: 'false', description: t('props.iconOnly') },
     { prop: 'loading', type: 'boolean', default: 'false', description: t('props.loading') },
     { prop: 'disabled', type: 'boolean', default: 'false', description: t('props.disabled') },

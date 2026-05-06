@@ -43,7 +43,9 @@
       "errorStates": "Estados de error",
       "skeletons": "Esqueletos",
       "i18n": "i18n",
-      "uiSidebar": "Barra lateral"
+      "uiSidebar": "Barra lateral",
+      "uiInput": "Input",
+      "uiTextarea": "Textarea"
     },
     "actions": {
       "expand": "Expandir barra lateral",
@@ -67,7 +69,9 @@
   },
   "table": {
     "empty": "Sin datos",
-    "showing": "{start}–{end} de {total}"
+    "showing": "{start}–{end} de {total}",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente"
   },
   "feedback": {
     "emptyState": {
