@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "title": "Spinner"
+  },
+  "header": {
+    "title": "Spinner",
+    "subtitle": "Atomic loading indicator. Used standalone or composed inside other components (Button, list rows, overlays)."
+  },
+  "sections": {
+    "sizes": {
+      "title": "Sizes",
+      "description": "Four presets aligned with type and icon scales. Default is md."
+    },
+    "colors": {
+      "title": "Colors",
+      "description": "Use current to inherit the parent's color (default), accent for branded loaders, or muted for ambient indicators."
+    },
+    "props": {
+      "title": "Props",
+      "description": "All standard SVG attributes are supported."
+    }
+  },
+  "futureNote": {
+    "title": "More patterns coming",
+    "description": "Full loading patterns and composition examples will land in the Feedback section of the showcase."
+  },
+  "props": {
+    "size": "Diameter preset.",
+    "color": "Stroke color source.",
+    "label": "Accessible name for assistive technology. Defaults to \"Loading\".",
+    "className": "Optional class merged with the base spinner classes."
+  },
+  "localization": {
+    "title": "Localization",
+    "description": "Always pass label as a translated string in user-facing contexts."
+  }
+}

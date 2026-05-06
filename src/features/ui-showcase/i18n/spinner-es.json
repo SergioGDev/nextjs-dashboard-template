@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "title": "Spinner"
+  },
+  "header": {
+    "title": "Spinner",
+    "subtitle": "Indicador de carga atómico. Se usa de forma independiente o compuesto dentro de otros componentes (Button, filas de listas, overlays)."
+  },
+  "sections": {
+    "sizes": {
+      "title": "Tamaños",
+      "description": "Cuatro presets alineados con las escalas de tipografía e iconos. El valor por defecto es md."
+    },
+    "colors": {
+      "title": "Colores",
+      "description": "Usa current para heredar el color del padre (por defecto), accent para loaders de marca, o muted para indicadores ambientales."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Todos los atributos SVG estándar están soportados."
+    }
+  },
+  "futureNote": {
+    "title": "Más patrones por llegar",
+    "description": "Los patrones completos de loading y ejemplos de composición aparecerán en la sección de Feedback del showcase."
+  },
+  "props": {
+    "size": "Preset de diámetro.",
+    "color": "Origen del color del trazo.",
+    "label": "Nombre accesible para tecnología asistiva. Por defecto \"Loading\".",
+    "className": "Clase opcional que se combina con las clases base del spinner."
+  },
+  "localization": {
+    "title": "Localización",
+    "description": "Pasa siempre label como una cadena traducida en contextos visibles para el usuario."
+  }
+}

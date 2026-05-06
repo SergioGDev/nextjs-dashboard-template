@@ -6,6 +6,64 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6b.1] Button + ButtonsGroup + Spinner extracción — 2026-05-05
+
+Primer sub-bloque de B6b (Inputs básicos). Introduce el patrón de showcase canónico para todo B6 (Anatomy → Variants → … → PropsTable → Localization), extrae `Spinner` como componente independiente, refactoriza `Button` para consumirlo internamente, añade un modificador ortogonal `iconOnly` y crea el componente nuevo `ButtonsGroup`.
+
+### Componentes
+
+- **`Spinner`** (`src/components/ui/spinner.tsx` + clases `nx-spinner` en `components.css`): SVG circular con stroke parcial dasheado y animación `nx-spin` (rotación lineal infinita 0.8s). Sizes `xs/sm/md/lg`, colores `current/accent/muted`, `label` para accesibilidad (`role="status"`, default `"Loading"`). Usa `currentColor` por defecto, lo que lo hace componible dentro de cualquier wrapper coloreado (Button, list rows, overlays).
+- **`Button` refactor**: el spinner inline (`<svg className="animate-spin"…>`) se sustituye por `<Spinner />`. Cuando `loading=true`, el contenido se mantiene en el DOM con `visibility:hidden` y el spinner se superpone con `position:absolute`, **manteniendo el ancho del botón**. Esto evita CLS al alternar loading state — el comportamiento previo (spinner inline + label) hacía crecer el botón ~24px al cargar.
+- **`Button.iconOnly` (prop nueva)**: ortogonal a `size`. Cuando es `true`, fuerza aspect 1:1 con la altura del size correspondiente (sm:32, md:36, lg:44). Convive con la `size="icon"` legacy (h-9 w-9), que se mantiene retrocompatible. Se usa **discriminated union** para forzar `aria-label` requerido cuando `iconOnly: true` — TypeScript falla en compilación si se omite. La prop `size="icon"` legacy no fuerza aria-label (preserva comportamiento existente; la auditoría puede recomendar deprecarla en sub-bloques posteriores).
+- **`ButtonsGroup`** (`src/components/ui/buttons-group.tsx` + clases `nx-btn-group` en `components.css`): contenedor flex que une visualmente botones hijos. Esquinas externas con `--radius-pill` (horizontal) o `--radius-md` (vertical). Bordes deduplicados via `margin: -1px` y `position: relative + z-index` para que el focus ring no quede tapado. `role="group"` por defecto, override a `"toolbar"` para barras de edición. Sin propagación mágica de `size` a los hijos — cada Button declara su propio size (decisión: explícito > mágico).
+
+### Showcase
+
+- **`Anatomy`** (`src/features/ui-showcase/components/anatomy.tsx`): componente reutilizable que define el patrón Anatomy fijado para todo B6. Recibe `render` (la previsualización con `AnatomyPartHighlight` aplicado a las partes) y `parts: AnatomyPart[]` (tabla compacta con name/type/required/description). Las descripciones son traducibles; los nombres de partes (`leading`, `label`, `trailing`, `container`, `buttons`) se mantienen en inglés en ambos locales (jerga universal del design system).
+- **`AnatomyPartHighlight`**: helper visual con `border: 1px dashed var(--accent)` y un label en font-mono `text-[10px]` posicionado en `top: -20px`. Se usa también para resaltar partes anidadas (en `ButtonsGroup` resalta el `container` y cada `button` por separado).
+- Tres páginas de showcase nuevas (split server/client porque necesitan interacción para snippets copiables):
+  - `/ui/buttons` — Anatomy + Variants × 6 + Sizes × 3 + With icons + Icon-only + Loading + Disabled + Full width + PropsTable + Localization. La sección Icon-only incluye una nota destacada (`Info` icon + texto en panel `info-muted`) explicando el contrato de `aria-label`.
+  - `/ui/buttons-group` — Anatomy (con highlights anidados) + Horizontal + Vertical + Mixed variants + With icons + As toolbar + PropsTable + Localization.
+  - `/ui/spinner` — versión mínima (sizes + colors + PropsTable + nota apuntando a la sección Feedback). **Sin sección Anatomy**: los componentes atómicos no llevan Anatomy (decisión documentada).
+
+### i18n
+
+- 3 namespaces nuevos como archivos separados (patrón ya establecido por `foundations`):
+  - `buttons` (`buttons-{en,es}.json`)
+  - `buttonsGroup` (`buttons-group-{en,es}.json`)
+  - `spinner` (`spinner-{en,es}.json`)
+- Registrados en `src/i18n/request.ts`. Política híbrida: snippets de código en EN literal (referencia copy-paste); demos, prosa, descriptions de partes y de props en idioma activo; nombres de partes y nombres de props en EN literal.
+- Claves `anatomy.title` y `anatomy.columns.*` añadidas al namespace `uiShowcase` (compartidas por todas las Anatomy de B6).
+- Labels de sidebar nuevos: `sidebar.items.uiButton`, `sidebar.items.uiButtonsGroup`, `sidebar.items.uiSpinner` en EN/ES.
+
+### Integración
+
+- `routes.ts`: `routes.ui.buttons`, `routes.ui.buttonsGroup`, `routes.ui.spinner`.
+- `sidebar.config.ts`: 3 nuevos children en el grupo "Components", insertados al inicio (Button, Buttons group) y agrupados con feedback (Spinner) según orden de pertenencia mental, no alfabético. Sin iconos en children (consistencia con resto del sidebar — `sidebar-link.tsx` ignora icons en `isChild`).
+- Overview `/ui`: la card "Inputs" pasa de coming-soon a activa con `count: 2` y href a `/ui/buttons`. La card "Feedback" sube de 4 a 5 (incluye ahora Spinner). Descripciones actualizadas en `uiShowcase.overview.categories.{inputs,feedback}` para reflejar los componentes reales.
+
+### Decisiones técnicas
+
+- **`iconOnly` vs renombrar `size="icon"`**: se mantiene `size="icon"` para retrocompatibilidad (usado en data-table, theme-toggle, users-content). `iconOnly` es una prop adicional ortogonal, no una sustitución. Pendiente: revisar si convergir ambos en B6b.2 cuando se documente la migración.
+- **Discriminated union vs warning runtime**: se eligió la unión discriminada (`{iconOnly:true; 'aria-label':string} | {iconOnly?:false}`). Se descartó warning en `useEffect` porque la unión TypeScript bloquea el error en compile time, mejor experiencia para el desarrollador.
+- **`fullWidth` añadida como prop nueva**: la auditoría B6.0 la pidió implícitamente (Botón "Continue" en login form usa `className="w-full"`). Ahora es una prop semántica explícita. Backwards-compat: las clases `w-full` manuales siguen funcionando (se merge via `cn`).
+- **Spinner standalone vs override de Button.icon**: `Spinner` es público y reutilizable (no solo dentro de Button). Esto permite componer loading states en list items, overlays, KPI cards, etc. sin duplicar SVGs.
+- **Anatomy column "description"**: condicional. Si ninguna parte tiene description, la columna no se renderiza.
+- **`ButtonsGroup` sin propagación de `size`**: explícito > mágico. Cada Button hijo declara su size. Si se necesita en el futuro (toolbars con muchos botones idénticos), se puede añadir como helper sin breaking change.
+
+### Lint y build
+
+- `npm run lint` → 0 errores nuevos (2 warnings preexistentes intactos: `_data` no usado en settings-form, `<img>` en avatar).
+- `npm run build` → 44 páginas estáticas (era 38; +6 = 3 páginas nuevas × 2 locales).
+
+### Deuda técnica detectada
+
+- **`size="icon"` legacy vs `iconOnly`**: dos formas de hacer lo mismo. Resolver en B6b.2 (migrar usages a `iconOnly` + size, marcar `size="icon"` como deprecated).
+- **Componentes atómicos sin Anatomy**: documentar en `docs/components.md` (al cierre de B6) que los componentes atómicos (Spinner, Divider, Skeleton) no llevan sección Anatomy.
+- **Skeleton aria-labels en EN**: deuda heredada (no resuelta en B6b.1). Sigue documentada en `i18n.md`.
+
+---
+
 ## [B6a.4] Sidebar active matcher fix + "Foundations" → "Bases" (ES) — 2026-05-05
 
 Dos paper cuts detectados tras cerrar B6a, arreglados antes de arrancar B6b. Sin cambios funcionales más allá de estos dos puntos.

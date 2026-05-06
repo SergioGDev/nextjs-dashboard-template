@@ -47,7 +47,7 @@
       },
       "inputs": {
         "label": "Inputs",
-        "description": "Botones, inputs, selects, checkboxes"
+        "description": "Botones, grupos de botones, inputs, selects"
       },
       "display": {
         "label": "Visualización",
@@ -55,7 +55,7 @@
       },
       "feedback": {
         "label": "Feedback",
-        "description": "Toasts, estados vacíos, estados de error, skeletons"
+        "description": "Toasts, estados vacíos, estados de error, esqueletos, spinner"
       },
       "data": {
         "label": "Datos",
@@ -634,5 +634,14 @@
     "title": "Localización",
     "description": "Todos los strings visibles deberían envolverse con useTranslations de next-intl. Los snippets de arriba muestran strings literales por claridad, pero en código de producción usa t() para soportar múltiples idiomas.",
     "linkLabel": "Ver la guía de i18n"
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "columns": {
+      "part": "Parte",
+      "type": "Tipo",
+      "required": "Requerido",
+      "description": "Descripción"
+    }
   }
 }

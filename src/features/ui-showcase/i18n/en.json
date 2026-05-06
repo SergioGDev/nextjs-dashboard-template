@@ -47,7 +47,7 @@
       },
       "inputs": {
         "label": "Inputs",
-        "description": "Buttons, inputs, selects, checkboxes"
+        "description": "Buttons, buttons groups, inputs, selects"
       },
       "display": {
         "label": "Display",
@@ -55,7 +55,7 @@
       },
       "feedback": {
         "label": "Feedback",
-        "description": "Toasts, empty states, error states, skeletons"
+        "description": "Toasts, empty states, error states, skeletons, spinner"
       },
       "data": {
         "label": "Data",
@@ -634,5 +634,14 @@
     "title": "Localization",
     "description": "All visible strings should be wrapped with useTranslations from next-intl. The snippets above show literal strings for clarity, but in production code use t() to support multiple languages.",
     "linkLabel": "See the i18n guide"
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "columns": {
+      "part": "Part",
+      "type": "Type",
+      "required": "Required",
+      "description": "Description"
+    }
   }
 }

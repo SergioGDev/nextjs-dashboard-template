@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "title": "Botón"
+  },
+  "header": {
+    "title": "Botón",
+    "subtitle": "Elemento de acción con forma de píldora. Seis variantes visuales, tres tamaños y modificadores ortogonales para icono y estado de carga."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Un botón se compone de un icono inicial opcional, una etiqueta y un icono final opcional. Todas las partes comparten el color y la forma de píldora del botón.",
+    "parts": {
+      "leading": "Icono decorativo o de estado opcional mostrado antes de la etiqueta.",
+      "label": "Verbo de acción en caja minúscula. Mantenlo breve — entre una y tres palabras.",
+      "trailing": "Indicador opcional (chevron, flecha) que sugiere el resultado o la dirección."
+    }
+  },
+  "sections": {
+    "variants": {
+      "title": "Variantes",
+      "description": "Seis tratamientos visuales. Usa default para la acción principal; secondary, outline y ghost para acciones de apoyo; destructive para operaciones irreversibles; link para navegación en línea."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "description": "Tres alturas predefinidas. El tamaño por defecto es md. Usa sm en barras compactas y lg para CTAs destacadas."
+    },
+    "icons": {
+      "title": "Con iconos",
+      "description": "Acompaña la etiqueta con un icono inicial para contexto, uno final para sugerir flujo, o ambos."
+    },
+    "iconOnly": {
+      "title": "Solo icono",
+      "description": "Botón cuadrado con la misma altura que el tamaño. Acompáñalo siempre de un aria-label descriptivo.",
+      "ariaNote": "Cuando iconOnly es true, aria-label pasa a ser una prop requerida — TypeScript la fuerza con una discriminated union."
+    },
+    "loading": {
+      "title": "Estado de carga",
+      "description": "Durante la carga el botón se deshabilita y la etiqueta se sustituye por un spinner. El ancho se mantiene para evitar saltos de layout."
+    },
+    "disabled": {
+      "title": "Estado deshabilitado",
+      "description": "Opacidad reducida y pointer-events:none. Úsalo para acciones temporalmente no disponibles, no como sustituto de ocultar."
+    },
+    "fullWidth": {
+      "title": "Ancho completo",
+      "description": "Se estira para ocupar todo su contenedor. Común en formularios apilados y sheets móviles."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Todos los ButtonHTMLAttributes estándar están soportados. Las props destacadas a continuación son específicas del componente."
+    }
+  },
+  "demos": {
+    "default": "Principal",
+    "secondary": "Secundario",
+    "ghost": "Ghost",
+    "outline": "Outline",
+    "destructive": "Eliminar",
+    "link": "Leer más",
+    "small": "Pequeño",
+    "medium": "Mediano",
+    "large": "Grande",
+    "search": "Buscar",
+    "more": "Más",
+    "filter": "Filtrar",
+    "loading": "Guardando",
+    "save": "Guardar cambios",
+    "fullWidth": "Continuar",
+    "settingsLabel": "Abrir ajustes",
+    "moreLabel": "Más opciones",
+    "trashLabel": "Mover a la papelera"
+  },
+  "props": {
+    "variant": "Tratamiento visual.",
+    "size": "Altura predefinida.",
+    "iconOnly": "Renderiza como botón cuadrado. Requiere aria-label cuando es true.",
+    "loading": "Deshabilita el botón y superpone un spinner centrado.",
+    "disabled": "Estado disabled estándar de HTML.",
+    "fullWidth": "Estira el botón para ocupar el ancho del contenedor.",
+    "children": "Contenido de la etiqueta. Combínalo con iconos en línea.",
+    "onClick": "Handler de click. No se invoca durante loading o disabled.",
+    "extendsNote": "Extiende todos los ButtonHTMLAttributes estándar (type, name, form, …)."
+  },
+  "localization": {
+    "title": "Localización",
+    "description": "Envuelve cada etiqueta visible con t() de useTranslations. Los snippets aquí usan strings literales por claridad."
+  }
+}

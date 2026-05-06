@@ -1,0 +1,70 @@
+{
+  "metadata": {
+    "title": "Buttons group"
+  },
+  "header": {
+    "title": "Buttons group",
+    "subtitle": "Joined collection of buttons that read as a single segmented control. Useful for toolbars, view toggles, and compact pagination."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A buttons group is a flex container that visually fuses its children. Outer corners use the system pill radius, inner corners are flat, and shared borders are deduplicated.",
+    "parts": {
+      "container": "Wrapping element with role=\"group\" or role=\"toolbar\" and an aria-label.",
+      "buttons": "Two or more Button children. Each declares its own variant and size."
+    }
+  },
+  "sections": {
+    "horizontal": {
+      "title": "Horizontal",
+      "description": "Default orientation. Outer corners adopt the pill radius; inner edges are flat."
+    },
+    "vertical": {
+      "title": "Vertical",
+      "description": "Stacked variant. Vertical groups switch to --radius-md on the outer corners — pill geometry reads awkwardly on tall stacks."
+    },
+    "mixed": {
+      "title": "Mixed variants",
+      "description": "Children can mix variants freely. Pair a default button with ghost siblings to express the active selection in a segmented control."
+    },
+    "icons": {
+      "title": "With icons",
+      "description": "Combine iconOnly buttons for compact toolbars. Each button still declares its own aria-label."
+    },
+    "toolbar": {
+      "title": "As a toolbar",
+      "description": "Pass role=\"toolbar\" when the group represents a set of editing actions. Pair with aria-label so screen readers can announce the toolbar's purpose."
+    }
+  },
+  "demos": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "alignLeft": "Align left",
+    "alignCenter": "Align center",
+    "alignRight": "Align right",
+    "edit": "Edit",
+    "copy": "Copy",
+    "delete": "Delete",
+    "labels": {
+      "formatting": "Text formatting",
+      "viewMode": "View mode",
+      "alignment": "Text alignment",
+      "actions": "Row actions"
+    }
+  },
+  "props": {
+    "children": "Two or more Button elements.",
+    "orientation": "Layout direction.",
+    "role": "ARIA role. Use 'toolbar' for editing toolbars; default 'group' is fine for general selectors.",
+    "ariaLabel": "Recommended. Describes the group's purpose to assistive technology.",
+    "className": "Optional class merged with the base group classes."
+  },
+  "localization": {
+    "title": "Localization",
+    "description": "ButtonsGroup itself has no visible text. Translate the labels of the Button children via useTranslations."
+  }
+}

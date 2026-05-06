@@ -12,3 +12,10 @@ export interface SubnavItem {
   group?: string;
   disabled?: boolean;
 }
+
+export interface AnatomyPart {
+  name: string;
+  type: string;
+  required?: boolean;
+  description?: string;
+}

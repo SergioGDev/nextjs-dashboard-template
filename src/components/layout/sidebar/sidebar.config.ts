@@ -44,10 +44,13 @@ export const sidebarConfig: SidebarConfig = [
         label: 'sidebar.items.uiComponents',
         icon: Layers,
         children: [
+          { type: 'link', label: 'sidebar.items.uiButton', href: routes.ui.buttons },
+          { type: 'link', label: 'sidebar.items.uiButtonsGroup', href: routes.ui.buttonsGroup },
           { type: 'link', label: 'sidebar.items.toasts', href: routes.ui.toasts },
           { type: 'link', label: 'sidebar.items.emptyStates', href: routes.ui.emptyStates },
           { type: 'link', label: 'sidebar.items.errorStates', href: routes.ui.errorStates },
           { type: 'link', label: 'sidebar.items.skeletons', href: routes.ui.skeletons },
+          { type: 'link', label: 'sidebar.items.uiSpinner', href: routes.ui.spinner },
           { type: 'link', label: 'sidebar.items.i18n', href: routes.ui.i18n },
         ],
       },

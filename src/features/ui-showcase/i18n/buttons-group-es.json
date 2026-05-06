@@ -1,0 +1,70 @@
+{
+  "metadata": {
+    "title": "Grupo de botones"
+  },
+  "header": {
+    "title": "Grupo de botones",
+    "subtitle": "Conjunto de botones unidos que se leen como un control segmentado. Útil para barras de herramientas, selectores de vista y paginación compacta."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Un grupo de botones es un contenedor flex que une visualmente a sus hijos. Las esquinas externas usan el radio de píldora del sistema, las internas son planas y los bordes compartidos no se duplican.",
+    "parts": {
+      "container": "Elemento envolvente con role=\"group\" o role=\"toolbar\" y un aria-label.",
+      "buttons": "Dos o más Button como hijos. Cada uno declara su propio variant y size."
+    }
+  },
+  "sections": {
+    "horizontal": {
+      "title": "Horizontal",
+      "description": "Orientación por defecto. Las esquinas externas adoptan el radio de píldora; los bordes internos son planos."
+    },
+    "vertical": {
+      "title": "Vertical",
+      "description": "Variante apilada. Los grupos verticales cambian a --radius-md en las esquinas externas — la geometría de píldora queda extraña en pilas altas."
+    },
+    "mixed": {
+      "title": "Variantes mixtas",
+      "description": "Los hijos pueden mezclar variants libremente. Combina un botón default con hermanos ghost para expresar la selección activa en un control segmentado."
+    },
+    "icons": {
+      "title": "Con iconos",
+      "description": "Combina botones iconOnly para barras de herramientas compactas. Cada botón sigue declarando su propio aria-label."
+    },
+    "toolbar": {
+      "title": "Como toolbar",
+      "description": "Pasa role=\"toolbar\" cuando el grupo represente un conjunto de acciones de edición. Acompáñalo de aria-label para que los lectores de pantalla anuncien el propósito de la barra."
+    }
+  },
+  "demos": {
+    "bold": "Negrita",
+    "italic": "Cursiva",
+    "underline": "Subrayado",
+    "day": "Día",
+    "week": "Semana",
+    "month": "Mes",
+    "alignLeft": "Alinear a la izquierda",
+    "alignCenter": "Alinear al centro",
+    "alignRight": "Alinear a la derecha",
+    "edit": "Editar",
+    "copy": "Copiar",
+    "delete": "Eliminar",
+    "labels": {
+      "formatting": "Formato de texto",
+      "viewMode": "Modo de vista",
+      "alignment": "Alineación de texto",
+      "actions": "Acciones de fila"
+    }
+  },
+  "props": {
+    "children": "Dos o más elementos Button.",
+    "orientation": "Dirección del layout.",
+    "role": "Rol ARIA. Usa 'toolbar' para barras de edición; el valor por defecto 'group' es apropiado para selectores generales.",
+    "ariaLabel": "Recomendado. Describe el propósito del grupo a la tecnología asistiva.",
+    "className": "Clase opcional que se combina con las clases base del grupo."
+  },
+  "localization": {
+    "title": "Localización",
+    "description": "ButtonsGroup en sí no tiene texto visible. Traduce las etiquetas de sus Button hijos vía useTranslations."
+  }
+}

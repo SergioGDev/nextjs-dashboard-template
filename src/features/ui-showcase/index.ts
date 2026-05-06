@@ -9,4 +9,5 @@ export { TypeSpecimen } from './components/type-specimen';
 export { AccentScope, AccentPicker } from './components/accent-scope';
 export type { Accent } from './components/accent-scope';
 export { PhilosophyCard } from './components/philosophy-card';
-export type { PropDoc, SubnavItem } from './types/showcase.types';
+export { Anatomy, AnatomyPartHighlight } from './components/anatomy';
+export type { PropDoc, SubnavItem, AnatomyPart } from './types/showcase.types';

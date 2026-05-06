@@ -15,6 +15,9 @@ export const routes = {
   ui: {
     overview: '/ui',
     foundations: '/ui/foundations',
+    buttons: '/ui/buttons',
+    buttonsGroup: '/ui/buttons-group',
+    spinner: '/ui/spinner',
     toasts: '/ui/toasts',
     emptyStates: '/ui/empty-states',
     errorStates: '/ui/error-states',

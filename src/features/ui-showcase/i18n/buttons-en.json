@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "title": "Button"
+  },
+  "header": {
+    "title": "Button",
+    "subtitle": "Pill-shaped action element. Six visual variants, three sizes, and orthogonal modifiers for icon-only and loading states."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A button is composed of an optional leading icon, a label, and an optional trailing icon. All parts share the button's color and pill geometry.",
+    "parts": {
+      "leading": "Optional decorative or status icon shown before the label.",
+      "label": "Action verb in sentence case. Keep it short — one to three words.",
+      "trailing": "Optional indicator (chevron, arrow) hinting at outcome or direction."
+    }
+  },
+  "sections": {
+    "variants": {
+      "title": "Variants",
+      "description": "Six visual treatments. Use default for the primary action; secondary, outline, and ghost for supporting actions; destructive for irreversible operations; link for inline navigation."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Three height presets. Default size is md. Use sm in compact toolbars and lg for hero CTAs."
+    },
+    "icons": {
+      "title": "With icons",
+      "description": "Pair the label with a leading icon for context, a trailing icon to hint at flow, or both."
+    },
+    "iconOnly": {
+      "title": "Icon-only",
+      "description": "Square button at the same height as the size preset. Always pair with a descriptive aria-label.",
+      "ariaNote": "When iconOnly is true, aria-label becomes a required prop — TypeScript enforces it via a discriminated union."
+    },
+    "loading": {
+      "title": "Loading state",
+      "description": "While loading, the button is disabled and the label is replaced by a spinner. Width is preserved to avoid layout shift."
+    },
+    "disabled": {
+      "title": "Disabled state",
+      "description": "Reduced opacity and pointer-events:none. Use for actions that are temporarily unavailable, not as a substitute for hiding."
+    },
+    "fullWidth": {
+      "title": "Full width",
+      "description": "Stretches to fill its container. Common in stacked forms and mobile sheets."
+    },
+    "props": {
+      "title": "Props",
+      "description": "All standard ButtonHTMLAttributes are supported. Highlighted props below are component-specific."
+    }
+  },
+  "demos": {
+    "default": "Default",
+    "secondary": "Secondary",
+    "ghost": "Ghost",
+    "outline": "Outline",
+    "destructive": "Delete",
+    "link": "Read more",
+    "small": "Small",
+    "medium": "Medium",
+    "large": "Large",
+    "search": "Search",
+    "more": "More",
+    "filter": "Filter",
+    "loading": "Saving",
+    "save": "Save changes",
+    "fullWidth": "Continue",
+    "settingsLabel": "Open settings",
+    "moreLabel": "More options",
+    "trashLabel": "Move to trash"
+  },
+  "props": {
+    "variant": "Visual treatment.",
+    "size": "Height preset.",
+    "iconOnly": "Renders as a square button. Requires aria-label when true.",
+    "loading": "Disables the button and overlays a centered spinner.",
+    "disabled": "Standard HTML disabled state.",
+    "fullWidth": "Stretches the button to fill its container width.",
+    "children": "Label content. Combine with leading/trailing icons inline.",
+    "onClick": "Click handler. Not invoked while loading or disabled.",
+    "extendsNote": "Extends all standard ButtonHTMLAttributes (type, name, form, …)."
+  },
+  "localization": {
+    "title": "Localization",
+    "description": "Wrap every visible label with t() from useTranslations. The snippets here use literal strings for clarity."
+  }
+}

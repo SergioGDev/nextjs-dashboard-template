@@ -15,18 +15,46 @@ export default getRequestConfig(async ({ requestLocale }) => {
 });
 
 async function loadMessages(locale: string) {
-  const [common, auth, dashboard, analytics, users, reports, settings, uiShowcase, foundations] =
-    await Promise.all([
-      import(`../messages/${locale}/common.json`).then((m) => m.default),
-      import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
-      import(`../features/dashboard/i18n/${locale}.json`).then((m) => m.default),
-      import(`../features/analytics/i18n/${locale}.json`).then((m) => m.default),
-      import(`../features/users/i18n/${locale}.json`).then((m) => m.default),
-      import(`../features/reports/i18n/${locale}.json`).then((m) => m.default),
-      import(`../features/settings/i18n/${locale}.json`).then((m) => m.default),
-      import(`../features/ui-showcase/i18n/${locale}.json`).then((m) => m.default),
-      import(`../features/ui-showcase/i18n/foundations-${locale}.json`).then((m) => m.default),
-    ]);
+  const [
+    common,
+    auth,
+    dashboard,
+    analytics,
+    users,
+    reports,
+    settings,
+    uiShowcase,
+    foundations,
+    buttons,
+    buttonsGroup,
+    spinner,
+  ] = await Promise.all([
+    import(`../messages/${locale}/common.json`).then((m) => m.default),
+    import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
+    import(`../features/dashboard/i18n/${locale}.json`).then((m) => m.default),
+    import(`../features/analytics/i18n/${locale}.json`).then((m) => m.default),
+    import(`../features/users/i18n/${locale}.json`).then((m) => m.default),
+    import(`../features/reports/i18n/${locale}.json`).then((m) => m.default),
+    import(`../features/settings/i18n/${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/foundations-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/buttons-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/buttons-group-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/spinner-${locale}.json`).then((m) => m.default),
+  ]);
 
-  return { common, auth, dashboard, analytics, users, reports, settings, uiShowcase, foundations };
+  return {
+    common,
+    auth,
+    dashboard,
+    analytics,
+    users,
+    reports,
+    settings,
+    uiShowcase,
+    foundations,
+    buttons,
+    buttonsGroup,
+    spinner,
+  };
 }
