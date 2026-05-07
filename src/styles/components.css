@@ -221,6 +221,11 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+}
+.nx-card:has(> .nx-card__head),
+.nx-card:has(> .nx-card__body) {
+  padding: 0;
 }
 .nx-card--raised {
   background: var(--surface-raised);

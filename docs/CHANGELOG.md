@@ -6,6 +6,37 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6c.1.5] Fix: Card padding regression + i18n angle-bracket keys — 2026-05-07
+
+Dos regresiones introducidas en B6c.1, corregidas antes de continuar.
+
+### Fix 1 — Card sin padding interno
+
+Al migrar Card a `nx-card`, se perdió el `padding: 24px` original (los tokens tienen `--space-6` = 24px). La corrección añade `padding: var(--space-6)` a `.nx-card` y lo anula con un selector `:has()` cuando la tarjeta usa sub-componentes (`nx-card__head` o `nx-card__body`), que ya gestionan su propio padding internamente.
+
+```css
+.nx-card { padding: var(--space-6); }
+.nx-card:has(> .nx-card__head),
+.nx-card:has(> .nx-card__body) { padding: 0; }
+```
+
+Verificado en Dashboard, Analytics, Settings, /ui/card y Login: las tarjetas simples muestran `padding: 24px`; las compuestas `padding: 0`.
+
+### Fix 2 — Claves literales en /ui/card (next-intl v4 + angle brackets)
+
+En next-intl v4, `t()` falla silenciosamente y devuelve la clave si el valor del mensaje contiene etiquetas HTML (`<div>`, `<h3>`, `<p>`). Las cuatro claves afectadas en `card-en.json` y `card-es.json` se reescriben sin corchetes angulares:
+- `anatomy.parts.title`: `"…as an <h3>."` → `"…as an h3 element."`
+- `anatomy.parts.description`: `"…as a <p>."` → `"…as a p element."`
+- `sections.props.description`: `"…<div> attributes."` → `"…div attributes."`
+- `props.extendsNote`: `"…<div> attributes…"` → `"…div attributes…"`
+
+### Build
+
+- Lint: 0 errores nuevos.
+- Build: 56 páginas (sin cambio).
+
+---
+
 ## [B6c.1] Display components — Card, Badge, Avatar, Separator + radius-lg — 2026-05-07
 
 Tercer bloque de B6 (Display). Reabre el principio Mercury que mantenía las tarjetas con `--radius-lg: 0px`, migra Card / Badge / Separator / Skeleton al sistema de clases `nx-*`, extiende Badge con modo chip (onRemove + leadingIcon), añade Avatar con clases `nx-avatar`, y crea las 4 páginas de showcase del grupo "Display".

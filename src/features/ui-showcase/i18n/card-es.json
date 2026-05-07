@@ -12,8 +12,8 @@
     "parts": {
       "root": "Contenedor raíz. Controla el borde, el fondo y el radio a través de la clase CSS nx-card.",
       "header": "Slot superior con borde inferior. Úsalo para títulos y acciones. Renderizado por CardHeader.",
-      "title": "Texto principal en negrita. Renderizado por CardTitle como <h3>.",
-      "description": "Texto secundario atenuado bajo el título. Renderizado por CardDescription como <p>.",
+      "title": "Texto principal en negrita. Renderizado por CardTitle como elemento h3.",
+      "description": "Texto secundario atenuado bajo el título. Renderizado por CardDescription como elemento p.",
       "content": "Slot del cuerpo principal con relleno. Renderizado por CardContent.",
       "footer": "Slot inferior con borde superior. Úsalo para acciones o metadatos. Renderizado por CardFooter."
     }
@@ -29,7 +29,7 @@
     },
     "props": {
       "title": "Props",
-      "description": "Extiende todos los atributos nativos de <div>. Props específicos del componente listados a continuación."
+      "description": "Extiende todos los atributos nativos de div. Props específicos del componente listados a continuación."
     }
   },
   "demos": {
@@ -45,6 +45,6 @@
   },
   "props": {
     "variant": "Estilo visual de la tarjeta. default usa fondo surface; raised usa surface-raised; interactive añade efectos hover.",
-    "extendsNote": "Extiende todos los atributos nativos de <div> (className, onClick, …)."
+    "extendsNote": "Extiende todos los atributos nativos de div (className, onClick, …)."
   }
 }

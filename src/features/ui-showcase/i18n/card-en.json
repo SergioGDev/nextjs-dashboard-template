@@ -12,8 +12,8 @@
     "parts": {
       "root": "Root container. Controls the border, background, and radius via the nx-card CSS class.",
       "header": "Top slot with a bottom border. Use for titles and actions. Rendered by CardHeader.",
-      "title": "Semibold primary text. Rendered by CardTitle as an <h3>.",
-      "description": "Secondary muted text below the title. Rendered by CardDescription as a <p>.",
+      "title": "Semibold primary text. Rendered by CardTitle as an h3 element.",
+      "description": "Secondary muted text below the title. Rendered by CardDescription as a p element.",
       "content": "Main body slot with padding. Rendered by CardContent.",
       "footer": "Bottom slot with a top border. Use for actions or metadata. Rendered by CardFooter."
     }
@@ -29,7 +29,7 @@
     },
     "props": {
       "title": "Props",
-      "description": "Extends all native <div> attributes. Component-specific props listed below."
+      "description": "Extends all native div attributes. Component-specific props listed below."
     }
   },
   "demos": {
@@ -45,6 +45,6 @@
   },
   "props": {
     "variant": "Visual style of the card. default uses surface background; raised uses surface-raised; interactive adds hover effects.",
-    "extendsNote": "Extends all native <div> attributes (className, onClick, …)."
+    "extendsNote": "Extends all native div attributes (className, onClick, …)."
   }
 }
