@@ -24,6 +24,8 @@ export const routes = {
     badge: '/ui/badge',
     avatar: '/ui/avatar',
     separator: '/ui/separator',
+    kbd: '/ui/kbd',
+    list: '/ui/list',
     toasts: '/ui/toasts',
     emptyStates: '/ui/empty-states',
     errorStates: '/ui/error-states',

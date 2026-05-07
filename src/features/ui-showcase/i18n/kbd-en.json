@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "Kbd"
+  },
+  "header": {
+    "title": "Kbd",
+    "subtitle": "Inline keyboard key indicator. Wraps a native kbd element with the nx-kbd class for consistent styling."
+  },
+  "sections": {
+    "singleKey": {
+      "title": "Single keys",
+      "description": "Individual keys styled as physical keyboard keys."
+    },
+    "modifierCombination": {
+      "title": "Modifier combinations",
+      "description": "Multiple Kbd elements joined by a plus sign to represent keyboard shortcuts."
+    },
+    "sequence": {
+      "title": "Key sequence",
+      "description": "Two or more keys pressed one after another, separated by a divider."
+    },
+    "inlineProse": {
+      "title": "Inline in prose",
+      "description": "Kbd used inline within a paragraph to call out a shortcut in context."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native kbd attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "prose": "Press <esc>Esc</esc> to cancel or <enter>Enter</enter> to confirm.",
+    "sequenceLabel": "Go to dashboard",
+    "extendsNote": "Extends all native HTMLElement attributes (className, …)."
+  },
+  "props": {
+    "className": "Additional CSS classes to merge onto the kbd element.",
+    "children": "Key label or symbol to display inside the badge."
+  }
+}

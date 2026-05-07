@@ -52,6 +52,8 @@ export const sidebarConfig: SidebarConfig = [
           { type: 'link', label: 'sidebar.items.uiBadge', href: routes.ui.badge },
           { type: 'link', label: 'sidebar.items.uiAvatar', href: routes.ui.avatar },
           { type: 'link', label: 'sidebar.items.uiSeparator', href: routes.ui.separator },
+          { type: 'link', label: 'sidebar.items.uiKbd', href: routes.ui.kbd },
+          { type: 'link', label: 'sidebar.items.uiList', href: routes.ui.list },
           { type: 'link', label: 'sidebar.items.toasts', href: routes.ui.toasts },
           { type: 'link', label: 'sidebar.items.emptyStates', href: routes.ui.emptyStates },
           { type: 'link', label: 'sidebar.items.errorStates', href: routes.ui.errorStates },

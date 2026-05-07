@@ -51,7 +51,7 @@
       },
       "display": {
         "label": "Visualización",
-        "description": "Cards, badges, avatares, divisores"
+        "description": "Cards, badges, avatares, separadores, kbd, listas"
       },
       "feedback": {
         "label": "Feedback",

@@ -49,7 +49,9 @@
       "uiCard": "Card",
       "uiBadge": "Badge",
       "uiAvatar": "Avatar",
-      "uiSeparator": "Separator"
+      "uiSeparator": "Separator",
+      "uiKbd": "Kbd",
+      "uiList": "List"
     },
     "actions": {
       "expand": "Expand sidebar",

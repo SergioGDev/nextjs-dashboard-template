@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "title": "List"
+  },
+  "header": {
+    "title": "List",
+    "subtitle": "Utility CSS classes for bulleted, ordered, and description lists. Applied directly to semantic ul, ol, and dl elements — no React component required."
+  },
+  "sections": {
+    "bulleted": {
+      "title": "Bulleted",
+      "description": "Unordered list with disc bullets. Apply nx-list to a ul element."
+    },
+    "ordered": {
+      "title": "Ordered",
+      "description": "Numbered list. Apply nx-list and nx-list--ordered to an ol element."
+    },
+    "description": {
+      "title": "Description list",
+      "description": "Term and definition pairs. Apply nx-list and nx-list--description to a dl element."
+    },
+    "customIcon": {
+      "title": "With custom icon",
+      "description": "Replace the default bullet with a Lucide icon by omitting the list-style and adding an icon inside each li."
+    },
+    "nested": {
+      "title": "Nested list",
+      "description": "A list inside a list. Child lists inherit the same nx-list styles and add a top margin for visual separation."
+    },
+    "classes": {
+      "title": "Classes reference"
+    }
+  },
+  "demos": {
+    "bulleted": {
+      "item1": "Accessible by default — uses semantic HTML elements",
+      "item2": "Styled via CSS custom properties for automatic theme support",
+      "item3": "No JavaScript or React components needed",
+      "item4": "Works with any list content"
+    },
+    "ordered": {
+      "item1": "Install the package with your preferred package manager",
+      "item2": "Import the CSS file in your layout",
+      "item3": "Apply the class to your list element",
+      "item4": "Customize with CSS custom properties as needed"
+    },
+    "description": {
+      "term1": "nx-list",
+      "def1": "Base class for all list variants. Adds consistent spacing and font styling.",
+      "term2": "nx-list--ordered",
+      "def2": "Applies decimal numbering to the list.",
+      "term3": "nx-list--description",
+      "def3": "Styles dt and dd elements for term/definition pairs."
+    },
+    "customIcon": {
+      "item1": "Built with React and Next.js",
+      "item2": "Styled with Tailwind v4 and CSS custom properties",
+      "item3": "Icons from the Lucide icon library"
+    },
+    "nested": {
+      "parent1": "Design tokens",
+      "nested1a": "Colors and surfaces",
+      "nested1b": "Typography scale",
+      "nested1c": "Spacing and radii",
+      "parent2": "Components",
+      "nested2a": "Buttons and inputs",
+      "nested2b": "Cards and badges"
+    }
+  },
+  "classes": {
+    "list": {
+      "class": "nx-list",
+      "appliedTo": "ul",
+      "description": "Base bulleted list. Adds disc bullets, spacing, and muted bullet color."
+    },
+    "ordered": {
+      "class": "nx-list--ordered",
+      "appliedTo": "ol",
+      "description": "Enables decimal numbering. Use with nx-list."
+    },
+    "description": {
+      "class": "nx-list--description",
+      "appliedTo": "dl",
+      "description": "Removes bullets and styles dt (semibold) and dd (muted, indented) pairs."
+    },
+    "compact": {
+      "class": "nx-list--compact",
+      "appliedTo": "ul, ol",
+      "description": "Reduces vertical gap between items for dense layouts."
+    }
+  }
+}

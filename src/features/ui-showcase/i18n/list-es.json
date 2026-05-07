@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "title": "List"
+  },
+  "header": {
+    "title": "List",
+    "subtitle": "Clases CSS de utilidad para listas con viñetas, ordenadas y de descripción. Se aplican directamente sobre elementos semánticos ul, ol y dl — no se necesita componente React."
+  },
+  "sections": {
+    "bulleted": {
+      "title": "Con viñetas",
+      "description": "Lista desordenada con viñetas de disco. Aplica nx-list a un elemento ul."
+    },
+    "ordered": {
+      "title": "Ordenada",
+      "description": "Lista numerada. Aplica nx-list y nx-list--ordered a un elemento ol."
+    },
+    "description": {
+      "title": "Lista de descripción",
+      "description": "Pares de término y definición. Aplica nx-list y nx-list--description a un elemento dl."
+    },
+    "customIcon": {
+      "title": "Con icono personalizado",
+      "description": "Sustituye la viñeta predeterminada por un icono de Lucide omitiendo el list-style y añadiendo un icono dentro de cada li."
+    },
+    "nested": {
+      "title": "Lista anidada",
+      "description": "Una lista dentro de otra lista. Las listas hijas heredan los mismos estilos nx-list y añaden un margen superior para separación visual."
+    },
+    "classes": {
+      "title": "Referencia de clases"
+    }
+  },
+  "demos": {
+    "bulleted": {
+      "item1": "Accesible por defecto — usa elementos HTML semánticos",
+      "item2": "Estilizado mediante CSS custom properties para soporte automático de temas",
+      "item3": "No se necesita JavaScript ni componentes React",
+      "item4": "Funciona con cualquier contenido de lista"
+    },
+    "ordered": {
+      "item1": "Instala el paquete con tu gestor de paquetes preferido",
+      "item2": "Importa el archivo CSS en tu layout",
+      "item3": "Aplica la clase al elemento de lista",
+      "item4": "Personaliza con CSS custom properties según sea necesario"
+    },
+    "description": {
+      "term1": "nx-list",
+      "def1": "Clase base para todas las variantes de lista. Añade espaciado consistente y estilos de fuente.",
+      "term2": "nx-list--ordered",
+      "def2": "Aplica numeración decimal a la lista.",
+      "term3": "nx-list--description",
+      "def3": "Estiliza los elementos dt y dd para pares término/definición."
+    },
+    "customIcon": {
+      "item1": "Construido con React y Next.js",
+      "item2": "Estilizado con Tailwind v4 y CSS custom properties",
+      "item3": "Iconos de la librería de iconos Lucide"
+    },
+    "nested": {
+      "parent1": "Tokens de diseño",
+      "nested1a": "Colores y superficies",
+      "nested1b": "Escala tipográfica",
+      "nested1c": "Espaciado y radios",
+      "parent2": "Componentes",
+      "nested2a": "Botones e inputs",
+      "nested2b": "Cards y badges"
+    }
+  },
+  "classes": {
+    "list": {
+      "class": "nx-list",
+      "appliedTo": "ul",
+      "description": "Lista con viñetas base. Añade viñetas de disco, espaciado y color de viñeta atenuado."
+    },
+    "ordered": {
+      "class": "nx-list--ordered",
+      "appliedTo": "ol",
+      "description": "Activa la numeración decimal. Usar con nx-list."
+    },
+    "description": {
+      "class": "nx-list--description",
+      "appliedTo": "dl",
+      "description": "Elimina las viñetas y estiliza los pares dt (negrita) y dd (atenuado, sangría)."
+    },
+    "compact": {
+      "class": "nx-list--compact",
+      "appliedTo": "ul, ol",
+      "description": "Reduce el espacio vertical entre elementos para diseños densos."
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": "Kbd"
+  },
+  "header": {
+    "title": "Kbd",
+    "subtitle": "Indicador de tecla de teclado en línea. Envuelve un elemento kbd nativo con la clase nx-kbd para un estilo consistente."
+  },
+  "sections": {
+    "singleKey": {
+      "title": "Teclas individuales",
+      "description": "Teclas individuales estilizadas como teclas físicas de teclado."
+    },
+    "modifierCombination": {
+      "title": "Combinaciones con modificadores",
+      "description": "Varios elementos Kbd unidos con un signo más para representar atajos de teclado."
+    },
+    "sequence": {
+      "title": "Secuencia de teclas",
+      "description": "Dos o más teclas pulsadas consecutivamente, separadas por un divisor."
+    },
+    "inlineProse": {
+      "title": "En línea dentro de texto",
+      "description": "Kbd usado dentro de un párrafo para destacar un atajo en contexto."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de kbd. Props específicos del componente listados a continuación."
+    }
+  },
+  "demos": {
+    "prose": "Pulsa <esc>Esc</esc> para cancelar o <enter>Enter</enter> para confirmar.",
+    "sequenceLabel": "Ir al dashboard",
+    "extendsNote": "Extiende todos los atributos nativos de HTMLElement (className, …)."
+  },
+  "props": {
+    "className": "Clases CSS adicionales que se fusionan en el elemento kbd.",
+    "children": "Etiqueta o símbolo de la tecla a mostrar dentro del componente."
+  }
+}

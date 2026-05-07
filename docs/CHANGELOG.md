@@ -6,6 +6,53 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6c.2] Display: Kbd + List — cierre del bloque B6c — 2026-05-07
+
+Último sub-bloque de B6c. Completa la sección "Display" del design system con los dos componentes restantes del catálogo: `Kbd` (componente React trivial) y `List` (utility CSS sin componente). Con este bloque, la categoría Display pasa a 6 entradas en el overview.
+
+### Componentes
+
+- **`Kbd` nuevo** (`src/components/ui/kbd.tsx`): wrapper trivial sobre `<kbd>` con `cn('nx-kbd', className)`. Acepta y propaga `React.HTMLAttributes<HTMLElement>`. La clase `.nx-kbd` ya existía en `components.css`; no se ha modificado (fuente mono, border `--border-strong`, fondo `--surface-raised`, color `--text-secondary`).
+
+- **Utility CSS `nx-list-*`** (`src/styles/components.css`, bloque nuevo al final):
+  - `.nx-list` — lista con viñetas base: `list-style: disc`, `color: var(--text-secondary)`, `gap: var(--space-1)`, marker `--text-muted`.
+  - `.nx-list--ordered` — numeración decimal con marker `--text-muted`.
+  - `.nx-list--description` — elimina viñetas, estiliza `dt` (semibold, `--text-primary`) y `dd` (muted, sangría `--space-4`).
+  - `.nx-list--compact` — reduce gap entre items (`gap: 0`, `padding-block: 1px`).
+  - Anidado: `.nx-list .nx-list` añade `margin-top: var(--space-1)`.
+  - **Sin componente React List.tsx** — las clases se aplican directamente a `ul`, `ol`, `dl` semánticos.
+
+### Decisión documentada
+
+List es utility CSS (no componente React) porque es 100% presentacional. El mismo patrón que `.nx-kbd`. Un componente sería overhead sin beneficio. La composición con iconos personalizados se consigue con `style={{ listStyle: 'none', paddingLeft: 0 }}` + un `flex items-start gap-2` dentro de cada `li`.
+
+### Showcase
+
+- `/ui/kbd` — Header + Single keys (7 keys) + Modifier combinations (4 combos en grid 2×2) + Key sequence (g then d) + Inline prose (`t.rich` con renderers `esc`/`enter`) + PropsTable + Localization.
+- `/ui/list` — Header + Bulleted + Ordered + Description list + Custom icon (Lucide `Check`) + Nested + Classes reference table (4 filas: Class / Applied to / Description) + Localization.
+- Overview `/ui/page.tsx`: display count 4 → 6, descripción actualizada.
+
+### i18n
+
+- `kbd-{en,es}.json` y `list-{en,es}.json` en `src/features/ui-showcase/i18n/`.
+- `request.ts`: namespaces `kbd` y `list` registrados.
+- `routes.ts`: `ui.kbd = '/ui/kbd'`, `ui.list = '/ui/list'`.
+- `common.json` (en/es): `sidebar.items.uiKbd = "Kbd"`, `sidebar.items.uiList = "List"`.
+- `sidebar.config.ts`: items Kbd y List en Components, después de Separator.
+- Cadenas con `<tag>` evitadas en todos los JSON (lección de B6c.1.5).
+- `demos.prose` en kbd-{en,es}.json usa rich text tags (`<esc>Esc</esc>`) — componente usa `t.rich()` con renderers `(chunks) => <Kbd>{chunks}</Kbd>`.
+
+### Fix detectado durante verificación
+
+`demos.prose` usaba inicialmente `{esc}` (ICU string placeholder) en lugar de `<esc>Esc</esc>` (rich text tag). El placeholder devolvía cadena vacía en `t.rich()`. Corregido antes del commit.
+
+### Build
+
+- Lint: 0 errores nuevos (6 warnings pre-existentes).
+- Build: 60 páginas (era 56; +4 = 2 rutas × 2 locales).
+
+---
+
 ## [B6c.1.5] Fix: Card padding regression + i18n angle-bracket keys — 2026-05-07
 
 Dos regresiones introducidas en B6c.1, corregidas antes de continuar.

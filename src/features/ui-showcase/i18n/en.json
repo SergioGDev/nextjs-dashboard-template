@@ -51,7 +51,7 @@
       },
       "display": {
         "label": "Display",
-        "description": "Cards, badges, avatars, dividers"
+        "description": "Cards, badges, avatars, separators, kbd, lists"
       },
       "feedback": {
         "label": "Feedback",

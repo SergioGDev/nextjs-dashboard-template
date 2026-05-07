@@ -665,3 +665,61 @@
   animation: nx-toast-out 300ms var(--ease-out) forwards;
   overflow: hidden;
 }
+
+/* ===== List ===== */
+.nx-list {
+  list-style: disc;
+  padding-left: var(--space-5);
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nx-list > li::marker {
+  color: var(--text-muted);
+}
+
+.nx-list .nx-list {
+  margin-top: var(--space-1);
+}
+
+.nx-list--ordered {
+  list-style: decimal;
+}
+
+.nx-list--ordered > li::marker {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nx-list--description {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.nx-list--description > dt {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.nx-list--description > dd {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  margin-left: var(--space-4);
+  margin-top: calc(var(--space-1) / 2);
+}
+
+.nx-list--compact {
+  gap: 0;
+}
+
+.nx-list--compact > li {
+  padding-block: 1px;
+}
