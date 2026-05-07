@@ -39,5 +39,5 @@ export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDi
 }
 
 export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex items-center pt-4 mt-4 border-t border-[var(--border)]', className)} {...props} />;
+  return <div className={cn('nx-card__footer', className)} {...props} />;
 }

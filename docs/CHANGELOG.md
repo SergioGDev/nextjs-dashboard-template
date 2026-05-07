@@ -6,9 +6,18 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
-## [B6c.2] Display: Kbd + List — cierre del bloque B6c — 2026-05-07
+## [B6c.2] Display: Kbd + List + CardFooter nx-* — cierre del bloque B6c — 2026-05-07
 
-Último sub-bloque de B6c. Completa la sección "Display" del design system con los dos componentes restantes del catálogo: `Kbd` (componente React trivial) y `List` (utility CSS sin componente). Con este bloque, la categoría Display pasa a 6 entradas en el overview.
+Último sub-bloque de B6c. Cierra la deuda de migración nx-* de Card (CardFooter) y completa la sección "Display" con `Kbd` (componente React trivial) y `List` (utility CSS sin componente). La categoría Display pasa a 6 entradas y la migración nx-* de Card es total.
+
+### Pre-work — CardFooter (deuda heredada de B6c.1)
+
+`CardFooter` quedó sin migrar a nx-* en B6c.1: renderizaba con Tailwind directo (`flex items-center pt-4 mt-4 border-t …`) sin padding lateral. Dado que el reset `:has(> .nx-card__body)` elimina el padding del root cuando la Card usa sub-componentes, el footer quedaba pegado al borde horizontal.
+
+- **`components.css`**: nueva clase `.nx-card__footer` con `padding: var(--space-4) var(--space-5)` y `border-top`. Añadido `.nx-card:has(> .nx-card__footer)` al bloque `:has()` de reset.
+- **`card.tsx`**: `CardFooter` pasa de Tailwind a `cn('nx-card__footer', className)`.
+- **Consumidores**: `CardFooter` solo se usa en `card-content.tsx` (showcase). No hay consumidores en producción.
+- **Verificado**: `/ui/card` sección "Sub-components" — botón "View details" con `padding: 16px 20px` confirmado via `getComputedStyle`.
 
 ### Componentes
 

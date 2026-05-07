@@ -224,7 +224,8 @@
   padding: var(--space-6);
 }
 .nx-card:has(> .nx-card__head),
-.nx-card:has(> .nx-card__body) {
+.nx-card:has(> .nx-card__body),
+.nx-card:has(> .nx-card__footer) {
   padding: 0;
 }
 .nx-card--raised {
@@ -259,6 +260,12 @@
 }
 .nx-card__body {
   padding: var(--space-5);
+}
+.nx-card__footer {
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
 }
 
 /* ===== Badge ===== */
