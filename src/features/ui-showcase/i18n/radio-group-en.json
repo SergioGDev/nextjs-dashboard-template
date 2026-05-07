@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "title": "Radio Group"
+  },
+  "header": {
+    "title": "Radio Group",
+    "subtitle": "A set of mutually exclusive options. Only one item can be selected at a time. Supports keyboard navigation with arrow keys."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "RadioGroup renders a role=radiogroup container. Each RadioItem wraps a hidden input with a custom visual control.",
+    "parts": {
+      "input": "Hidden native radio input. Carries focus, keyboard, and form semantics.",
+      "box": "Circular border rendered as the visual control.",
+      "dot": "Filled dot that appears when the item is selected.",
+      "label": "Primary text for the option.",
+      "description": "Supporting text rendered below the label."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "Unselected, selected, and disabled variants."
+    },
+    "orientation": {
+      "title": "Orientation",
+      "description": "Vertical (default) or horizontal layout."
+    },
+    "withDescription": {
+      "title": "With descriptions",
+      "description": "Each item can carry a description for additional context."
+    },
+    "props": {
+      "title": "Props",
+      "description": "RadioGroup accepts the following props."
+    }
+  },
+  "demos": {
+    "labelFree": "Free",
+    "labelPro": "Pro",
+    "labelEnterprise": "Enterprise",
+    "descriptionFree": "Up to 3 projects, community support.",
+    "descriptionPro": "Unlimited projects, priority support.",
+    "descriptionEnterprise": "Custom contracts, dedicated account manager.",
+    "labelEmail": "Email",
+    "labelSMS": "SMS",
+    "labelPush": "Push notification",
+    "labelLight": "Light",
+    "labelDark": "Dark",
+    "labelSystem": "System default",
+    "labelDisabled": "Disabled option",
+    "descriptionDisabled": "This option is not available."
+  },
+  "props": {
+    "name": "HTML name attribute used to group the inputs.",
+    "value": "Controlled selected value.",
+    "defaultValue": "Initial selected value (uncontrolled).",
+    "onChange": "Callback fired with the new value when selection changes.",
+    "items": "Array of RadioItem objects ({ value, label, description?, disabled? }).",
+    "disabled": "Disables the entire group.",
+    "orientation": "Layout direction of the items.",
+    "extendsNote": "RadioGroup does not extend HTMLElement props directly. Use native form attributes (name, form) at the input level if needed."
+  }
+}

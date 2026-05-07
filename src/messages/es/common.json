@@ -54,7 +54,9 @@
       "uiList": "List",
       "uiSelect": "Select",
       "uiCheckbox": "Checkbox",
-      "uiSwitch": "Switch"
+      "uiSwitch": "Switch",
+      "uiRadioGroup": "Radio Group",
+      "uiSlider": "Slider"
     },
     "actions": {
       "expand": "Expandir barra lateral",

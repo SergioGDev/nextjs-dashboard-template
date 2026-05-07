@@ -29,6 +29,8 @@ export const routes = {
     select: '/ui/select',
     checkbox: '/ui/checkbox',
     switch: '/ui/switch',
+    radioGroup: '/ui/radio-group',
+    slider: '/ui/slider',
     toasts: '/ui/toasts',
     emptyStates: '/ui/empty-states',
     errorStates: '/ui/error-states',

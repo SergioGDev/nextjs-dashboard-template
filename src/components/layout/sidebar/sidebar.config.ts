@@ -57,6 +57,8 @@ export const sidebarConfig: SidebarConfig = [
           { type: 'link', label: 'sidebar.items.uiSelect', href: routes.ui.select },
           { type: 'link', label: 'sidebar.items.uiCheckbox', href: routes.ui.checkbox },
           { type: 'link', label: 'sidebar.items.uiSwitch', href: routes.ui.switch },
+          { type: 'link', label: 'sidebar.items.uiRadioGroup', href: routes.ui.radioGroup },
+          { type: 'link', label: 'sidebar.items.uiSlider', href: routes.ui.slider },
           { type: 'link', label: 'sidebar.items.toasts', href: routes.ui.toasts },
           { type: 'link', label: 'sidebar.items.emptyStates', href: routes.ui.emptyStates },
           { type: 'link', label: 'sidebar.items.errorStates', href: routes.ui.errorStates },

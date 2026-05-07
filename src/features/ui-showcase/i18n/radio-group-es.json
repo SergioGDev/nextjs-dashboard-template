@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "title": "Radio Group"
+  },
+  "header": {
+    "title": "Radio Group",
+    "subtitle": "Conjunto de opciones mutuamente excluyentes. Solo se puede seleccionar una opción a la vez. Soporta navegación con teclado mediante las teclas de flecha."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "RadioGroup renderiza un contenedor role=radiogroup. Cada RadioItem envuelve un input oculto con un control visual personalizado.",
+    "parts": {
+      "input": "Input radio nativo oculto. Gestiona el foco, teclado y semántica de formulario.",
+      "box": "Borde circular que actúa como control visual.",
+      "dot": "Punto relleno que aparece cuando el ítem está seleccionado.",
+      "label": "Texto principal de la opción.",
+      "description": "Texto de apoyo que se muestra bajo la etiqueta."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "Estados",
+      "description": "Variantes sin selección, seleccionada y deshabilitada."
+    },
+    "orientation": {
+      "title": "Orientación",
+      "description": "Disposición vertical (por defecto) u horizontal."
+    },
+    "withDescription": {
+      "title": "Con descripciones",
+      "description": "Cada ítem puede incluir una descripción para proporcionar contexto adicional."
+    },
+    "props": {
+      "title": "Props",
+      "description": "RadioGroup acepta las siguientes props."
+    }
+  },
+  "demos": {
+    "labelFree": "Gratuito",
+    "labelPro": "Pro",
+    "labelEnterprise": "Enterprise",
+    "descriptionFree": "Hasta 3 proyectos, soporte comunitario.",
+    "descriptionPro": "Proyectos ilimitados, soporte prioritario.",
+    "descriptionEnterprise": "Contratos personalizados, gestor de cuenta dedicado.",
+    "labelEmail": "Correo electrónico",
+    "labelSMS": "SMS",
+    "labelPush": "Notificación push",
+    "labelLight": "Claro",
+    "labelDark": "Oscuro",
+    "labelSystem": "Predeterminado del sistema",
+    "labelDisabled": "Opción deshabilitada",
+    "descriptionDisabled": "Esta opción no está disponible."
+  },
+  "props": {
+    "name": "Atributo name de HTML para agrupar los inputs.",
+    "value": "Valor seleccionado controlado.",
+    "defaultValue": "Valor inicial seleccionado (no controlado).",
+    "onChange": "Callback que se ejecuta con el nuevo valor cuando cambia la selección.",
+    "items": "Array de objetos RadioItem ({ value, label, description?, disabled? }).",
+    "disabled": "Deshabilita el grupo completo.",
+    "orientation": "Dirección de disposición de los ítems.",
+    "extendsNote": "RadioGroup no extiende directamente las props de HTMLElement. Usa atributos de formulario nativos (name, form) a nivel de input si es necesario."
+  }
+}

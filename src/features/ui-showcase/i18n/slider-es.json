@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "title": "Slider"
+  },
+  "header": {
+    "title": "Slider",
+    "subtitle": "Input para seleccionar un valor numérico dentro de un rango. Envuelve el input range nativo con estilos personalizados."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Slider envuelve un input[type=range] nativo con una cabecera de etiqueta/valor y estilos CSS personalizados para la pista y el pulgar.",
+    "parts": {
+      "input": "Input range nativo. Gestiona toda la accesibilidad del navegador y la semántica de teclado.",
+      "track": "La barra horizontal que representa el rango completo.",
+      "thumb": "El manejador arrastrable que el usuario mueve para seleccionar un valor.",
+      "label": "Etiqueta de texto opcional que se muestra sobre el slider.",
+      "value": "Lectura numérica opcional alineada a la derecha de la etiqueta."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "Estados",
+      "description": "Por defecto, con visualización del valor y deshabilitado."
+    },
+    "range": {
+      "title": "Rango y paso",
+      "description": "Controla min, max y step para definir la granularidad del slider."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Slider acepta las siguientes props."
+    }
+  },
+  "demos": {
+    "labelVolume": "Volumen",
+    "labelBrightness": "Brillo",
+    "labelOpacity": "Opacidad",
+    "labelZoom": "Nivel de zoom",
+    "labelTemperature": "Temperatura",
+    "labelDisabled": "Slider deshabilitado",
+    "unitPercent": "%",
+    "unitX": "x"
+  },
+  "props": {
+    "label": "Etiqueta de texto que se muestra sobre el slider.",
+    "showValue": "Cuando es true, el valor actual se muestra a la derecha de la etiqueta.",
+    "formatValue": "Función para formatear el valor numérico en la visualización (p. ej. añadir una unidad).",
+    "min": "Valor mínimo.",
+    "max": "Valor máximo.",
+    "step": "Incremento del paso.",
+    "value": "Valor controlado.",
+    "defaultValue": "Valor inicial (no controlado).",
+    "disabled": "Deshabilita el slider.",
+    "extendsNote": "Slider extiende Omit<HTMLInputAttributes, 'type' | 'size'>. Todos los atributos nativos de range están soportados."
+  }
+}

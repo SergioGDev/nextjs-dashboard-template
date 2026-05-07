@@ -680,6 +680,144 @@
   transform: translateX(12px);
 }
 
+/* ===== Radio ===== */
+.nx-radio-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+.nx-radio-field:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.nx-radio-control {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.nx-radio-control input[type="radio"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.nx-radio-box {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  transition: all var(--dur-fast);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nx-radio-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--accent-foreground);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+  pointer-events: none;
+}
+.nx-radio-field:hover .nx-radio-box {
+  border-color: var(--accent);
+}
+.nx-radio-control:has(input:checked) .nx-radio-box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.nx-radio-control:has(input:checked) .nx-radio-dot {
+  opacity: 1;
+}
+.nx-radio-control:has(input:focus-visible) .nx-radio-box {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+/* ===== Slider ===== */
+.nx-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.nx-slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nx-slider-value {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.nx-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--accent);
+  transition: opacity var(--dur-fast);
+}
+.nx-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform var(--dur-fast), box-shadow var(--dur-fast);
+}
+.nx-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.nx-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: var(--radius-full);
+}
+.nx-slider::-moz-range-track {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+}
+.nx-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 4px var(--accent-muted);
+}
+.nx-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px var(--accent-muted);
+}
+.nx-slider:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 4px var(--accent-muted);
+}
+.nx-slider:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.nx-slider:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+}
+
 /* ===== Avatar ===== */
 .nx-avatar {
   position: relative;

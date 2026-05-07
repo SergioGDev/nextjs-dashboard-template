@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "title": "Slider"
+  },
+  "header": {
+    "title": "Slider",
+    "subtitle": "An input for selecting a numeric value within a range. Wraps the native range input with custom styling."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "Slider wraps a native input[type=range] with a label/value header and custom CSS track and thumb styling.",
+    "parts": {
+      "input": "Native range input. Carries all browser accessibility and keyboard semantics.",
+      "track": "The horizontal bar representing the full range.",
+      "thumb": "The draggable handle the user moves to select a value.",
+      "label": "Optional text label shown above the slider.",
+      "value": "Optional numeric readout shown aligned to the right of the label."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "Default, with value display, and disabled."
+    },
+    "range": {
+      "title": "Range and step",
+      "description": "Control min, max, and step to define the slider's granularity."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Slider accepts the following props."
+    }
+  },
+  "demos": {
+    "labelVolume": "Volume",
+    "labelBrightness": "Brightness",
+    "labelOpacity": "Opacity",
+    "labelZoom": "Zoom level",
+    "labelTemperature": "Temperature",
+    "labelDisabled": "Disabled slider",
+    "unitPercent": "%",
+    "unitX": "x"
+  },
+  "props": {
+    "label": "Text label rendered above the slider.",
+    "showValue": "When true, the current value is displayed to the right of the label.",
+    "formatValue": "Function to format the numeric value for display (e.g. append a unit).",
+    "min": "Minimum value.",
+    "max": "Maximum value.",
+    "step": "Step increment.",
+    "value": "Controlled value.",
+    "defaultValue": "Initial value (uncontrolled).",
+    "disabled": "Disables the slider.",
+    "extendsNote": "Slider extends Omit<HTMLInputAttributes, 'type' | 'size'>. All native range attributes are supported."
+  }
+}

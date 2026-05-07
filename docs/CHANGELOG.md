@@ -6,6 +6,97 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6d.2] Inputs avanzados: RadioGroup + Slider — 2026-05-07
+
+Dos componentes construidos desde cero + páginas de showcase. La categoría Inputs pasa de 7 a 9 en el overview.
+
+### Nuevos componentes
+
+**`src/components/ui/radio-group.tsx` — RadioGroup**
+
+Componente sin dependencias externas que envuelve inputs `type="radio"` nativos con control visual personalizado.
+
+API pública:
+- `name: string` — requerido; agrupa los inputs para el submit de formulario
+- `items: RadioItem[]` — array de `{ value, label, description?, disabled? }`
+- `value` / `defaultValue` / `onChange` — patrón controlado/no-controlado estándar
+- `disabled` — deshabilita el grupo completo
+- `orientation: 'vertical' | 'horizontal'` — layout con `flex-col gap-3` o `flex-row flex-wrap gap-4`
+
+Decisiones:
+- **Roving tabindex**: el ítem seleccionado (o el primero si no hay selección) recibe `tabIndex=0`; el resto `-1`. Las flechas `ArrowUp/Down/Left/Right` mueven el foco y seleccionan, saltando ítems disabled.
+- **`:has()` para estados CSS**: igual que Checkbox y Switch, se usan selectores `:has(input:checked)` y `:has(input:focus-visible)` para los estilos de checked/focus sin clases JS adicionales.
+- **Sin Radix/Headless UI**: se mantiene la política del proyecto de primitivas nativas wrapeadas. La accesibilidad (role, tabindex, keyboard) se gestiona manualmente.
+- **No se expone `RadioItem` como componente separado**: el API de array `items[]` es más ergonómico para el 99% de los casos de uso; un API de children compound habría requerido context y mayor complejidad.
+
+**`src/components/ui/slider.tsx` — Slider**
+
+Wrapper del `input[type=range]` nativo con label, visualización del valor y estilos CSS personalizados de pista y pulgar.
+
+API pública:
+- `label` — texto sobre el slider
+- `showValue: boolean` — muestra el valor actual alineado a la derecha del label
+- `formatValue: (value: number) => string` — formatea el número (p. ej. añadir unidades)
+- `min / max / step` — controlan el rango y la granularidad
+- `value` / `defaultValue` — patrón controlado/no-controlado; internamente usa `useState` cuando es no-controlado
+- Extiende `Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'>`
+
+Decisiones:
+- **Native range input**: igual que Select, se mantiene el input nativo para conservar accesibilidad y comportamiento táctil sin dependencias. Permite sliders de rango (range) en el futuro vía `multiple`.
+- **CSS webkit/moz**: los pseudo-elementos `::-webkit-slider-thumb`, `::-moz-range-thumb`, etc. son necesarios para overridear el estilo nativo cross-browser. No hay alternativa pura CSS3 que funcione en todos los navegadores.
+- **`accent-color: var(--accent)`**: se usa como fallback para navegadores que no soporten los pseudo-elementos. El track activo (parte izquierda del thumb) no se puede colorear de forma consistente cross-browser con CSS puro; se documenta como limitación.
+- **`Omit<..., 'size'>`**: igual que Switch, el `size` de `HTMLInputAttributes` es `number` (longitud visible del campo texto), lo que colisionaría con cualquier prop `size` futura de tamaño visual.
+
+### CSS (`src/styles/components.css`)
+
+Añadidas dos secciones nuevas tras `.nx-switch--sm`:
+
+**`.nx-radio-*`**:
+- `.nx-radio-field` — flex container con `cursor: pointer`; opacidad 0.4 + `cursor: not-allowed` cuando `:has(input:disabled)`
+- `.nx-radio-control` — wrapper relativo 16×16px
+- `.nx-radio-box` — círculo con borde, fondo `var(--surface)`, transición
+- `.nx-radio-dot` — círculo interno 6×6px, `opacity: 0` por defecto
+- Estado checked: `:has(input:checked)` → `background: var(--accent)` + dot `opacity: 1`
+- Estado focus: `:has(input:focus-visible)` → `box-shadow: 0 0 0 3px var(--accent-muted)`
+- Hover: `.nx-radio-field:hover .nx-radio-box` → `border-color: var(--accent)`
+
+**`.nx-slider-*`**:
+- `.nx-slider-wrap` — flex column gap-2
+- `.nx-slider-header` — row justify-between para label + value
+- `.nx-slider-value` — xs tabular-nums, color `var(--text-muted)`
+- `.nx-slider` — `appearance: none`, height 4px, `background: var(--border-strong)`, `accent-color: var(--accent)`
+- Pseudo-elementos thumb (`-webkit-slider-thumb`, `-moz-range-thumb`): 16×16px, `background: var(--accent)`, scale 1.15 en hover, focus ring `var(--accent-muted)`
+- Estado disabled: opacidad 0.4
+
+### Páginas de showcase
+
+**`/ui/radio-group`** (`radio-group/page.tsx` + `radio-group-content.tsx`):
+- Anatomy: box + dot + label + description
+- States: uncontrolled, controlled (con `useState`), group disabled, item disabled
+- Orientation: vertical vs horizontal (2 demos)
+- With descriptions: plan pricing con 3 opciones descritas
+
+**`/ui/slider`** (`slider/page.tsx` + `slider-content.tsx`):
+- Anatomy: track + thumb + label + value readout estático
+- States: default, with value display, controlled (`useState`), disabled
+- Range and step: min/max básico, custom step (0.5x zoom), large range (temperatura -20..50°C)
+
+### Config / i18n / rutas
+
+- `src/config/routes.ts` — `radioGroup: '/ui/radio-group'`, `slider: '/ui/slider'`
+- `src/components/layout/sidebar/sidebar.config.ts` — 2 ítems añadidos tras uiSwitch
+- `src/messages/en/common.json` + `es/common.json` — claves `uiRadioGroup`, `uiSlider`
+- `src/i18n/request.ts` — 2 imports nuevos + namespaces en el return
+- `src/features/ui-showcase/i18n/` — 4 archivos JSON (radio-group-en/es, slider-en/es)
+- `src/app/[locale]/(dashboard)/ui/page.tsx` — inputs count 7 → 9
+
+### Build
+
+- Antes: 66 páginas (tras B6d.1)
+- Después: **70 páginas** (+4 = 2 rutas × 2 locales), 0 errores de TypeScript ni lint
+
+---
+
 ## [B6d.1] Inputs avanzados: Select, Checkbox, Switch — 2026-05-07
 
 Migración nx-* de los tres controles de formulario pendientes + 3 páginas de showcase. La categoría Inputs pasa de 4 a 7 componentes en el overview.
