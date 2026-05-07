@@ -25,7 +25,7 @@ interface Category {
 const categories: Category[] = [
   { key: 'foundations', count: 8, href: routes.ui.foundations, icon: Palette, unit: 'sections' },
   { key: 'inputs', count: 4, href: routes.ui.buttons, icon: Layers },
-  { key: 'display', count: 0, href: null, icon: Table2 },
+  { key: 'display', count: 4, href: routes.ui.card, icon: Table2 },
   { key: 'feedback', count: 5, href: routes.ui.toasts, icon: Bell },
   { key: 'data', count: 0, href: null, icon: Database },
   { key: 'charts', count: 0, href: null, icon: BarChart2 },
@@ -67,7 +67,7 @@ export default async function UiOverviewPage({ params }: { params: Promise<{ loc
                     {t(countKey, { count })}
                   </span>
                 ) : (
-                  <Badge variant="muted">{t('common.comingSoon')}</Badge>
+                  <Badge variant="neutral">{t('common.comingSoon')}</Badge>
                 )}
               </div>
               <div>

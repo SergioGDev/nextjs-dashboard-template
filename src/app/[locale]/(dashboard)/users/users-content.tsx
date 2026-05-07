@@ -20,8 +20,8 @@ import { ErrorState } from '@components/feedback/error-state';
 import { EmptyState } from '@components/feedback/empty-state';
 import { toast } from '@components/feedback/toast';
 
-const roleVariant: Record<UserRole, 'default' | 'success' | 'info' | 'warning'> = {
-  admin: 'default',
+const roleVariant: Record<UserRole, 'accent' | 'success' | 'info' | 'warning'> = {
+  admin: 'accent',
   manager: 'info',
   editor: 'warning',
   viewer: 'success',
@@ -114,7 +114,7 @@ export function UsersContent() {
       header: t('columns.status'),
       sortable: true,
       render: (row) => (
-        <Badge variant={row.status === 'active' ? 'success' : 'muted'}>
+        <Badge variant={row.status === 'active' ? 'success' : 'neutral'}>
           {t(`statuses.${row.status}`)}
         </Badge>
       ),

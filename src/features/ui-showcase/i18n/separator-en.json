@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "title": "Separator"
+  },
+  "header": {
+    "title": "Separator",
+    "subtitle": "A thin visual divider for separating sections of content. Supports horizontal and vertical orientations."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A separator is a single <div> with role=\"separator\" and an orientation-specific CSS modifier.",
+    "parts": {
+      "line": "The rendered <div> element. The orientation modifier controls whether it spans the full width or height."
+    }
+  },
+  "sections": {
+    "orientations": {
+      "title": "Orientations",
+      "description": "Horizontal fills the available width; vertical fills the available height of its flex container."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native <div> attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "horizontalTitle": "Horizontal",
+    "verticalTitle": "Vertical",
+    "verticalItemA": "Section A",
+    "verticalItemB": "Section B",
+    "verticalItemC": "Section C"
+  },
+  "props": {
+    "orientation": "Direction of the separator. horizontal (default) or vertical.",
+    "extendsNote": "Extends all native <div> attributes (className, …)."
+  }
+}

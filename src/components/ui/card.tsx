@@ -1,26 +1,33 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export type CardProps = React.HTMLAttributes<HTMLDivElement>;
+export type CardVariant = 'default' | 'raised' | 'interactive';
 
-export function Card({ className, ...props }: CardProps) {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: CardVariant;
+}
+
+export function Card({ className, variant = 'default', onClick, ...props }: CardProps) {
   return (
     <div
       className={cn(
-        'rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6',
-        className
+        'nx-card',
+        variant === 'raised' && 'nx-card--raised',
+        variant === 'interactive' && 'nx-card--interactive',
+        className,
       )}
+      onClick={onClick}
       {...props}
     />
   );
 }
 
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex flex-col gap-1 mb-4', className)} {...props} />;
+  return <div className={cn('nx-card__head', className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn('text-base font-semibold text-[var(--text-primary)]', className)} {...props} />;
+  return <h3 className={cn('nx-card__title', className)} {...props} />;
 }
 
 export function CardDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
@@ -28,7 +35,7 @@ export function CardDescription({ className, ...props }: React.HTMLAttributes<HT
 }
 
 export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('', className)} {...props} />;
+  return <div className={cn('nx-card__body', className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {

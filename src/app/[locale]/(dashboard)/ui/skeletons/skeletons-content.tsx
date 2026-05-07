@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ShowcaseSection, ShowcaseDemo, ShowcaseGrid, PropsTable } from '@features/ui-showcase';
+import { Skeleton } from '@components/ui/skeleton';
 import {
   SkeletonBase,
   TableSkeleton,
@@ -99,6 +100,24 @@ export function SkeletonsContent() {
           </pre>
         </div>
       </div>
+
+      {/* Skeleton primitive */}
+      <ShowcaseSection
+        title={t('sections.skeleton.title')}
+        description={t('sections.skeleton.description')}
+      >
+        <ShowcaseGrid columns={3}>
+          <ShowcaseDemo title="text line" code={`<Skeleton className="h-3 w-full rounded-full" />`}>
+            <Skeleton className="h-3 w-full rounded-full" />
+          </ShowcaseDemo>
+          <ShowcaseDemo title="circle" code={`<Skeleton className="h-9 w-9 rounded-full" />`}>
+            <Skeleton className="h-9 w-9 rounded-full" />
+          </ShowcaseDemo>
+          <ShowcaseDemo title="block" code={`<Skeleton className="h-24 w-full rounded-xl" />`}>
+            <Skeleton className="h-24 w-full rounded-xl" />
+          </ShowcaseDemo>
+        </ShowcaseGrid>
+      </ShowcaseSection>
 
       {/* Primitives */}
       <ShowcaseSection

@@ -341,6 +341,10 @@
       "subtitle": "Animaciones de placeholder mostradas mientras se carga el contenido. Los skeletons reducen la latencia percibida reflejando la forma del contenido real. Iguala siempre las dimensiones del skeleton al componente real para evitar layout shift (CLS)."
     },
     "sections": {
+      "skeleton": {
+        "title": "Primitivo — Skeleton",
+        "description": "La clase CSS nx-skeleton base alimenta todos los skeletons tipados. Úsala directamente cuando ninguna forma predefinida encaje."
+      },
       "primitives": {
         "title": "Primitivos — SkeletonBase",
         "description": "Bloque básico de bajo nivel con cinco formas predefinidas. Úsalo para placeholders ad-hoc."

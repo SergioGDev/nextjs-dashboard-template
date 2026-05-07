@@ -292,6 +292,25 @@
   background: var(--info-muted);
   color: var(--info);
 }
+.nx-badge__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  margin-left: var(--space-1);
+  border-radius: 50%;
+  opacity: 0.6;
+  transition: opacity var(--dur-fast);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  color: currentColor;
+}
+.nx-badge__remove:hover {
+  opacity: 1;
+}
 
 .nx-dot {
   display: inline-block;
@@ -413,11 +432,21 @@
   color: var(--text-secondary);
 }
 
-.nx-divider {
-  height: 1px;
+.nx-separator {
   background: var(--border);
   border: 0;
+  flex-shrink: 0;
+}
+.nx-separator--horizontal {
+  height: 1px;
+  width: 100%;
   margin: var(--space-4) 0;
+}
+.nx-separator--vertical {
+  width: 1px;
+  height: 100%;
+  margin: 0 var(--space-4);
+  align-self: stretch;
 }
 
 .nx-checkbox {
@@ -446,6 +475,37 @@
   border-top: 0;
   border-right: 0;
   transform: translateY(-1px) rotate(-45deg);
+}
+
+/* ===== Avatar ===== */
+.nx-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-weight: var(--fw-semibold);
+  user-select: none;
+  flex-shrink: 0;
+}
+.nx-avatar--xs { width: 24px; height: 24px; font-size: var(--fs-xs); }
+.nx-avatar--sm { width: 32px; height: 32px; font-size: var(--fs-xs); }
+.nx-avatar--md { width: 36px; height: 36px; font-size: var(--fs-sm); }
+.nx-avatar--lg { width: 44px; height: 44px; font-size: var(--fs-base); }
+.nx-avatar--xl { width: 64px; height: 64px; font-size: var(--fs-xl); }
+
+/* ===== Skeleton ===== */
+@keyframes nx-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.nx-skeleton {
+  background: var(--surface-raised);
+  border-radius: var(--radius-md);
+  animation: nx-pulse 1.8s ease-in-out infinite;
 }
 
 /* ===== Sidebar group collapse/expand ===== */

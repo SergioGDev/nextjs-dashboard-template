@@ -1,19 +1,23 @@
+'use client';
+
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+
+export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string;
   alt?: string;
   fallback?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: AvatarSize;
 }
 
-const sizeClasses = {
-  xs: 'h-6 w-6 text-xs',
-  sm: 'h-8 w-8 text-xs',
-  md: 'h-9 w-9 text-sm',
-  lg: 'h-11 w-11 text-base',
-  xl: 'h-16 w-16 text-xl',
+const sizeClass: Record<AvatarSize, string> = {
+  xs: 'nx-avatar--xs',
+  sm: 'nx-avatar--sm',
+  md: 'nx-avatar--md',
+  lg: 'nx-avatar--lg',
+  xl: 'nx-avatar--xl',
 };
 
 export function Avatar({ className, src, alt, fallback, size = 'md', ...props }: AvatarProps) {
@@ -22,12 +26,7 @@ export function Avatar({ className, src, alt, fallback, size = 'md', ...props }:
 
   return (
     <div
-      className={cn(
-        'relative inline-flex shrink-0 items-center justify-center rounded-full overflow-hidden',
-        'bg-[var(--surface-raised)] text-[var(--text-secondary)] font-semibold select-none',
-        sizeClasses[size],
-        className
-      )}
+      className={cn('nx-avatar', sizeClass[size], className)}
       {...props}
     >
       {src && !error ? (

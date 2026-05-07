@@ -6,6 +6,53 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6c.1] Display components — Card, Badge, Avatar, Separator + radius-lg — 2026-05-07
+
+Tercer bloque de B6 (Display). Reabre el principio Mercury que mantenía las tarjetas con `--radius-lg: 0px`, migra Card / Badge / Separator / Skeleton al sistema de clases `nx-*`, extiende Badge con modo chip (onRemove + leadingIcon), añade Avatar con clases `nx-avatar`, y crea las 4 páginas de showcase del grupo "Display".
+
+### Token fix
+
+- **`--radius-lg: 0px` → `12px`** (`src/styles/tokens.css`): el valor `0px` era un override deliberado del bloque B3 ("CARDS ARE SHARP") que fue revertido. Afecta a `nx-card`, `nx-card--raised/interactive` y cualquier `rounded-[var(--radius-lg)]` en componentes existentes. El resto de radii de Mercury (`--radius-sm: 2px`, `--radius-md: 4px`, `--radius-pill: 32px`) no cambian.
+
+### Componentes
+
+- **`Card` refactor** (`src/components/ui/card.tsx`): añade `variant?: 'default' | 'raised' | 'interactive'` y migra a clases `nx-card` / `nx-card--raised` / `nx-card--interactive`. Sub-componentes `CardHeader` → `nx-card__head`, `CardTitle` → `nx-card__title`, `CardContent` → `nx-card__body`. `CardDescription` y `CardFooter` mantienen Tailwind directo (no tienen clase nx-* propia). CSS pre-existente en `components.css`.
+- **`Badge` refactor** (`src/components/ui/badge.tsx`): renombra variantes (`default` → `accent`, `muted` → `neutral`), añade `leadingIcon?: ReactNode` y modo chip con **discriminated union** (`onRemove: () => void` + `aria-label: string` requerido cuando onRemove está presente). Migra a clases `nx-badge` + `nx-badge--{variant}`. Nueva clase `nx-badge__remove` en `components.css` para el botón de cierre del chip.
+- **`Avatar` refactor** (`src/components/ui/avatar.tsx`): añade `'use client'` (usa `useState` para el fallback de imagen rota), migra a clases `nx-avatar` + `nx-avatar--{xs|sm|md|lg|xl}`. Nuevas clases en `components.css`.
+- **`Separator` refactor** (`src/components/ui/separator.tsx`): migra de Tailwind directo a `nx-separator` + `nx-separator--horizontal/vertical`. Añade `aria-orientation`. En CSS se renombra `nx-divider` → `nx-separator` (el nombre legacy no tenía consumidores externos).
+- **`Skeleton` refactor** (`src/components/ui/skeleton.tsx`): sustituye `animate-pulse bg-[var(--surface-raised)]` por clase `nx-skeleton`. Nueva clase + keyframe `@keyframes nx-pulse` en `components.css`.
+- **`components.css`**: añade `nx-badge__remove`, renombra `nx-divider` → `nx-separator` con variante vertical, añade bloque `nx-avatar` (5 sizes), añade bloque `nx-skeleton` + `@keyframes nx-pulse`.
+
+### Migración de variantes Badge
+
+Todos los consumidores de `variant="muted"` → `variant="neutral"` y `variant="default"` → `variant="accent"`:
+- `ui/page.tsx`, `reports-content.tsx`, `users-content.tsx`, `dashboard-content.tsx`, `users/[id]/user-detail-content.tsx` (incluye `roleVariant` record).
+
+### Showcase
+
+- `/ui/card` — Header + Anatomy (root/header/title/description/content/footer) + Variants (default/raised/interactive con toast on click) + Sub-components (full composition) + PropsTable.
+- `/ui/badge` — Header + Anatomy (icon/label/remove) + Variants (6) + Leading icon + Chip mode (chips reactivos con reset) + PropsTable.
+- `/ui/avatar` — Header + Anatomy (container/image/fallback) + Sizes (xs–xl alineados en fila) + Fallback behavior (3 demos) + PropsTable.
+- `/ui/separator` — Header + Anatomy (line) + Orientations (horizontal/vertical) + PropsTable.
+- `/ui/skeletons` — Nueva sub-sección "Primitive — Skeleton" (text/circle/block) antes de la sección SkeletonBase existente.
+- Overview `/ui/page.tsx`: display count 0 → 4, href apunta a `/ui/card`.
+
+### i18n / Config
+
+- `common.json` (en/es): `sidebar.items.uiCard`, `uiBadge`, `uiAvatar`, `uiSeparator`.
+- `request.ts`: namespaces `card`, `badge`, `avatar`, `separator`.
+- `routes.ts`: `ui.card`, `ui.badge`, `ui.avatar`, `ui.separator`.
+- `sidebar.config.ts`: Card, Badge, Avatar, Separator en el grupo Components (después de Textarea, antes de Toasts).
+- `uiShowcase.skeletons.sections.skeleton` (en/es): nueva clave para la sub-sección del primitivo.
+- 8 nuevos ficheros de traducción en `src/features/ui-showcase/i18n/` (card/badge/avatar/separator × en/es).
+
+### Build
+
+- Lint: 0 errores nuevos.
+- Build: 56 páginas (era 48; +8 = 4 rutas × 2 locales).
+
+---
+
 ## [B6b.2] Input + Textarea showcase + migración size="icon" — 2026-05-06
 
 Segundo sub-bloque de B6b (Inputs básicos). Cierra la migración de `size="icon"` a `iconOnly`, extiende `Input` y `Textarea` con props de tamaño y texto de ayuda, los migra a las clases `nx-*` de `components.css`, y añade sus páginas de showcase completas incluyendo el patrón Search.

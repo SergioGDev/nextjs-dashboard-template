@@ -16,8 +16,8 @@ import { ErrorState } from '@components/feedback/error-state';
 import { EmptyState } from '@components/feedback/empty-state';
 import { toast } from '@components/feedback/toast';
 
-const roleVariant: Record<UserRole, 'default' | 'success' | 'info' | 'warning'> = {
-  admin: 'default',
+const roleVariant: Record<UserRole, 'accent' | 'success' | 'info' | 'warning'> = {
+  admin: 'accent',
   manager: 'info',
   editor: 'warning',
   viewer: 'success',
@@ -119,7 +119,7 @@ export function UserDetailContent({ id }: UserDetailContentProps) {
                 <Badge variant={roleVariant[user.role]}>
                   {t(`roles.${user.role}`)}
                 </Badge>
-                <Badge variant={user.status === 'active' ? 'success' : 'muted'}>
+                <Badge variant={user.status === 'active' ? 'success' : 'neutral'}>
                   {t(`statuses.${user.status}`)}
                 </Badge>
               </div>

@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "title": "Tarjeta"
+  },
+  "header": {
+    "title": "Tarjeta",
+    "subtitle": "Contenedor de superficie para agrupar contenido relacionado. Admite variantes por defecto, elevada e interactiva con un sistema de slots estructurados opcional."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Una tarjeta se compone del contenedor raíz y sub-componentes opcionales: CardHeader, CardTitle, CardDescription, CardContent y CardFooter.",
+    "parts": {
+      "root": "Contenedor raíz. Controla el borde, el fondo y el radio a través de la clase CSS nx-card.",
+      "header": "Slot superior con borde inferior. Úsalo para títulos y acciones. Renderizado por CardHeader.",
+      "title": "Texto principal en negrita. Renderizado por CardTitle como <h3>.",
+      "description": "Texto secundario atenuado bajo el título. Renderizado por CardDescription como <p>.",
+      "content": "Slot del cuerpo principal con relleno. Renderizado por CardContent.",
+      "footer": "Slot inferior con borde superior. Úsalo para acciones o metadatos. Renderizado por CardFooter."
+    }
+  },
+  "sections": {
+    "variants": {
+      "title": "Variantes",
+      "description": "Tres variantes controlan el fondo y el estilo de interacción. La variante interactiva añade un efecto hover adecuado para tarjetas clicables."
+    },
+    "subComponents": {
+      "title": "Sub-componentes",
+      "description": "Composición estructurada con CardHeader, CardTitle, CardDescription, CardContent y CardFooter para layouts consistentes."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de <div>. Props específicos del componente listados a continuación."
+    }
+  },
+  "demos": {
+    "defaultTitle": "Por defecto",
+    "raisedTitle": "Elevada",
+    "interactiveTitle": "Interactiva",
+    "cardTitle": "Resumen del proyecto",
+    "cardDescription": "Sigue el progreso y gestiona los recursos del equipo.",
+    "cardBody": "El contenido de tu proyecto va aquí.",
+    "cardFooterAction": "Ver detalles",
+    "clickableCard": "Haz clic aquí",
+    "clickToastMessage": "¡Tarjeta clicada!"
+  },
+  "props": {
+    "variant": "Estilo visual de la tarjeta. default usa fondo surface; raised usa surface-raised; interactive añade efectos hover.",
+    "extendsNote": "Extiende todos los atributos nativos de <div> (className, onClick, …)."
+  }
+}

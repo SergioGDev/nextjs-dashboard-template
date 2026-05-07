@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "title": "Card"
+  },
+  "header": {
+    "title": "Card",
+    "subtitle": "Surface container for grouping related content. Supports default, raised, and interactive variants with an optional structured slot system."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A card is composed of the root container and optional sub-components: CardHeader, CardTitle, CardDescription, CardContent, and CardFooter.",
+    "parts": {
+      "root": "Root container. Controls the border, background, and radius via the nx-card CSS class.",
+      "header": "Top slot with a bottom border. Use for titles and actions. Rendered by CardHeader.",
+      "title": "Semibold primary text. Rendered by CardTitle as an <h3>.",
+      "description": "Secondary muted text below the title. Rendered by CardDescription as a <p>.",
+      "content": "Main body slot with padding. Rendered by CardContent.",
+      "footer": "Bottom slot with a top border. Use for actions or metadata. Rendered by CardFooter."
+    }
+  },
+  "sections": {
+    "variants": {
+      "title": "Variants",
+      "description": "Three variants control the background and interaction style. The interactive variant gains a hover effect suitable for clickable cards."
+    },
+    "subComponents": {
+      "title": "Sub-components",
+      "description": "Structured composition with CardHeader, CardTitle, CardDescription, CardContent, and CardFooter for consistent layouts."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native <div> attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "defaultTitle": "Default",
+    "raisedTitle": "Raised",
+    "interactiveTitle": "Interactive",
+    "cardTitle": "Project overview",
+    "cardDescription": "Track progress and manage team resources.",
+    "cardBody": "Your project content goes here.",
+    "cardFooterAction": "View details",
+    "clickableCard": "Click me",
+    "clickToastMessage": "Card clicked!"
+  },
+  "props": {
+    "variant": "Visual style of the card. default uses surface background; raised uses surface-raised; interactive adds hover effects.",
+    "extendsNote": "Extends all native <div> attributes (className, onClick, …)."
+  }
+}

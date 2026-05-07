@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Avatar"
+  },
+  "header": {
+    "title": "Avatar",
+    "subtitle": "Circular user representation with image support and automatic initials fallback. Available in five sizes."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "An avatar is a circular container that renders an image when available, or falls back to initials derived from the alt or fallback prop.",
+    "parts": {
+      "container": "Circular clip container. Controls size, background, and overflow.",
+      "image": "The <img> element. Rendered when src is provided and loads without error.",
+      "fallback": "Initials text. Shown when src is absent or the image fails to load."
+    }
+  },
+  "sections": {
+    "sizes": {
+      "title": "Sizes",
+      "description": "Five size presets from xs (24px) to xl (64px). Use md for most contexts, xl for profile headers."
+    },
+    "fallback": {
+      "title": "Fallback behavior",
+      "description": "When no src is provided or the image fails to load, initials are derived from the alt prop (first letter of each word, max 2 chars). Override with the fallback prop."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native <div> attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "xs": "XS",
+    "sm": "SM",
+    "md": "MD",
+    "lg": "LG",
+    "xl": "XL",
+    "altName": "Alice Martin",
+    "fallbackOnly": "JD",
+    "brokenSrc": "Broken image"
+  },
+  "props": {
+    "src": "Image URL. When omitted or the image fails to load, the fallback is shown.",
+    "alt": "Alt text for the image. Also used to derive initials when no fallback is provided.",
+    "fallback": "Custom initials shown when no image is available. Overrides auto-derived initials.",
+    "size": "Size preset. One of: xs (24px), sm (32px), md (36px, default), lg (44px), xl (64px).",
+    "extendsNote": "Extends all native <div> attributes (className, …)."
+  }
+}

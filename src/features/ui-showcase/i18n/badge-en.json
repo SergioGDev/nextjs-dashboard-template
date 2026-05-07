@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "title": "Badge"
+  },
+  "header": {
+    "title": "Badge",
+    "subtitle": "Compact label for status, category, or metadata. Supports six semantic color variants, an optional leading icon, and a chip mode with a dismissible remove button."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A badge is an inline container with optional leading icon, label text, and optional remove button (chip mode).",
+    "parts": {
+      "icon": "Optional leading icon rendered before the label text.",
+      "label": "The visible text content of the badge.",
+      "remove": "Optional close button shown when onRemove is provided. Requires aria-label for accessibility."
+    }
+  },
+  "sections": {
+    "variants": {
+      "title": "Variants",
+      "description": "Six semantic variants map to design token color pairs. The accent variant is the default."
+    },
+    "leadingIcon": {
+      "title": "Leading icon",
+      "description": "Attach a small icon before the label for additional context."
+    },
+    "chipMode": {
+      "title": "Chip mode",
+      "description": "Add onRemove + aria-label to turn a badge into a dismissible chip. The remove button is always accessible via keyboard."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native <span> attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "accent": "Accent",
+    "neutral": "Neutral",
+    "success": "Success",
+    "warning": "Warning",
+    "error": "Error",
+    "info": "Info",
+    "withIconLabel": "Published",
+    "chipLabel": "React",
+    "chipAriaLabel": "Remove React",
+    "chipLabel2": "TypeScript",
+    "chipAriaLabel2": "Remove TypeScript",
+    "chipLabel3": "Next.js",
+    "chipAriaLabel3": "Remove Next.js"
+  },
+  "props": {
+    "variant": "Color variant. One of: accent (default), neutral, success, warning, error, info.",
+    "leadingIcon": "ReactNode rendered before the label text.",
+    "onRemove": "Callback fired when the remove button is clicked. When provided, a remove button is displayed.",
+    "ariaLabel": "Required when onRemove is set. Labels the remove button for screen readers.",
+    "extendsNote": "Extends all native <span> attributes (className, …)."
+  }
+}

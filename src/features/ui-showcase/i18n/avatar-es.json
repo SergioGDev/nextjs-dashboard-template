@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Avatar"
+  },
+  "header": {
+    "title": "Avatar",
+    "subtitle": "Representación circular de usuario con soporte de imagen y retorno automático a iniciales. Disponible en cinco tamaños."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Un avatar es un contenedor circular que renderiza una imagen cuando está disponible, o recurre a las iniciales derivadas del prop alt o fallback.",
+    "parts": {
+      "container": "Contenedor de recorte circular. Controla el tamaño, el fondo y el desbordamiento.",
+      "image": "El elemento <img>. Se renderiza cuando se proporciona src y carga sin error.",
+      "fallback": "Texto de iniciales. Se muestra cuando falta src o la imagen falla al cargar."
+    }
+  },
+  "sections": {
+    "sizes": {
+      "title": "Tamaños",
+      "description": "Cinco presets de tamaño desde xs (24px) hasta xl (64px). Usa md para la mayoría de contextos, xl para cabeceras de perfil."
+    },
+    "fallback": {
+      "title": "Comportamiento de retorno",
+      "description": "Cuando no se proporciona src o la imagen falla al cargar, las iniciales se derivan del prop alt (primera letra de cada palabra, máx. 2 chars). Anula con el prop fallback."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de <div>. Props específicos del componente listados a continuación."
+    }
+  },
+  "demos": {
+    "xs": "XS",
+    "sm": "SM",
+    "md": "MD",
+    "lg": "LG",
+    "xl": "XL",
+    "altName": "Alicia Martín",
+    "fallbackOnly": "JD",
+    "brokenSrc": "Imagen rota"
+  },
+  "props": {
+    "src": "URL de la imagen. Cuando se omite o la imagen falla al cargar, se muestra el retorno.",
+    "alt": "Texto alternativo de la imagen. También se usa para derivar iniciales cuando no se proporciona fallback.",
+    "fallback": "Iniciales personalizadas mostradas cuando no hay imagen disponible. Anula las iniciales derivadas automáticamente.",
+    "size": "Preset de tamaño. Uno de: xs (24px), sm (32px), md (36px, predeterminado), lg (44px), xl (64px).",
+    "extendsNote": "Extiende todos los atributos nativos de <div> (className, …)."
+  }
+}

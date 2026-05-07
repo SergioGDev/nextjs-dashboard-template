@@ -45,7 +45,11 @@
       "i18n": "i18n",
       "uiSidebar": "Barra lateral",
       "uiInput": "Input",
-      "uiTextarea": "Textarea"
+      "uiTextarea": "Textarea",
+      "uiCard": "Tarjeta",
+      "uiBadge": "Insignia",
+      "uiAvatar": "Avatar",
+      "uiSeparator": "Separador"
     },
     "actions": {
       "expand": "Expandir barra lateral",

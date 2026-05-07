@@ -50,7 +50,7 @@ export function ReportsContent() {
       key: 'type',
       header: t('columns.type'),
       sortable: true,
-      render: (row) => <Badge variant="muted">{t(`types.${row.type}`)}</Badge>,
+      render: (row) => <Badge variant="neutral">{t(`types.${row.type}`)}</Badge>,
     },
     {
       key: 'status',

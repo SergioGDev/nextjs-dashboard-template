@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "title": "Insignia"
+  },
+  "header": {
+    "title": "Insignia",
+    "subtitle": "Etiqueta compacta para estado, categoría o metadatos. Admite seis variantes de color semánticas, un icono inicial opcional y modo chip con botón de eliminación."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Una insignia es un contenedor en línea con icono inicial opcional, texto de etiqueta y botón de eliminación opcional (modo chip).",
+    "parts": {
+      "icon": "Icono inicial opcional renderizado antes del texto de la etiqueta.",
+      "label": "El contenido de texto visible de la insignia.",
+      "remove": "Botón de cierre opcional que aparece cuando se proporciona onRemove. Requiere aria-label para accesibilidad."
+    }
+  },
+  "sections": {
+    "variants": {
+      "title": "Variantes",
+      "description": "Seis variantes semánticas se asignan a pares de colores de tokens de diseño. La variante accent es la predeterminada."
+    },
+    "leadingIcon": {
+      "title": "Icono inicial",
+      "description": "Adjunta un pequeño icono antes de la etiqueta para contexto adicional."
+    },
+    "chipMode": {
+      "title": "Modo chip",
+      "description": "Añade onRemove + aria-label para convertir una insignia en un chip descartable. El botón de eliminación siempre es accesible mediante teclado."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de <span>. Props específicos del componente listados a continuación."
+    }
+  },
+  "demos": {
+    "accent": "Acento",
+    "neutral": "Neutral",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "error": "Error",
+    "info": "Info",
+    "withIconLabel": "Publicado",
+    "chipLabel": "React",
+    "chipAriaLabel": "Eliminar React",
+    "chipLabel2": "TypeScript",
+    "chipAriaLabel2": "Eliminar TypeScript",
+    "chipLabel3": "Next.js",
+    "chipAriaLabel3": "Eliminar Next.js"
+  },
+  "props": {
+    "variant": "Variante de color. Una de: accent (predeterminado), neutral, success, warning, error, info.",
+    "leadingIcon": "ReactNode renderizado antes del texto de la etiqueta.",
+    "onRemove": "Callback ejecutado al hacer clic en el botón de eliminación. Cuando se proporciona, se muestra un botón de eliminación.",
+    "ariaLabel": "Requerido cuando se establece onRemove. Etiqueta el botón de eliminación para lectores de pantalla.",
+    "extendsNote": "Extiende todos los atributos nativos de <span> (className, …)."
+  }
+}

@@ -341,6 +341,10 @@
       "subtitle": "Placeholder animations shown while data is loading. Skeletons reduce perceived latency by mirroring the shape of the real content. Always match the skeleton dimensions to the real component to avoid layout shift (CLS)."
     },
     "sections": {
+      "skeleton": {
+        "title": "Primitive — Skeleton",
+        "description": "The base nx-skeleton CSS class powers all typed skeletons. Use it directly when no preset shape fits."
+      },
       "primitives": {
         "title": "Primitives — SkeletonBase",
         "description": "Low-level building block with five preset shapes. Use for ad-hoc placeholders."

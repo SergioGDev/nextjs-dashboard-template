@@ -41,7 +41,7 @@ export function DashboardContent() {
       key: 'status',
       header: t('campaigns.columns.status'),
       render: (row) => (
-        <Badge variant={row.status === 'active' ? 'success' : row.status === 'paused' ? 'warning' : 'muted'}>
+        <Badge variant={row.status === 'active' ? 'success' : row.status === 'paused' ? 'warning' : 'neutral'}>
           {t(`campaigns.status.${row.status}`)}
         </Badge>
       ),

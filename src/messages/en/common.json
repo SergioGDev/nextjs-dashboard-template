@@ -45,7 +45,11 @@
       "i18n": "i18n",
       "uiSidebar": "Sidebar",
       "uiInput": "Input",
-      "uiTextarea": "Textarea"
+      "uiTextarea": "Textarea",
+      "uiCard": "Card",
+      "uiBadge": "Badge",
+      "uiAvatar": "Avatar",
+      "uiSeparator": "Separator"
     },
     "actions": {
       "expand": "Expand sidebar",

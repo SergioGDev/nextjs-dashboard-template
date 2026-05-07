@@ -61,7 +61,7 @@
      Cards are SHARP (0-4px), buttons and inputs are PILLS (32-40px). */
   --radius-sm: 2px; /* was 4px */
   --radius-md: 4px; /* was 6px — containers */
-  --radius-lg: 0px; /* was 10px — CARDS ARE SHARP */
+  --radius-lg: 12px;
   --radius-xl: 4px; /* was 14px */
   --radius-pill: 32px; /* NEW — buttons, inputs */
   --radius-pill-lg: 40px; /* NEW — large pill (header CTAs) */

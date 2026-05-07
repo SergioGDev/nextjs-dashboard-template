@@ -1,28 +1,58 @@
+'use client';
+
 import * as React from 'react';
+import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'muted';
-}
+export type BadgeVariant = 'accent' | 'neutral' | 'success' | 'warning' | 'error' | 'info';
 
-const variantClasses = {
-  default: 'bg-[var(--accent-muted)] text-[var(--accent)] border-[var(--accent-muted)]',
-  success: 'bg-[var(--success-muted)] text-[var(--success)] border-[var(--success-muted)]',
-  warning: 'bg-[var(--warning-muted)] text-[var(--warning)] border-[var(--warning-muted)]',
-  error: 'bg-[var(--error-muted)] text-[var(--error)] border-[var(--error-muted)]',
-  info: 'bg-[var(--info-muted)] text-[var(--info)] border-[var(--info-muted)]',
-  muted: 'bg-[var(--surface-raised)] text-[var(--text-muted)] border-[var(--border)]',
+export type BadgeProps = Omit<React.HTMLAttributes<HTMLSpanElement>, 'aria-label'> & {
+  variant?: BadgeVariant;
+  leadingIcon?: React.ReactNode;
+} & (
+  | { onRemove: () => void; 'aria-label': string }
+  | { onRemove?: never; 'aria-label'?: string }
+);
+
+const variantClass: Record<BadgeVariant, string> = {
+  accent: 'nx-badge--accent',
+  neutral: 'nx-badge--neutral',
+  success: 'nx-badge--success',
+  warning: 'nx-badge--warning',
+  error: 'nx-badge--error',
+  info: 'nx-badge--info',
 };
 
-export function Badge({ className, variant = 'default', ...props }: BadgeProps) {
+export function Badge({
+  className,
+  variant = 'accent',
+  leadingIcon,
+  onRemove,
+  children,
+  'aria-label': ariaLabel,
+  ...props
+}: BadgeProps) {
   return (
     <span
-      className={cn(
-        'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium',
-        variantClasses[variant],
-        className
-      )}
+      className={cn('nx-badge', variantClass[variant], className)}
+      aria-label={onRemove ? undefined : ariaLabel}
       {...props}
-    />
+    >
+      {leadingIcon}
+      {children}
+      {onRemove && (
+        <button
+          type="button"
+          className="nx-badge__remove"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          aria-label={ariaLabel}
+        >
+          <X size={10} strokeWidth={2.5} />
+        </button>
+      )}
+    </span>
   );
 }
