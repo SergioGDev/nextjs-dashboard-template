@@ -36,6 +36,9 @@ async function loadMessages(locale: string) {
     separator,
     kbd,
     list,
+    select,
+    checkbox,
+    switchNs,
   ] = await Promise.all([
     import(`../messages/${locale}/common.json`).then((m) => m.default),
     import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
@@ -57,6 +60,9 @@ async function loadMessages(locale: string) {
     import(`../features/ui-showcase/i18n/separator-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/kbd-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/list-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/select-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/checkbox-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/switch-${locale}.json`).then((m) => m.default),
   ]);
 
   return {
@@ -80,5 +86,8 @@ async function loadMessages(locale: string) {
     separator,
     kbd,
     list,
+    select,
+    checkbox,
+    switch: switchNs,
   };
 }

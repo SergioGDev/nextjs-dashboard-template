@@ -51,7 +51,10 @@
       "uiAvatar": "Avatar",
       "uiSeparator": "Separador",
       "uiKbd": "Kbd",
-      "uiList": "List"
+      "uiList": "List",
+      "uiSelect": "Select",
+      "uiCheckbox": "Checkbox",
+      "uiSwitch": "Switch"
     },
     "actions": {
       "expand": "Expandir barra lateral",

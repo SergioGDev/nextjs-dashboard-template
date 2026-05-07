@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "title": "Select"
+  },
+  "header": {
+    "title": "Select",
+    "subtitle": "Campo desplegable nativo basado en el elemento select del navegador. Admite etiquetas, estados de error, placeholder y todos los atributos HTML estándar de select."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Un select se compone de una etiqueta opcional, el campo select nativo con un icono chevron, y texto de error opcional.",
+    "parts": {
+      "label": "Identifica el campo. Se renderiza como elemento label con htmlFor correspondiente. Opcional pero recomendado para accesibilidad.",
+      "field": "El elemento select nativo. Acepta todos los atributos HTML estándar de select.",
+      "icon": "Icono ChevronDown posicionado en el slot derecho. Decorativo — los eventos de puntero están desactivados.",
+      "helper": "Mensaje de error renderizado debajo del campo cuando se establece la prop error."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "Estados",
+      "description": "El select hereda los mismos estilos de borde y foco que Input. El estado de error sobreescribe el color del borde y el anillo de foco."
+    },
+    "withLabel": {
+      "title": "Con etiqueta",
+      "description": "Pasa una prop label para renderizar una etiqueta accesible sobre el campo. El id se genera automáticamente desde el texto de la etiqueta."
+    },
+    "placeholder": {
+      "title": "Placeholder",
+      "description": "Pasa una prop placeholder para mostrar una primera opción no seleccionable como indicación."
+    },
+    "roadmap": {
+      "title": "Hoja de ruta",
+      "description": "El Select actual es nativo: utiliza el desplegable integrado del navegador, lo que garantiza accesibilidad, soporte móvil y sin JavaScript extra. Funciones de listbox personalizado (búsqueda, selección múltiple, opciones agrupadas, carga asíncrona) están planificadas para una versión futura."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de select. Props específicas del componente listadas a continuación."
+    }
+  },
+  "demos": {
+    "labelRole": "Rol",
+    "labelStatus": "Estado",
+    "labelCountry": "País",
+    "placeholderSelect": "Selecciona una opción…",
+    "placeholderCountry": "Selecciona un país…",
+    "errorRequired": "Por favor selecciona un valor.",
+    "optionAdmin": "Administrador",
+    "optionManager": "Gestor",
+    "optionEditor": "Editor",
+    "optionViewer": "Lector",
+    "optionActive": "Activo",
+    "optionInactive": "Inactivo",
+    "optionUS": "Estados Unidos",
+    "optionMX": "México",
+    "optionES": "España",
+    "optionFR": "Francia"
+  },
+  "props": {
+    "label": "Etiqueta mostrada sobre el campo. Genera un id automáticamente.",
+    "error": "Mensaje de error mostrado en rojo debajo del campo. También aplica estilo de error al borde.",
+    "placeholder": "Primera opción no seleccionable usada como indicación cuando no hay valor seleccionado.",
+    "disabled": "Atributo HTML disabled estándar.",
+    "extendsNote": "Extiende todos los atributos nativos de select (name, multiple, size, …)."
+  }
+}

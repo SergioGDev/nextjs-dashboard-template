@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "title": "Checkbox"
+  },
+  "header": {
+    "title": "Checkbox",
+    "subtitle": "Toggle binario para opciones individuales o selección múltiple. Admite estados marcado, desmarcado e indeterminado con etiqueta y descripción opcionales."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Un checkbox se compone de un input nativo oculto, un cuadro de control visual con icono de verificación, y una etiqueta y descripción opcionales.",
+    "parts": {
+      "control": "Elemento input nativo oculto. Recibe el foco y los eventos de teclado.",
+      "box": "Cuadrado visual renderizado mediante CSS :has(). Cambia al color de acento cuando está marcado o indeterminado.",
+      "icon": "Icono Check o Minus dentro del cuadro. Visible solo en estado marcado o indeterminado.",
+      "label": "Texto breve que identifica la opción. Renderizado como span dentro del elemento label.",
+      "description": "Texto de apoyo debajo de la etiqueta. Úsalo para pistas o advertencias."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "Estados",
+      "description": "El checkbox admite cuatro estados visuales: desmarcado, marcado, indeterminado (selección parcial) y desactivado."
+    },
+    "group": {
+      "title": "Grupo",
+      "description": "Combina varios checkboxes con un estado indeterminado en el padre para representar selección parcial en una lista."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de input excepto type. Props específicas del componente listadas a continuación."
+    }
+  },
+  "demos": {
+    "labelNotifications": "Notificaciones por email",
+    "descriptionNotifications": "Recibe emails sobre la actividad de tu cuenta.",
+    "labelMarketing": "Emails de marketing",
+    "descriptionMarketing": "Recibe actualizaciones de producto y ofertas promocionales.",
+    "labelSecurity": "Alertas de seguridad",
+    "descriptionSecurity": "Recibe siempre emails relacionados con la seguridad.",
+    "labelDisabled": "Opción desactivada",
+    "descriptionDisabled": "Esta opción no puede modificarse.",
+    "labelSelectAll": "Seleccionar todo",
+    "labelOption1": "Opción A",
+    "labelOption2": "Opción B",
+    "labelOption3": "Opción C"
+  },
+  "props": {
+    "label": "Texto de etiqueta renderizado junto al control.",
+    "description": "Texto de apoyo renderizado debajo de la etiqueta.",
+    "indeterminate": "Establece el estado visual indeterminado. Útil para checkboxes padre en listas de selección múltiple.",
+    "checked": "Estado checked controlado.",
+    "defaultChecked": "Estado checked inicial no controlado.",
+    "disabled": "Atributo HTML disabled estándar.",
+    "extendsNote": "Extiende todos los atributos nativos de input excepto type (name, value, onChange, …)."
+  }
+}

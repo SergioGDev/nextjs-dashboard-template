@@ -173,6 +173,50 @@
   color: var(--error);
 }
 
+/* ===== Select ===== */
+.nx-select {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 0 var(--space-8) 0 var(--space-3);
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font: var(--fw-regular) var(--fs-sm)/1 var(--font-sans);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast),
+    box-shadow var(--dur-fast);
+}
+.nx-select:hover {
+  border-color: var(--text-muted);
+}
+.nx-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.nx-select.is-error {
+  border-color: var(--error);
+}
+.nx-select.is-error:focus {
+  box-shadow: 0 0 0 3px var(--error-muted);
+}
+.nx-select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.nx-select__icon {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
 /* ===== Textarea ===== */
 .nx-textarea {
   display: block;
@@ -487,6 +531,153 @@
   border-top: 0;
   border-right: 0;
   transform: translateY(-1px) rotate(-45deg);
+}
+.nx-checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.nx-checkbox:indeterminate {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.nx-checkbox:indeterminate::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 2px;
+  background: var(--accent-foreground);
+  border-radius: 1px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* React component wrappers */
+.nx-checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+.nx-checkbox-field:has(input:disabled) {
+  cursor: not-allowed;
+}
+.nx-checkbox-control {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.nx-checkbox-control input[type="checkbox"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.nx-checkbox-box {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  transition: all var(--dur-fast);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nx-checkbox-icon {
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+  pointer-events: none;
+  color: var(--accent-foreground);
+}
+.nx-checkbox-field:hover .nx-checkbox-box {
+  border-color: var(--accent);
+}
+.nx-checkbox-control:has(input:checked) .nx-checkbox-box,
+.nx-checkbox-control:has(input:indeterminate) .nx-checkbox-box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.nx-checkbox-control:has(input:checked) .nx-checkbox-icon,
+.nx-checkbox-control:has(input:indeterminate) .nx-checkbox-icon {
+  opacity: 1;
+}
+.nx-checkbox-control:has(input:focus-visible) .nx-checkbox-box {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.nx-checkbox-control:has(input:disabled) .nx-checkbox-box {
+  opacity: 0.4;
+}
+
+/* ===== Switch ===== */
+.nx-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 36px;
+  height: 20px;
+  margin-top: 1px;
+}
+.nx-switch input[type="checkbox"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+}
+.nx-switch__track {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+  transition: background var(--dur-fast);
+  pointer-events: none;
+}
+.nx-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform var(--dur-fast);
+  pointer-events: none;
+}
+.nx-switch:has(input:checked) .nx-switch__track {
+  background: var(--accent);
+}
+.nx-switch:has(input:checked) .nx-switch__thumb {
+  transform: translateX(16px);
+}
+.nx-switch:has(input:focus-visible) .nx-switch__track {
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+.nx-switch:has(input:disabled) {
+  opacity: 0.4;
+}
+.nx-switch:has(input:disabled) input {
+  cursor: not-allowed;
+}
+.nx-switch--sm {
+  width: 28px;
+  height: 16px;
+}
+.nx-switch--sm .nx-switch__thumb {
+  width: 12px;
+  height: 12px;
+}
+.nx-switch--sm:has(input:checked) .nx-switch__thumb {
+  transform: translateX(12px);
 }
 
 /* ===== Avatar ===== */

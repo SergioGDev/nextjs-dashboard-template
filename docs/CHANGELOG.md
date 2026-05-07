@@ -6,6 +6,56 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6d.1] Inputs avanzados: Select, Checkbox, Switch — 2026-05-07
+
+Migración nx-* de los tres controles de formulario pendientes + 3 páginas de showcase. La categoría Inputs pasa de 4 a 7 componentes en el overview.
+
+### Migración nx-*
+
+**Select** — componente totalmente refactorizado:
+- Nueva clase `.nx-select` en `components.css`: `appearance: none`, mismos tokens que `.nx-input` (height 34px, `--surface`, `--border-strong`, `--radius-md`), `padding-right: var(--space-8)` para el icono chevron. Estados hover, focus (ring 3px `--accent-muted`), `is-error`, y disabled.
+- Nueva clase `.nx-select__icon` para el `ChevronDown` (position absolute, pointer-events none).
+- `select.tsx` migra el wrapper a `nx-field/nx-label/nx-help` (igual que `input.tsx`) y la `<select>` a `cn('nx-select', error && 'is-error')`.
+- **Consumidores verificados**: `user-form.tsx` (Role + Status) y `users-content.tsx` (filtros All roles / All statuses) — ninguna regresión visual.
+
+**Checkbox** — refactor estructural + nueva prop:
+- Clase `.nx-checkbox` preexistente ampliada: focus-visible (ring accent), indeterminate (fondo accent + barra horizontal CSS).
+- Nuevas clases React: `.nx-checkbox-field` (wrapper label), `.nx-checkbox-control` (relative container), `.nx-checkbox-box` (visual 16px), `.nx-checkbox-icon` (opacity 0→1). Checked/indeterminate/focus/disabled gestionados por CSS `:has()`.
+- `checkbox.tsx`: elimina el patrón `sr-only peer` + div. El input nativo está en `.nx-checkbox-control` con `opacity: 0; inset: 0`. El icono `Check` o `Minus` (lucide) vive dentro de `.nx-checkbox-box`.
+- **Nueva prop `indeterminate?: boolean`**: se aplica vía `useEffect` (`el.indeterminate = true`), que es la única forma de establecer el estado indeterminado en un input nativo.
+
+**Switch** — componente completamente reescrito + nueva prop:
+- Nuevas clases `.nx-switch`, `.nx-switch__track`, `.nx-switch__thumb`. Track: `--border-strong` → `--accent` al checked. Thumb: círculo blanco `16×16`, `transform: translateX(16px)` al checked. Todo vía CSS `:has(input:checked)`.
+- `switch.tsx`: el input nativo es transparente (`opacity: 0; inset: 0`) dentro de `.nx-switch`. Elimina el patrón `peer-checked:` de Tailwind.
+- **Nueva prop `size?: 'sm' | 'md'`** (default `'md'`): modifier class `.nx-switch--sm` (28×16px, thumb 12px, translate 12px). Omitido de `InputHTMLAttributes` vía `Omit<..., 'type' | 'size'>` para evitar conflicto con `size: number` del DOM.
+
+### Showcase
+
+- `/ui/select` — Anatomy (label+field+icon+helper) + States (default, error, disabled, with label) + Placeholder + Roadmap (nota native-first) + Props + Localization.
+- `/ui/checkbox` — Anatomy (control+box+icon+label+description) + States (5 demos: unchecked, checked, indeterminate, disabled, with description) + Group (demo interactivo de estado indeterminado padre) + Props + Localization.
+- `/ui/switch` — Anatomy (input+track+thumb+label+description) + States (4 demos: off, on, disabled-off, disabled-on) + Sizes (sm/md) + With label+description + Settings panel pattern + Props + Localization.
+
+### Config / i18n
+
+- `routes.ts`: `select: '/ui/select'`, `checkbox: '/ui/checkbox'`, `switch: '/ui/switch'`.
+- `sidebar.config.ts`: 3 nuevos items en el grupo Components, entre List y Toasts.
+- `common.json` (en + es): claves `uiSelect`, `uiCheckbox`, `uiSwitch`.
+- `request.ts`: 3 namespaces añadidos al `Promise.all` + return object (`select`, `checkbox`, `switch`). La clave `switch` se admite como nombre de propiedad en object literal JS (no es reservada en ese contexto); la variable se nombra `switchNs` en la destructuración del array.
+- 6 archivos JSON de traducción: `select-{en,es}.json`, `checkbox-{en,es}.json`, `switch-{en,es}.json`.
+
+### Build
+
+- `npm run lint`: 0 errores nuevos (los 2 warnings preexistentes no son de este bloque).
+- `npm run build`: 66 páginas (+6 = 3 rutas × 2 locales). ✓
+
+### Decisión documentada
+
+Select nativo vs. listbox custom: se eligió el nativo por accesibilidad garantizada, soporte móvil out-of-the-box y cero JS extra. Listbox custom (búsqueda, multi-select, agrupado, async) documentado como roadmap en el showcase.
+
+Checkbox con `:has()` vs. `peer-checked:` Tailwind: se migra a `:has()` para consistencia con el resto del nx-* system. La cobertura de `:has()` es >96% a mayo 2026.
+
+---
+
 ## [B6c.2] Display: Kbd + List + CardFooter nx-* — cierre del bloque B6c — 2026-05-07
 
 Último sub-bloque de B6c. Cierra la deuda de migración nx-* de Card (CardFooter) y completa la sección "Display" con `Kbd` (componente React trivial) y `List` (utility CSS sin componente). La categoría Display pasa a 6 entradas y la migración nx-* de Card es total.

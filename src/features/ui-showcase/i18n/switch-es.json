@@ -1,0 +1,59 @@
+{
+  "metadata": {
+    "title": "Switch"
+  },
+  "header": {
+    "title": "Switch",
+    "subtitle": "Control toggle para configuraciones binarias on/off. Proporciona retroalimentación visual inmediata con un pulgar deslizante. Admite dos tamaños y una etiqueta opcional con descripción."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Un switch se compone de un input nativo oculto, una pista que cambia de color cuando está activo, y un pulgar que se desliza de izquierda a derecha.",
+    "parts": {
+      "input": "Checkbox nativo oculto. Recibe el foco y los eventos de teclado.",
+      "track": "Fondo con forma de píldora. Gris cuando está apagado, color de acento cuando está encendido.",
+      "thumb": "Círculo blanco que se desliza por la pista mediante CSS :has().",
+      "label": "Texto breve que identifica la configuración. Renderizado como span dentro del elemento label.",
+      "description": "Texto de apoyo debajo de la etiqueta."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "Estados",
+      "description": "Switch admite estados encendido, apagado y desactivado. Navegable con teclado con anillo de foco visible."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "description": "Dos presets de tamaño. Usa sm en paneles de configuración densos; md es el predeterminado para toggles independientes."
+    },
+    "withLabel": {
+      "title": "Con etiqueta y descripción",
+      "description": "Pasa props label y description para dar contexto al toggle."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extiende todos los atributos nativos de input excepto type. Props específicas del componente listadas a continuación."
+    }
+  },
+  "demos": {
+    "labelNotifications": "Notificaciones push",
+    "descriptionNotifications": "Recibe notificaciones en tu dispositivo.",
+    "labelMarketing": "Emails de marketing",
+    "descriptionMarketing": "Recibe actualizaciones de producto y ofertas.",
+    "labelAutoSave": "Guardado automático",
+    "labelDarkMode": "Modo oscuro",
+    "labelAnalytics": "Analíticas",
+    "labelDisabled": "Toggle desactivado",
+    "on": "Activado",
+    "off": "Desactivado"
+  },
+  "props": {
+    "label": "Texto de etiqueta renderizado junto al switch.",
+    "description": "Texto de apoyo renderizado debajo de la etiqueta.",
+    "size": "Preset de tamaño: sm (28x16px) o md (36x20px, predeterminado).",
+    "checked": "Estado checked controlado.",
+    "defaultChecked": "Estado checked inicial no controlado.",
+    "disabled": "Atributo HTML disabled estándar.",
+    "extendsNote": "Extiende todos los atributos nativos de input excepto type (name, value, onChange, …)."
+  }
+}

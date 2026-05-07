@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "title": "Select"
+  },
+  "header": {
+    "title": "Select",
+    "subtitle": "Native dropdown field built on the browser's select element. Supports labels, error states, placeholder, and all standard HTML select attributes."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A select is composed of an optional label, the native select field with a chevron icon, and optional error text.",
+    "parts": {
+      "label": "Identifies the field. Rendered as a label element with matching htmlFor. Optional but recommended for accessibility.",
+      "field": "The native select element. Accepts all standard HTML select attributes.",
+      "icon": "ChevronDown icon positioned in the trailing slot. Decorative — pointer events are disabled.",
+      "helper": "Error message rendered below the field when the error prop is set."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "The select inherits the same border and focus styles as Input. Error state overrides the border color and focus ring."
+    },
+    "withLabel": {
+      "title": "With label",
+      "description": "Pass a label prop to render an accessible label above the field. The id is auto-generated from the label text."
+    },
+    "placeholder": {
+      "title": "Placeholder",
+      "description": "Pass a placeholder prop to show a non-selectable first option as a prompt."
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "description": "The current Select is native-first: it uses the browser's built-in dropdown, which guarantees accessibility, mobile support, and zero extra JavaScript. Custom listbox features (search, multi-select, grouped options, async loading) are planned for a future release."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native select attributes. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "labelRole": "Role",
+    "labelStatus": "Status",
+    "labelCountry": "Country",
+    "placeholderSelect": "Select an option…",
+    "placeholderCountry": "Select a country…",
+    "errorRequired": "Please select a value.",
+    "optionAdmin": "Admin",
+    "optionManager": "Manager",
+    "optionEditor": "Editor",
+    "optionViewer": "Viewer",
+    "optionActive": "Active",
+    "optionInactive": "Inactive",
+    "optionUS": "United States",
+    "optionMX": "Mexico",
+    "optionES": "Spain",
+    "optionFR": "France"
+  },
+  "props": {
+    "label": "Label displayed above the field. Generates an id automatically.",
+    "error": "Error message shown in red below the field. Also applies error styling to the border.",
+    "placeholder": "Non-selectable first option used as a prompt when no value is selected.",
+    "disabled": "Standard HTML disabled attribute.",
+    "extendsNote": "Extends all native select attributes (name, multiple, size, …)."
+  }
+}

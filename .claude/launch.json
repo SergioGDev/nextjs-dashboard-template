@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nexdash-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/sergiogarcia/Developer/nexdash", "run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "nexdash-worktree",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/sergiogarcia/Developer/nexdash/.claude/worktrees/goofy-kilby-25ce10", "run", "dev", "--", "-p", "3001"],
+      "port": 3001
+    }
+  ]
+}

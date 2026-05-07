@@ -1,0 +1,59 @@
+{
+  "metadata": {
+    "title": "Switch"
+  },
+  "header": {
+    "title": "Switch",
+    "subtitle": "Toggle control for binary on/off settings. Provides immediate visual feedback with a sliding thumb. Supports two sizes and an optional label with description."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A switch is composed of a hidden native input, a track that changes color when checked, and a thumb that slides from left to right.",
+    "parts": {
+      "input": "Hidden native checkbox. Receives focus and keyboard events.",
+      "track": "Pill-shaped background. Gray when off, accent color when on.",
+      "thumb": "White circle that slides along the track via CSS :has().",
+      "label": "Short text identifying the setting. Rendered as a span inside the label element.",
+      "description": "Supporting text below the label."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "Switch supports on, off, and disabled states. Keyboard-focusable with a visible focus ring."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Two size presets. Use sm in dense settings panels; md is the default for standalone toggles."
+    },
+    "withLabel": {
+      "title": "With label and description",
+      "description": "Pass label and description props to provide context for the toggle."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native input attributes except type. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "labelNotifications": "Push notifications",
+    "descriptionNotifications": "Receive notifications on your device.",
+    "labelMarketing": "Marketing emails",
+    "descriptionMarketing": "Get product updates and offers.",
+    "labelAutoSave": "Auto-save",
+    "labelDarkMode": "Dark mode",
+    "labelAnalytics": "Analytics",
+    "labelDisabled": "Disabled toggle",
+    "on": "On",
+    "off": "Off"
+  },
+  "props": {
+    "label": "Label text rendered next to the switch.",
+    "description": "Supporting text rendered below the label.",
+    "size": "Size preset: sm (28x16px) or md (36x20px, default).",
+    "checked": "Controlled checked state.",
+    "defaultChecked": "Uncontrolled initial checked state.",
+    "disabled": "Standard HTML disabled attribute.",
+    "extendsNote": "Extends all native input attributes except type (name, value, onChange, …)."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "title": "Checkbox"
+  },
+  "header": {
+    "title": "Checkbox",
+    "subtitle": "Binary toggle for individual options or multi-item selection. Supports checked, unchecked, and indeterminate states with an optional label and description."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A checkbox is composed of a hidden native input, a visual control box with a check icon, and an optional label and description.",
+    "parts": {
+      "control": "Hidden native input element. Receives focus and keyboard events.",
+      "box": "Visual square rendered via CSS :has(). Changes to accent color when checked or indeterminate.",
+      "icon": "Check or Minus icon inside the box. Visible only in checked or indeterminate state.",
+      "label": "Short text identifying the option. Rendered as a span inside the label element.",
+      "description": "Supporting text below the label. Use for hints or caveats."
+    }
+  },
+  "sections": {
+    "states": {
+      "title": "States",
+      "description": "Checkbox supports four visual states: unchecked, checked, indeterminate (partial selection), and disabled."
+    },
+    "group": {
+      "title": "Group",
+      "description": "Combine multiple checkboxes with a parent indeterminate state to represent partial selection in a list."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Extends all native input attributes except type. Component-specific props listed below."
+    }
+  },
+  "demos": {
+    "labelNotifications": "Email notifications",
+    "descriptionNotifications": "Receive emails about account activity.",
+    "labelMarketing": "Marketing emails",
+    "descriptionMarketing": "Get product updates and promotional offers.",
+    "labelSecurity": "Security alerts",
+    "descriptionSecurity": "Always receive security-related emails.",
+    "labelDisabled": "Disabled option",
+    "descriptionDisabled": "This option cannot be changed.",
+    "labelSelectAll": "Select all",
+    "labelOption1": "Option A",
+    "labelOption2": "Option B",
+    "labelOption3": "Option C"
+  },
+  "props": {
+    "label": "Label text rendered next to the control.",
+    "description": "Supporting text rendered below the label.",
+    "indeterminate": "Sets the indeterminate visual state. Useful for parent checkboxes in a multi-select list.",
+    "checked": "Controlled checked state.",
+    "defaultChecked": "Uncontrolled initial checked state.",
+    "disabled": "Standard HTML disabled attribute.",
+    "extendsNote": "Extends all native input attributes except type (name, value, onChange, …)."
+  }
+}
