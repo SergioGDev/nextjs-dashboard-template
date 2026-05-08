@@ -62,7 +62,9 @@
       "uiDialog": "Dialog",
       "uiForms": "Formularios",
       "uiTable": "Tabla",
-      "uiDataTable": "Tabla de datos"
+      "uiDataTable": "Tabla de datos",
+      "uiAreaChart": "Gráfico de área",
+      "uiBarChart": "Gráfico de barras"
     },
     "actions": {
       "expand": "Expandir barra lateral",

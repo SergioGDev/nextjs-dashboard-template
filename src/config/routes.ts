@@ -43,5 +43,7 @@ export const routes = {
     forms: '/ui/forms',
     table: '/ui/table',
     dataTable: '/ui/data-table',
+    areaChart: '/ui/area-chart',
+    barChart: '/ui/bar-chart',
   },
 } as const;

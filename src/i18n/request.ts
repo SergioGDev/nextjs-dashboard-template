@@ -47,6 +47,8 @@ async function loadMessages(locale: string) {
     forms,
     table,
     dataTable,
+    areaChart,
+    barChart,
   ] = await Promise.all([
     import(`../messages/${locale}/common.json`).then((m) => m.default),
     import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
@@ -79,6 +81,8 @@ async function loadMessages(locale: string) {
     import(`../features/ui-showcase/i18n/forms-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/table-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/data-table-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/area-chart-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/bar-chart-${locale}.json`).then((m) => m.default),
   ]);
 
   return {
@@ -113,5 +117,7 @@ async function loadMessages(locale: string) {
     forms,
     table,
     dataTable,
+    areaChart,
+    barChart,
   };
 }

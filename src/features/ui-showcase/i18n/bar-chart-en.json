@@ -1,0 +1,64 @@
+{
+  "metadata": { "title": "Bar Chart" },
+  "header": {
+    "title": "Bar Chart",
+    "subtitle": "Single-series bar chart built on Recharts BarChart. Renders rounded bars with a highlighted cursor on hover. Shares the same formatter and yLabel API as AreaChart."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomy",
+      "description": "Same Recharts primitives as AreaChart but without the gradient. The Bar element renders rounded rectangles capped at maxBarSize to avoid overly wide bars on sparse datasets."
+    },
+    "basic": {
+      "title": "Basic",
+      "description": "Pass data, xKey, and yKey. The color defaults to var(--accent). Hover a bar to see the tooltip."
+    },
+    "formatters": {
+      "title": "With formatters",
+      "description": "Same formatter API as AreaChart — formatY for Y-axis ticks, formatTooltip for the tooltip value."
+    },
+    "yLabel": {
+      "title": "With yLabel",
+      "description": "Pass yLabel to replace the raw yKey string in the tooltip label. Use a localised string from t() at the call site."
+    },
+    "colors": {
+      "title": "Custom colors",
+      "description": "Pass any CSS color to the color prop. Use system tokens for theme compatibility."
+    },
+    "loading": {
+      "title": "Loading and error states",
+      "description": "See the canonical loading and error pattern documented on the Area Chart page."
+    },
+    "props": {
+      "title": "Props",
+      "description": "All props except data, xKey, and yKey are optional."
+    }
+  },
+  "anatomy": {
+    "responsiveContainer": "Responsive wrapper — fills parent width, uses the height prop",
+    "barChart": "Recharts BarChart root — receives data array and margin config",
+    "cartesianGrid": "Horizontal grid lines — uses chartGridProps from @lib/charts",
+    "xAxis": "Bottom axis — renders tick labels from xKey; uses chartAxisProps",
+    "yAxis": "Left axis — renders tick labels via formatY; uses chartAxisProps",
+    "tooltip": "Hover overlay — cursor highlights the bar column; styled via chartTooltipStyle",
+    "bar": "Bar element — rounded top corners (radius 4px), capped at maxBarSize 32px"
+  },
+  "demos": {
+    "yLabel": { "label": "Units" },
+    "colors": {
+      "success": "Success",
+      "warning": "Warning",
+      "info": "Info"
+    }
+  },
+  "props": {
+    "data": "Array of data objects. Each object must contain the xKey and yKey fields.",
+    "xKey": "Key of the field used for X-axis labels.",
+    "yKey": "Key of the field used for bar heights and the tooltip value.",
+    "color": "Bar fill color. Defaults to var(--accent). Use CSS custom properties for theme compatibility.",
+    "yLabel": "Human-readable label shown in the tooltip instead of the raw yKey string.",
+    "formatY": "Formats Y-axis tick labels. Receives a number, returns a string.",
+    "formatTooltip": "Formats the value in the tooltip. Receives a number, returns a string.",
+    "height": "Chart height in pixels. Defaults to 220."
+  }
+}

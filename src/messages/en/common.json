@@ -62,7 +62,9 @@
       "uiDialog": "Dialog",
       "uiForms": "Forms",
       "uiTable": "Table",
-      "uiDataTable": "Data Table"
+      "uiDataTable": "Data Table",
+      "uiAreaChart": "Area Chart",
+      "uiBarChart": "Bar Chart"
     },
     "actions": {
       "expand": "Expand sidebar",

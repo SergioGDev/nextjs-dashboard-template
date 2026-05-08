@@ -1,0 +1,79 @@
+{
+  "metadata": { "title": "Gráfico de área" },
+  "header": {
+    "title": "Area Chart",
+    "subtitle": "Gráfico de área de una sola serie construido sobre Recharts AreaChart. Renderiza un área rellena con degradado y una línea de trazo, responsivo a su contenedor. El ordenado y los formateadores los proporciona el que lo llama — el componente es puramente presentacional."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "El gráfico se compone de primitivas de Recharts envueltas en un ResponsiveContainer. El degradado se define en un bloque defs y lo referencia el fill del Area."
+    },
+    "basic": {
+      "title": "Básico",
+      "description": "Pasa data, xKey e yKey. El color por defecto es var(--accent). Hover para ver el tooltip."
+    },
+    "formatters": {
+      "title": "Con formateadores",
+      "description": "formatY controla las etiquetas de los ticks del eje Y. formatTooltip controla el valor mostrado en el tooltip al hacer hover. Ambos reciben un número y devuelven un string — localízalos desde el punto de llamada."
+    },
+    "yLabel": {
+      "title": "Con yLabel",
+      "description": "Pasa yLabel para reemplazar el string raw yKey en la fila de label del tooltip. Usa un string localizado de t() en el punto de llamada — el snippet usa un literal solo como ilustración."
+    },
+    "colors": {
+      "title": "Colores personalizados",
+      "description": "Pasa cualquier color CSS a la prop color. Usa tokens del sistema (var(--success), var(--warning), var(--info)) en vez de valores hex hardcodeados para que el gráfico se adapte a los cambios de tema."
+    },
+    "gradient": {
+      "title": "Múltiples gráficos en la misma página",
+      "description": "Cada instancia de AreaChart genera un ID de degradado único via React.useId(), así que dos gráficos con el mismo yKey en la misma página no comparten su degradado. Ambos se renderizan de forma independiente."
+    },
+    "loading": {
+      "title": "Estados de carga y error",
+      "description": "Envuelve AreaChart con el patrón estándar de feedback: ChartSkeleton mientras carga, ErrorState en error, EmptyState para datos vacíos. Esta es la referencia canónica para todos los showcases de gráficos."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Todas las props excepto data, xKey e yKey son opcionales."
+    }
+  },
+  "anatomy": {
+    "responsiveContainer": "Wrapper responsivo — rellena el ancho del padre, usa la prop height",
+    "areaChart": "Raíz Recharts AreaChart — recibe el array data y la config de márgenes",
+    "defs": "Bloque SVG defs — contiene la definición del linearGradient",
+    "linearGradient": "Definición de degradado — se desvanece desde color al 20% de opacidad hasta transparente; el ID es único por instancia via React.useId()",
+    "cartesianGrid": "Líneas de cuadrícula horizontales — usa chartGridProps de @lib/charts",
+    "xAxis": "Eje inferior — renderiza etiquetas de tick de xKey; usa chartAxisProps",
+    "yAxis": "Eje izquierdo — renderiza etiquetas de tick via formatY; usa chartAxisProps",
+    "tooltip": "Overlay de hover — estilizado via chartTooltipStyle, valor formateado por formatTooltip",
+    "area": "Forma de área rellena — fill con degradado + trazo sólido en color, sin puntos excepto al hover"
+  },
+  "demos": {
+    "yLabel": { "label": "Ingresos" },
+    "colors": {
+      "success": "Éxito",
+      "warning": "Advertencia",
+      "info": "Info"
+    },
+    "gradient": {
+      "note": "Dos instancias de AreaChart con el mismo yKey — cada una tiene su propio ID de degradado generado por React.useId(). Sin degradado compartido, sin sangrado visual."
+    },
+    "loading": {
+      "patternTitle": "Patrón estándar de feedback",
+      "skeletonNote": "ChartSkeleton type=\"area\" coincide con la forma de un AreaChart.",
+      "errorNote": "ErrorState cubre el slot del gráfico con un botón de reintento.",
+      "emptyNote": "EmptyState se muestra cuando data es un array vacío."
+    }
+  },
+  "props": {
+    "data": "Array de objetos de datos. Cada objeto debe contener los campos xKey e yKey.",
+    "xKey": "Clave del campo usado para las etiquetas del eje X.",
+    "yKey": "Clave del campo usado para los valores del eje Y y el dataKey del Area.",
+    "color": "Color de relleno y trazo. Por defecto var(--accent). Usa propiedades CSS personalizadas para compatibilidad con temas.",
+    "yLabel": "Label legible por humanos mostrado en el tooltip en vez del string raw yKey. Pasa un string localizado de t() en el punto de llamada.",
+    "formatY": "Formatea las etiquetas de tick del eje Y. Recibe un número, devuelve un string.",
+    "formatTooltip": "Formatea el valor en el tooltip. Recibe un número, devuelve un string.",
+    "height": "Altura del gráfico en píxeles. Por defecto 220."
+  }
+}

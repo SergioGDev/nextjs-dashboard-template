@@ -9,12 +9,20 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import {
+  chartTooltipStyle,
+  chartTooltipLabelStyle,
+  chartAxisProps,
+  chartGridProps,
+} from '@lib/charts';
 
 interface BarChartProps {
   data: Record<string, unknown>[];
   xKey: string;
   yKey: string;
   color?: string;
+  /** Optional human-readable label shown in the tooltip instead of the raw yKey. */
+  yLabel?: string;
   formatY?: (v: number) => string;
   formatTooltip?: (v: number) => string;
   height?: number;
@@ -25,6 +33,7 @@ export function BarChart({
   xKey,
   yKey,
   color = 'var(--accent)',
+  yLabel,
   formatY,
   formatTooltip,
   height = 220,
@@ -32,31 +41,16 @@ export function BarChart({
   return (
     <ResponsiveContainer width="100%" height={height}>
       <ReBarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-        <XAxis
-          dataKey={xKey}
-          tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-          tickLine={false}
-          axisLine={false}
-          interval="preserveStartEnd"
-        />
-        <YAxis
-          tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={formatY}
-          width={50}
-        />
+        <CartesianGrid {...chartGridProps} />
+        <XAxis {...chartAxisProps} dataKey={xKey} interval="preserveStartEnd" />
+        <YAxis {...chartAxisProps} tickFormatter={formatY} width={50} />
         <Tooltip
-          contentStyle={{
-            background: 'var(--surface-raised)',
-            border: '1px solid var(--border)',
-            borderRadius: 8,
-            fontSize: 12,
-            color: 'var(--text-primary)',
-          }}
-          formatter={(v) => [formatTooltip ? formatTooltip(Number(v)) : String(v), yKey]}
-          labelStyle={{ color: 'var(--text-muted)' }}
+          contentStyle={chartTooltipStyle}
+          formatter={(v) => [
+            formatTooltip ? formatTooltip(Number(v)) : String(v),
+            yLabel ?? yKey,
+          ]}
+          labelStyle={chartTooltipLabelStyle}
           cursor={{ fill: 'var(--border)' }}
         />
         <Bar dataKey={yKey} fill={color} radius={[4, 4, 0, 0]} maxBarSize={32} />

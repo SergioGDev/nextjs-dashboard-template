@@ -1,0 +1,64 @@
+{
+  "metadata": { "title": "Gráfico de barras" },
+  "header": {
+    "title": "Bar Chart",
+    "subtitle": "Gráfico de barras de una sola serie construido sobre Recharts BarChart. Renderiza barras redondeadas con un cursor resaltado al hover. Comparte la misma API de formateadores y yLabel que AreaChart."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "Las mismas primitivas de Recharts que AreaChart pero sin el degradado. El elemento Bar renderiza rectángulos redondeados limitados a maxBarSize para evitar barras demasiado anchas en datasets escasos."
+    },
+    "basic": {
+      "title": "Básico",
+      "description": "Pasa data, xKey e yKey. El color por defecto es var(--accent). Hover sobre una barra para ver el tooltip."
+    },
+    "formatters": {
+      "title": "Con formateadores",
+      "description": "La misma API de formateadores que AreaChart — formatY para los ticks del eje Y, formatTooltip para el valor del tooltip."
+    },
+    "yLabel": {
+      "title": "Con yLabel",
+      "description": "Pasa yLabel para reemplazar el string raw yKey en el label del tooltip. Usa un string localizado de t() en el punto de llamada."
+    },
+    "colors": {
+      "title": "Colores personalizados",
+      "description": "Pasa cualquier color CSS a la prop color. Usa tokens del sistema para compatibilidad con temas."
+    },
+    "loading": {
+      "title": "Estados de carga y error",
+      "description": "Ver el patrón canónico de carga y error documentado en la página de Area Chart."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Todas las props excepto data, xKey e yKey son opcionales."
+    }
+  },
+  "anatomy": {
+    "responsiveContainer": "Wrapper responsivo — rellena el ancho del padre, usa la prop height",
+    "barChart": "Raíz Recharts BarChart — recibe el array data y la config de márgenes",
+    "cartesianGrid": "Líneas de cuadrícula horizontales — usa chartGridProps de @lib/charts",
+    "xAxis": "Eje inferior — renderiza etiquetas de tick de xKey; usa chartAxisProps",
+    "yAxis": "Eje izquierdo — renderiza etiquetas de tick via formatY; usa chartAxisProps",
+    "tooltip": "Overlay de hover — el cursor resalta la columna de la barra; estilizado via chartTooltipStyle",
+    "bar": "Elemento Bar — esquinas superiores redondeadas (radio 4px), limitado a maxBarSize 32px"
+  },
+  "demos": {
+    "yLabel": { "label": "Unidades" },
+    "colors": {
+      "success": "Éxito",
+      "warning": "Advertencia",
+      "info": "Info"
+    }
+  },
+  "props": {
+    "data": "Array de objetos de datos. Cada objeto debe contener los campos xKey e yKey.",
+    "xKey": "Clave del campo usado para las etiquetas del eje X.",
+    "yKey": "Clave del campo usado para las alturas de las barras y el valor del tooltip.",
+    "color": "Color de relleno de las barras. Por defecto var(--accent). Usa propiedades CSS personalizadas para compatibilidad con temas.",
+    "yLabel": "Label legible por humanos mostrado en el tooltip en vez del string raw yKey.",
+    "formatY": "Formatea las etiquetas de tick del eje Y. Recibe un número, devuelve un string.",
+    "formatTooltip": "Formatea el valor en el tooltip. Recibe un número, devuelve un string.",
+    "height": "Altura del gráfico en píxeles. Por defecto 220."
+  }
+}

@@ -1,6 +1,11 @@
 'use client';
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import {
+  chartTooltipStyle,
+  chartTooltipLabelStyle,
+  chartLegendStyle,
+} from '@lib/charts';
 
 interface DonutChartProps {
   data: { name: string; value: number; color: string }[];
@@ -27,20 +32,14 @@ export function DonutChart({ data, height = 220, innerRadius = 55, outerRadius =
           ))}
         </Pie>
         <Tooltip
-          contentStyle={{
-            background: 'var(--surface-raised)',
-            border: '1px solid var(--border)',
-            borderRadius: 8,
-            fontSize: 12,
-            color: 'var(--text-primary)',
-          }}
+          contentStyle={chartTooltipStyle}
           formatter={(v) => [`${v}%`]}
-          labelStyle={{ color: 'var(--text-muted)' }}
+          labelStyle={chartTooltipLabelStyle}
         />
         <Legend
           iconType="circle"
           iconSize={8}
-          wrapperStyle={{ fontSize: 12, color: 'var(--text-muted)' }}
+          wrapperStyle={chartLegendStyle}
         />
       </PieChart>
     </ResponsiveContainer>

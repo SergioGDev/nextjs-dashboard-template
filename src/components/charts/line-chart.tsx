@@ -10,6 +10,13 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import {
+  chartTooltipStyle,
+  chartTooltipLabelStyle,
+  chartAxisProps,
+  chartGridProps,
+  chartLegendStyle,
+} from '@lib/charts';
 
 interface Series {
   key: string;
@@ -30,37 +37,19 @@ export function LineChart({ data, xKey, series, formatY, formatTooltip, height =
   return (
     <ResponsiveContainer width="100%" height={height}>
       <ReLineChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-        <XAxis
-          dataKey={xKey}
-          tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-          tickLine={false}
-          axisLine={false}
-          interval="preserveStartEnd"
-        />
-        <YAxis
-          tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={formatY}
-          width={50}
-        />
+        <CartesianGrid {...chartGridProps} />
+        <XAxis {...chartAxisProps} dataKey={xKey} interval="preserveStartEnd" />
+        <YAxis {...chartAxisProps} tickFormatter={formatY} width={50} />
         <Tooltip
-          contentStyle={{
-            background: 'var(--surface-raised)',
-            border: '1px solid var(--border)',
-            borderRadius: 8,
-            fontSize: 12,
-            color: 'var(--text-primary)',
-          }}
+          contentStyle={chartTooltipStyle}
           formatter={(v, key) => [
             formatTooltip ? formatTooltip(Number(v), String(key)) : String(v),
             series.find((s) => s.key === String(key))?.label ?? String(key),
           ]}
-          labelStyle={{ color: 'var(--text-muted)' }}
+          labelStyle={chartTooltipLabelStyle}
         />
         <Legend
-          wrapperStyle={{ fontSize: 12, color: 'var(--text-muted)' }}
+          wrapperStyle={chartLegendStyle}
           formatter={(value) => series.find((s) => s.key === value)?.label ?? value}
         />
         {series.map(({ key, color }) => (

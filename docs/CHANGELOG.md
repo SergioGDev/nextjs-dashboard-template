@@ -6,6 +6,73 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B7.1] Charts category — Area Chart & Bar Chart showcases — 2026-05-08
+
+Abre la categoría Charts en el design system. Extrae constantes de estilo compartidas,
+refactoriza los 4 wrappers de Recharts, añade la prop `yLabel`, corrige el bug de
+gradient ID compartido, y crea las páginas de showcase canónicas para AreaChart y BarChart.
+
+### Shared chart styling — `src/lib/charts.ts`
+
+Nuevo módulo con cinco helpers exportados:
+- `chartTooltipStyle` / `chartTooltipLabelStyle` — estilos del tooltip
+- `chartAxisProps` — tick, tickLine, axisLine para XAxis/YAxis
+- `chartGridProps` — strokeDasharray, stroke, vertical para CartesianGrid
+- `chartLegendStyle` — fontSize, color para Legend
+
+Los 4 wrappers (area, bar, line, donut) los consumen vía spread (`{...chartAxisProps}`).
+Elimina ~40 líneas de definiciones duplicadas. `as const` en cada helper permite que
+TypeScript infiera los tipos literales correctamente al hacer spread.
+
+### AreaChart — gradient ID fix + `yLabel`
+
+**Bug**: `id={`grad-${yKey}`}` en el `<linearGradient>` era compartido entre todas las
+instancias con el mismo `yKey`. Dos AreaCharts en la misma página con `yKey="revenue"`
+usaban el mismo gradiente — el segundo sobreescribía al primero.
+
+**Fix**: `const gradientId = React.useId().replace(/:/g, 'g')` — ID único por instancia.
+El `.replace(/:/g, 'g')` convierte `:r0:` a `gr0g` para evitar problemas de parsing en
+selectores CSS al usar el ID como fragment identifier.
+
+**`yLabel`**: nueva prop opcional. Si se pasa, reemplaza el `yKey` crudo en el label del
+tooltip. Patrón recomendado: pasar `t('myKey')` desde el call site para localización.
+
+### BarChart — `yLabel`
+
+Misma API que AreaChart (`yLabel?: string`). Sin gradient (las barras usan `fill={color}`
+directamente), por lo que no tiene el bug de ID compartido.
+
+### LineChart & DonutChart — helper adoption
+
+Refactorizados para consumir `chartTooltipStyle`, `chartAxisProps`, `chartGridProps` y
+`chartLegendStyle`. Sin cambios de API pública.
+
+### Routes, sidebar & overview
+
+- `routes.ui.areaChart = '/ui/area-chart'`, `routes.ui.barChart = '/ui/bar-chart'`
+- Sidebar: dos nuevos links en el grupo de components UI
+- `common.json` en/es: claves `uiAreaChart` / `uiBarChart`
+- Overview page: categoría `charts` abierta con `count: 2`, `href: routes.ui.areaChart`
+
+### i18n namespaces
+
+- `src/features/ui-showcase/i18n/area-chart-{en,es}.json`
+- `src/features/ui-showcase/i18n/bar-chart-{en,es}.json`
+- `src/i18n/request.ts`: `areaChart` y `barChart` registrados
+
+### Showcase — `/ui/area-chart` (canonical)
+
+Secciones: Anatomy · Basic · With formatters · With yLabel · Custom colors ·
+Multiple charts (gradient isolation test) · Loading & error states (canonical, con
+patrón completo + demos de ChartSkeleton, ErrorState y EmptyState) · Props · Localization.
+
+### Showcase — `/ui/bar-chart` (referential)
+
+Secciones: Anatomy · Basic · With formatters · With yLabel · Custom colors ·
+Loading (link a /ui/area-chart en lugar de sección canónica) · Props · Localization.
+
+---
+
 ## [B6g.3] DataTable consumer adaptations — 2026-05-08
 
 Cierre definitivo del bloque B6g. Aprovecha las APIs añadidas en B6g.2
