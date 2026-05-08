@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "title": "DataTable"
+  },
+  "header": {
+    "title": "DataTable",
+    "subtitle": "Tabla con ordenación client-side, paginación, búsqueda y selección de filas integradas. Construida sobre las primitivas Table — acepta una configuración de columnas y un array de datos, y gestiona todo el estado de interacción internamente."
+  },
+  "sections": {
+    "basic": {
+      "title": "Básico",
+      "description": "Configuración mínima: pasa columns y data. Establece sortable: true por columna para habilitar la ordenación. getRowId proporciona un ID estable para cada fila — requerido para selección y recomendado para corrección."
+    },
+    "badges": {
+      "title": "Con badges de estado",
+      "description": "Usa la función render en la definición de columna para devolver cualquier nodo React — útil para chips de estado y valores formateados."
+    },
+    "avatars": {
+      "title": "Con avatares",
+      "description": "Render personalizado para la columna de nombre — Avatar y texto de nombre uno al lado del otro. Apila información adicional bajo el nombre para una celda de usuario compacta."
+    },
+    "pagination": {
+      "title": "Con paginación",
+      "description": "Los controles de paginación aparecen automáticamente cuando el total de filas supera pageSize. El texto de resultados refleja el estado actual de ordenación y filtro."
+    },
+    "search": {
+      "title": "Con búsqueda",
+      "description": "Pasa searchable para mostrar un input de filtro encima de la tabla. Filtra todas las columnas por su valor de cadena bruto — la salida de col.render no se busca. La página se resetea a 1 en cada pulsación."
+    },
+    "selection": {
+      "title": "Con selección de filas",
+      "description": "Pasa selectable y getRowId para habilitar la selección por checkbox. onSelectionChange se llama síncronamente en cada cambio con un Set de IDs seleccionados. Las selecciones entre páginas se preservan al paginar."
+    },
+    "loading": {
+      "title": "Estado de carga",
+      "description": "Pasa loading para mostrar filas de skeleton mientras se obtienen los datos."
+    },
+    "empty": {
+      "title": "Estado vacío",
+      "description": "Un array data vacío muestra una fila de mensaje a lo ancho. El mensaje por defecto está localizado. Sobreescríbelo con la prop emptyMessage."
+    },
+    "serverSide": {
+      "title": "Nota sobre server-side",
+      "description": "DataTable gestiona el sort, la búsqueda y la paginación completamente en el cliente. Para paginación o búsqueda server-side, gestiona esos estados externamente y pasa el slice ya paginado como data. Usa la prop loading para mostrar skeletons mientras carga una nueva página."
+    },
+    "feedbackPattern": {
+      "title": "Patrón de feedback",
+      "description": "Patrón estándar para componentes que obtienen datos: skeleton mientras carga, ErrorState en error, DataTable cuando los datos están listos. DataTable gestiona su propio mensaje de vacío — no se necesita un EmptyState separado."
+    },
+    "keyboard": {
+      "title": "Navegación por teclado",
+      "description": "Los botones de ordenación y los controles de paginación son enfocables con Tab y se activan con Enter o Espacio. Los checkboxes soportan Espacio para alternar. El checkbox de selección total en la cabecera alterna todas las filas visibles de la página actual."
+    },
+    "props": {
+      "title": "Props de DataTable",
+      "description": "DataTable es un componente genérico — T se infiere del array data."
+    },
+    "columnProps": {
+      "title": "Props de Column",
+      "description": "Cada entrada en el array columns configura una columna."
+    }
+  },
+  "demos": {
+    "search": {
+      "placeholder": "Buscar usuarios…"
+    },
+    "selection": {
+      "selected": "{count} seleccionados",
+      "noneSelected": "Ninguna fila seleccionada"
+    },
+    "empty": {
+      "customMessage": "Ningún usuario coincide con los filtros seleccionados."
+    }
+  },
+  "props": {
+    "columns": "Definiciones de columnas — label de cabecera, clave de datos, función render opcional, flag sortable y className.",
+    "data": "Array de filas de datos. El genérico T se infiere de esta prop.",
+    "loading": "Muestra filas de skeleton mientras es true. Oculta la tabla y el toolbar de búsqueda.",
+    "pageSize": "Filas por página. Por defecto 10. Los controles de paginación aparecen cuando el total de filas supera esto.",
+    "selectable": "Habilita una columna de checkbox a la izquierda. Requiere getRowId.",
+    "getRowId": "Devuelve un string ID estable para cada fila. Requerido cuando selectable es true.",
+    "emptyMessage": "Sobreescribe el mensaje vacío por defecto cuando data es un array vacío.",
+    "searchable": "Muestra un input de búsqueda encima de la tabla. Filtra todas las columnas por valor de cadena bruto.",
+    "searchPlaceholder": "Placeholder para el input de búsqueda. Por defecto la traducción de common.table.searchPlaceholder.",
+    "onSelectionChange": "Llamado síncronamente en cada cambio de selección con un Set de IDs de fila seleccionados.",
+    "className": "Clases extra aplicadas al contenedor raíz."
+  },
+  "columnProps": {
+    "key": "Clave de datos — el valor bruto en esta clave se muestra a menos que se proporcione render.",
+    "header": "Label de cabecera de columna.",
+    "render": "Renderizador de celda personalizado. Sobreescribe la visualización de cadena basada en clave.",
+    "sortable": "Habilita un botón de ordenación en la cabecera de columna.",
+    "className": "Clases extra aplicadas tanto a TableHead como a TableCell para esta columna."
+  }
+}

@@ -70,6 +70,7 @@ export const sidebarConfig: SidebarConfig = [
           { type: 'link', label: 'sidebar.items.i18n', href: routes.ui.i18n },
           { type: 'link', label: 'sidebar.items.uiForms', href: routes.ui.forms },
           { type: 'link', label: 'sidebar.items.uiTable', href: routes.ui.table },
+          { type: 'link', label: 'sidebar.items.uiDataTable', href: routes.ui.dataTable },
         ],
       },
       {

@@ -42,5 +42,6 @@ export const routes = {
     i18n: '/ui/i18n',
     forms: '/ui/forms',
     table: '/ui/table',
+    dataTable: '/ui/data-table',
   },
 } as const;

@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "title": "DataTable"
+  },
+  "header": {
+    "title": "DataTable",
+    "subtitle": "Feature-rich table with built-in client-side sort, pagination, search, and row selection. Built on top of the Table primitives — accepts a columns config and a data array and handles all interaction state internally."
+  },
+  "sections": {
+    "basic": {
+      "title": "Basic",
+      "description": "Minimal setup: pass columns and data. Set sortable: true per column to enable sort. getRowId provides a stable ID for each row — required for selection and recommended for correctness."
+    },
+    "badges": {
+      "title": "With status badges",
+      "description": "Use the render function in a column definition to return any React node — useful for status chips and formatted values."
+    },
+    "avatars": {
+      "title": "With avatars",
+      "description": "Custom render for the name column — Avatar and name text side by side. Stack additional info below the name for a compact user cell."
+    },
+    "pagination": {
+      "title": "With pagination",
+      "description": "Pagination controls appear automatically when the total row count exceeds pageSize. The showing text reflects the current sort and filter state."
+    },
+    "search": {
+      "title": "With search",
+      "description": "Pass searchable to render a filter input above the table. Filters all columns by their raw string value — col.render output is not searched. The page resets to 1 on each keystroke."
+    },
+    "selection": {
+      "title": "With row selection",
+      "description": "Pass selectable and getRowId to enable checkbox selection. onSelectionChange is called synchronously on every change with a Set of selected IDs. Cross-page selections are preserved when paginating."
+    },
+    "loading": {
+      "title": "Loading state",
+      "description": "Pass loading to show skeleton rows while data is being fetched."
+    },
+    "empty": {
+      "title": "Empty state",
+      "description": "An empty data array shows a full-width message row. The default message is localised. Override it with the emptyMessage prop."
+    },
+    "serverSide": {
+      "title": "Server-side note",
+      "description": "DataTable manages sort, search, and pagination entirely on the client. For server-side pagination or search, manage those states externally and pass the already-paginated slice as data. Use the loading prop to show skeletons while a new page loads."
+    },
+    "feedbackPattern": {
+      "title": "Feedback pattern",
+      "description": "Standard pattern for components that fetch data: skeleton while loading, ErrorState on error, DataTable when data is ready. DataTable handles its own empty message — no separate EmptyState needed."
+    },
+    "keyboard": {
+      "title": "Keyboard navigation",
+      "description": "Sort buttons and pagination controls are focusable with Tab and activated with Enter or Space. Checkboxes support Space to toggle. The select-all checkbox in the header toggles all visible rows on the current page."
+    },
+    "props": {
+      "title": "DataTable props",
+      "description": "DataTable is a generic component — T is inferred from the data array."
+    },
+    "columnProps": {
+      "title": "Column props",
+      "description": "Each entry in the columns array configures one column."
+    }
+  },
+  "demos": {
+    "search": {
+      "placeholder": "Search users…"
+    },
+    "selection": {
+      "selected": "{count} selected",
+      "noneSelected": "No rows selected"
+    },
+    "empty": {
+      "customMessage": "No users match the selected filters."
+    }
+  },
+  "props": {
+    "columns": "Column definitions — header label, data key, optional render function, sortable flag, and className.",
+    "data": "Array of data rows. The generic T is inferred from this prop.",
+    "loading": "Shows skeleton rows while true. Hides the table and search toolbar.",
+    "pageSize": "Rows per page. Defaults to 10. Pagination controls appear when total rows exceed this.",
+    "selectable": "Enables a checkbox column on the left. Requires getRowId.",
+    "getRowId": "Returns a stable string ID for each row. Required when selectable is true.",
+    "emptyMessage": "Overrides the default empty message shown when data is an empty array.",
+    "searchable": "Renders a search input above the table. Filters all columns by raw string value.",
+    "searchPlaceholder": "Placeholder for the search input. Falls back to the common.table.searchPlaceholder translation.",
+    "onSelectionChange": "Called synchronously on every selection change with a Set of selected row IDs.",
+    "className": "Extra classes applied to the root container."
+  },
+  "columnProps": {
+    "key": "Data key — the raw value at this key is displayed unless render is provided.",
+    "header": "Column header label.",
+    "render": "Custom cell renderer. Overrides the default key-based string display.",
+    "sortable": "Enables a sort button in the column header.",
+    "className": "Extra classes applied to both TableHead and TableCell for this column."
+  }
+}

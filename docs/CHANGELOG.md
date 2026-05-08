@@ -6,6 +6,89 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6g.2] DataTable: searchable + row selection + nx-* CSS + showcase — 2026-05-08
+
+Cierre del bloque B6g (Data tables). Tres nuevas props en `DataTable`, migración de
+sus estilos a `nx-data-table*` CSS, y showcase completa en `/ui/data-table`.
+
+### Nuevas props en `src/components/ui/data-table.tsx`
+
+- **`searchable?: boolean`** — muestra un input de filtro encima de la tabla.
+  Filtra todas las columnas por valor de cadena bruto (`col.render` no es searchable).
+- **`searchPlaceholder?: string`** — texto del input de búsqueda.
+- **`onSelectionChange?: (ids: Set<string>) => void`** — callback síncrono llamado en
+  cada cambio de selección (toggle de fila o toggle-all). Recibe el `Set` completo
+  de IDs seleccionados.
+
+### Pipeline filter → sort → paginate
+
+El orden de operaciones es: `filteredData` (useMemo sobre data+query) → `sortedData`
+(useMemo sobre filteredData) → `pageData` (slice). La paginación usa `sortedData.length`
+como total (no `data.length`), por lo que el "Showing X–Y of Z" refleja el resultado
+filtrado. El reset a página 1 se hace inline en el `onChange` del Input (no con `useEffect`).
+
+### Mejora en toggleAll
+
+La lógica anterior comparaba `selected.size === pageData.length` (incorrecto para
+multi-página). La nueva lógica: `pageIds.every((id) => selected.has(id))` determina si
+todas las filas de la página actual están seleccionadas. Si sí → deselect solo esas filas
+preservando otras páginas; si no → unión de selección actual + filas de página actual.
+
+### CSS: `src/styles/components.css`
+
+Bloque `nx-data-table*` añadido al final del archivo:
+- `.nx-data-table` — flex column, `width: 100%`
+- `.nx-data-table__toolbar` — flex row, `max-width: 20rem`
+- `.nx-data-table__sort-btn` — inline-flex, `font: inherit`, hover color
+- `.nx-data-table__pagination` — flex space-between
+- `.nx-data-table__showing` — fs-sm, color muted
+
+El sort button y pagination se migraron de clases Tailwind ad-hoc a estas clases BEM.
+`width: 100%` en `.nx-data-table` es necesario para que el componente se expanda en
+contenedores flex (p. ej. el área de preview de `ShowcaseDemo`).
+
+### Showcase: `/ui/data-table`
+
+`src/app/[locale]/(dashboard)/ui/data-table/page.tsx` + `data-table-content.tsx`
+
+Secciones (13):
+1. Header + import snippet
+2. Basic (smallUsers, 4 columnas sortable)
+3. With status badges (render para status con Badge success/warning/neutral)
+4. With avatars (render para name con Avatar + email)
+5. With pagination (manyUsers 35 filas, pageSize=10)
+6. **With search — nueva feature** (manyUsers + `searchable`)
+7. **With selection — nueva feature** (smallUsers + `selectable` + badge con count)
+8. Loading state (`loading=true`)
+9. Empty state (default message + custom message en ShowcaseGrid)
+10. Server-side note (explicación conceptual + snippet patrón externo)
+11. Feedback pattern (código `isLoading / isError / DataTable`)
+12. Keyboard navigation (nota textual)
+13. DataTable props (PropsTable)
+14. Column props (PropsTable de `Column<T>`)
+15. Localization note
+
+### Config y i18n
+
+- `routes.ui.dataTable = '/ui/data-table'`
+- `sidebar.config.ts`: entrada `sidebar.items.uiDataTable` en grupo uiComponents
+- `common.json` (en + es): keys `sidebar.items.uiDataTable`, `table.noResults`,
+  `table.searchPlaceholder`
+- `src/features/ui-showcase/i18n/data-table-{en,es}.json`
+- `src/i18n/request.ts`: namespace `dataTable` registrado
+
+### Overview
+
+`/ui/page.tsx`: categoría `data` — `count 1 → 2`.
+
+### Datos de demo
+
+`manyUsers` — 35 filas generadas desde un array de 35 nombres internacionales.
+`smallUsers` — primeras 5 filas de `manyUsers`. Ambas definidas a nivel de módulo
+como constantes (no state, no hooks) en `data-table-content.tsx`.
+
+---
+
 ## [B6g.1] Table primitive: nx-* migration + showcase — 2026-05-08
 
 Apertura del bloque B6g (Data tables). Migración cosmética del primitive `Table`

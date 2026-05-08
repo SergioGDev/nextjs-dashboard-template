@@ -61,7 +61,8 @@
       "uiDropdownMenu": "Dropdown Menu",
       "uiDialog": "Dialog",
       "uiForms": "Forms",
-      "uiTable": "Table"
+      "uiTable": "Table",
+      "uiDataTable": "Data Table"
     },
     "actions": {
       "expand": "Expand sidebar",
@@ -85,6 +86,8 @@
   },
   "table": {
     "empty": "No data found",
+    "noResults": "No results match your search.",
+    "searchPlaceholder": "Search…",
     "showing": "{start}–{end} of {total}",
     "previousPage": "Previous page",
     "nextPage": "Next page"
