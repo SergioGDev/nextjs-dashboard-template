@@ -56,7 +56,9 @@
       "uiCheckbox": "Checkbox",
       "uiSwitch": "Switch",
       "uiRadioGroup": "Radio Group",
-      "uiSlider": "Slider"
+      "uiSlider": "Slider",
+      "uiTooltip": "Tooltip",
+      "uiDropdownMenu": "Dropdown Menu"
     },
     "actions": {
       "expand": "Expand sidebar",

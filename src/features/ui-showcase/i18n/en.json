@@ -57,6 +57,10 @@
         "label": "Feedback",
         "description": "Toasts, empty states, error states, skeletons, spinner"
       },
+      "overlays": {
+        "label": "Overlays",
+        "description": "Tooltips, dropdown menus, dialogs, popovers"
+      },
       "data": {
         "label": "Data",
         "description": "Tables, filters, pagination"

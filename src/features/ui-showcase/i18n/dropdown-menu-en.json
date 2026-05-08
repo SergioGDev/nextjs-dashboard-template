@@ -1,0 +1,106 @@
+{
+  "metadata": {
+    "title": "Dropdown Menu"
+  },
+  "header": {
+    "title": "Dropdown Menu",
+    "subtitle": "A floating menu of actions triggered by a button. Supports keyboard navigation, disabled items, destructive actions, and labeled sections. Renders in a portal for reliable z-index stacking."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "DropdownMenu clones the trigger element to inject aria props, then portals the menu container to document.body.",
+    "parts": {
+      "trigger": "The element that opens the menu. Receives aria-haspopup and aria-expanded automatically.",
+      "menu": "The floating container with role=menu.",
+      "item": "An actionable row with role=menuitem.",
+      "separator": "A visual divider between groups of items.",
+      "label": "A non-interactive heading that groups items."
+    }
+  },
+  "sections": {
+    "basic": {
+      "title": "Basic example",
+      "description": "A simple menu with a few actions."
+    },
+    "withSections": {
+      "title": "With sections",
+      "description": "Use DropdownMenuLabel and DropdownMenuSeparator to organize items into groups."
+    },
+    "destructive": {
+      "title": "Destructive item",
+      "description": "Use destructive prop on items that perform irreversible actions."
+    },
+    "disabled": {
+      "title": "Disabled item",
+      "description": "Disabled items are visible but not interactive. They are skipped during keyboard navigation."
+    },
+    "alignRight": {
+      "title": "Align right",
+      "description": "Use align=right to open the menu anchored to the right edge of the trigger."
+    },
+    "keyboard": {
+      "title": "Keyboard navigation",
+      "description": "Full keyboard support is built in."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Component props reference."
+    }
+  },
+  "demos": {
+    "openMenu": "Open menu",
+    "openMenuRight": "Aligned right",
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "newFile": "New file",
+    "openFile": "Open file",
+    "saveFile": "Save file",
+    "recentFiles": "Recent files",
+    "actions": "Actions",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "archive": "Archive",
+    "danger": "Danger zone",
+    "delete": "Delete item",
+    "rename": "Rename",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "disabledItem": "Disabled action",
+    "signOut": "Sign out"
+  },
+  "keyboard": {
+    "key": "Key",
+    "action": "Action",
+    "arrowDown": "ArrowDown",
+    "arrowUp": "ArrowUp",
+    "home": "Home",
+    "end": "End",
+    "enterSpace": "Enter / Space",
+    "escape": "Escape",
+    "tab": "Tab",
+    "arrowDownDesc": "Move focus to the next item",
+    "arrowUpDesc": "Move focus to the previous item",
+    "homeDesc": "Move focus to the first item",
+    "endDesc": "Move focus to the last item",
+    "enterSpaceDesc": "Activate the focused item",
+    "escapeDesc": "Close the menu and return focus to the trigger",
+    "tabDesc": "Close the menu (focus moves naturally)"
+  },
+  "props": {
+    "menu": {
+      "trigger": "The element that opens the menu. aria-haspopup and aria-expanded are injected automatically.",
+      "align": "Which edge of the trigger the menu aligns to.",
+      "open": "Controlled open state.",
+      "onOpenChange": "Called when the open state should change.",
+      "className": "Additional classes on the menu container."
+    },
+    "item": {
+      "onClick": "Handler called when the item is activated.",
+      "destructive": "Styles the item in the error color to indicate a dangerous action.",
+      "disabled": "Prevents interaction and skips the item during keyboard navigation.",
+      "className": "Additional classes."
+    },
+    "extendsNote": "DropdownMenuItem renders as a native button. DropdownMenuSeparator and DropdownMenuLabel accept no props beyond className."
+  }
+}

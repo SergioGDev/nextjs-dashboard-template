@@ -22,3 +22,11 @@ component gets a dedicated page here.
 - `ShowcaseDemo` calls `toast.success('Copied to clipboard')` on copy — do NOT add extra feedback
 
 **Reference page:** `src/app/(dashboard)/ui/toasts/page.tsx`
+
+## Limitaciones conocidas
+
+- **Skeleton aria-labels** (`Loading table`, etc.) se mantienen en inglés. Razón: añadir
+  `useTranslations` a estos componentes presentacionales los forzaría a `'use client'` solo
+  para un string brevemente audible. Documentado como deuda técnica aceptable.
+- **Tooltip en touch**: los dispositivos táctiles no disparan eventos hover. El `Tooltip` solo
+  es visible con hover o foco de teclado — nunca usarlo como única fuente de información crítica.

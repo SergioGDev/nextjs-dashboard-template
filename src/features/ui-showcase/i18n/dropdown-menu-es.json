@@ -1,0 +1,106 @@
+{
+  "metadata": {
+    "title": "Dropdown Menu"
+  },
+  "header": {
+    "title": "Dropdown Menu",
+    "subtitle": "Menú flotante de acciones activado por un botón. Soporta navegación por teclado, ítems deshabilitados, acciones destructivas y secciones con etiquetas. Se renderiza en un portal para un apilado z-index fiable."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "DropdownMenu clona el elemento disparador para inyectar props aria, y luego porta el contenedor del menú a document.body.",
+    "parts": {
+      "trigger": "El elemento que abre el menú. Recibe aria-haspopup y aria-expanded automáticamente.",
+      "menu": "El contenedor flotante con role=menu.",
+      "item": "Una fila accionable con role=menuitem.",
+      "separator": "Divisor visual entre grupos de ítems.",
+      "label": "Encabezado no interactivo que agrupa ítems."
+    }
+  },
+  "sections": {
+    "basic": {
+      "title": "Ejemplo básico",
+      "description": "Un menú simple con algunas acciones."
+    },
+    "withSections": {
+      "title": "Con secciones",
+      "description": "Usa DropdownMenuLabel y DropdownMenuSeparator para organizar ítems en grupos."
+    },
+    "destructive": {
+      "title": "Ítem destructivo",
+      "description": "Usa la prop destructive en ítems que realizan acciones irreversibles."
+    },
+    "disabled": {
+      "title": "Ítem deshabilitado",
+      "description": "Los ítems deshabilitados son visibles pero no interactivos. Se omiten durante la navegación por teclado."
+    },
+    "alignRight": {
+      "title": "Alineado a la derecha",
+      "description": "Usa align=right para abrir el menú anclado al borde derecho del disparador."
+    },
+    "keyboard": {
+      "title": "Navegación por teclado",
+      "description": "Soporte completo de teclado integrado."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Referencia de props de los componentes."
+    }
+  },
+  "demos": {
+    "openMenu": "Abrir menú",
+    "openMenuRight": "Alineado a la derecha",
+    "profile": "Perfil",
+    "settings": "Ajustes",
+    "help": "Ayuda",
+    "newFile": "Nuevo archivo",
+    "openFile": "Abrir archivo",
+    "saveFile": "Guardar archivo",
+    "recentFiles": "Archivos recientes",
+    "actions": "Acciones",
+    "edit": "Editar",
+    "duplicate": "Duplicar",
+    "archive": "Archivar",
+    "danger": "Zona peligrosa",
+    "delete": "Eliminar ítem",
+    "rename": "Renombrar",
+    "share": "Compartir",
+    "copyLink": "Copiar enlace",
+    "disabledItem": "Acción deshabilitada",
+    "signOut": "Cerrar sesión"
+  },
+  "keyboard": {
+    "key": "Tecla",
+    "action": "Acción",
+    "arrowDown": "ArrowDown",
+    "arrowUp": "ArrowUp",
+    "home": "Home",
+    "end": "End",
+    "enterSpace": "Enter / Space",
+    "escape": "Escape",
+    "tab": "Tab",
+    "arrowDownDesc": "Mueve el foco al ítem siguiente",
+    "arrowUpDesc": "Mueve el foco al ítem anterior",
+    "homeDesc": "Mueve el foco al primer ítem",
+    "endDesc": "Mueve el foco al último ítem",
+    "enterSpaceDesc": "Activa el ítem enfocado",
+    "escapeDesc": "Cierra el menú y devuelve el foco al disparador",
+    "tabDesc": "Cierra el menú (el foco se mueve naturalmente)"
+  },
+  "props": {
+    "menu": {
+      "trigger": "El elemento que abre el menú. aria-haspopup y aria-expanded se inyectan automáticamente.",
+      "align": "Con qué borde del disparador se alinea el menú.",
+      "open": "Estado abierto controlado.",
+      "onOpenChange": "Se llama cuando el estado de apertura debe cambiar.",
+      "className": "Clases adicionales en el contenedor del menú."
+    },
+    "item": {
+      "onClick": "Handler llamado cuando el ítem es activado.",
+      "destructive": "Aplica estilo en color de error para indicar una acción peligrosa.",
+      "disabled": "Impide la interacción y omite el ítem durante la navegación por teclado.",
+      "className": "Clases adicionales."
+    },
+    "extendsNote": "DropdownMenuItem se renderiza como un botón nativo. DropdownMenuSeparator y DropdownMenuLabel no aceptan props más allá de className."
+  }
+}
