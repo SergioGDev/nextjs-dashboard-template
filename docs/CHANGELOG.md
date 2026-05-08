@@ -6,6 +6,69 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6d.5] Hotfix: auth session race condition — 2026-05-08
+
+Bug consistente: primer login correcto navega al dashboard, muestra el toast de bienvenida y
+vuelve de inmediato a `/login`. Segundo intento funcionaba. Adicionalmente, cualquier guardado
+de fichero en desarrollo invalidaba la sesión.
+
+### Causa raíz
+
+Next.js 15 compila cada Route Handler (`login/route.ts`, `me/route.ts`, `logout/route.ts`) en
+un bundle webpack separado. El módulo `_mock-store.ts` se evaluaba una vez por bundle, creando
+una instancia distinta de `Map` en cada handler:
+
+1. `POST /login` → guarda sessionId en la instancia A del Map
+2. `GET /me` → busca en la instancia B (vacía) → 401 → `null`
+3. `SessionProvider` ve `session === null` → `logout()` + redirect a `/login`
+4. En el segundo intento el módulo ya estaba en caché compartida → funcionaba
+
+El mismo aislamiento de módulos se producía en cada HMR → Map vacío → sesión corta en
+desarrollo.
+
+### Ficheros modificados (3 src + 2 docs)
+
+**`src/app/api/auth/_mock-store.ts`** — Singleton globalThis
+
+Sustituido `export const sessionStore = new Map()` por el patrón estándar de Next.js para
+módulos con estado: persistir el Map en `globalThis` con `??=`. Se usa el cast de tipo
+`(globalThis as typeof globalThis & { _nexdashSessionStore?: Map<...> })` en lugar de
+`declare global { var ... }` para no activar la regla `no-var` de ESLint. El Map sobrevive
+ahora a la separación de bundles entre Route Handlers y a los ciclos HMR.
+
+**`src/app/api/auth/me/route.ts`** — Check de expiración
+
+Añadido bloque explícito: si `new Date(session.expiresAt) <= new Date()`, borra la sesión
+del store y devuelve 401 con `code: 'SESSION_EXPIRED'`. Anteriormente, una sesión con
+`expiresAt` pasado era devuelta igualmente.
+
+**`src/components/auth/session-provider.tsx`** — Guard `isFetching`
+
+Añadida desestructuración de `isFetching` desde `useSession()`. El primer `useEffect`
+devuelve temprano si `isFetching === true`, evitando actuar sobre un `null` stale mientras
+hay un refetch en vuelo. Sin este guard, la invalidación de la query de sesión (disparada por
+`onSuccess` del login) producía una ventana en que `session === null` + `isFetching === true`
+era interpretada como sesión inválida.
+
+### Decisiones de implementación
+
+- **Cast de tipo vs `declare global`**: el cast `(globalThis as typeof globalThis & { ... })`
+  es preferible porque `declare global { var ... }` requiere la palabra clave `var`, que dispara
+  la regla `no-var` en la mayoría de configuraciones de ESLint. El cast no emite código y no
+  requiere `eslint-disable`.
+- **`??=` vs `?? (g.x = new Map())`**: se eligió la forma expresión `g.x ?? (g.x = new Map())`
+  por compatibilidad amplia (el operador `??=` es ES2021 y puede no estar disponible en todos
+  los targets de transpilación del proyecto).
+- **`isFetching` en lugar de `fetchStatus`**: semánticamente equivalente; `isFetching` es el
+  campo canónico que expone TanStack Query para este propósito.
+
+### Build
+
+- Lint: 0 errores nuevos (2 warnings preexistentes en `settings-form.tsx` y `avatar.tsx`)
+- Build: 70 páginas, sin errores
+
+---
+
 ## [B6d.2] Inputs avanzados: RadioGroup + Slider — 2026-05-07
 
 Dos componentes construidos desde cero + páginas de showcase. La categoría Inputs pasa de 7 a 9 en el overview.

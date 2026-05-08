@@ -20,5 +20,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  if (new Date(session.expiresAt) <= new Date()) {
+    sessionStore.delete(sessionId);
+    return NextResponse.json(
+      { message: 'Session expired', code: 'SESSION_EXPIRED' },
+      { status: 401 }
+    );
+  }
+
   return NextResponse.json({ user: session.user, expiresAt: session.expiresAt });
 }
