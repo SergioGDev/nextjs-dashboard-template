@@ -41,6 +41,8 @@ async function loadMessages(locale: string) {
     switchNs,
     radioGroup,
     slider,
+    tooltip,
+    dropdownMenu,
   ] = await Promise.all([
     import(`../messages/${locale}/common.json`).then((m) => m.default),
     import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
@@ -67,6 +69,8 @@ async function loadMessages(locale: string) {
     import(`../features/ui-showcase/i18n/switch-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/radio-group-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/slider-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/tooltip-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/dropdown-menu-${locale}.json`).then((m) => m.default),
   ]);
 
   return {
@@ -95,5 +99,7 @@ async function loadMessages(locale: string) {
     switch: switchNs,
     radioGroup,
     slider,
+    tooltip,
+    dropdownMenu,
   };
 }

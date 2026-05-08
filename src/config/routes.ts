@@ -31,6 +31,8 @@ export const routes = {
     switch: '/ui/switch',
     radioGroup: '/ui/radio-group',
     slider: '/ui/slider',
+    tooltip: '/ui/tooltip',
+    dropdownMenu: '/ui/dropdown-menu',
     toasts: '/ui/toasts',
     emptyStates: '/ui/empty-states',
     errorStates: '/ui/error-states',

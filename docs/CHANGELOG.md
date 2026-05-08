@@ -6,6 +6,86 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6e.1] Overlays: Tooltip + DropdownMenu — 2026-05-08
+
+Refactor completo de `Tooltip` y `DropdownMenu` con accesibilidad full ARIA, portal rendering y
+navegación por teclado. Nueva categoría **Overlays** en el overview de `/ui`. Dos páginas de
+showcase nuevas.
+
+### Componentes refactorizados
+
+**`src/components/ui/tooltip.tsx`**
+
+Reescrito desde cero. El componente anterior era un wrapper básico sin portal ni soporte de foco.
+Nueva implementación:
+
+- `createPortal` a `document.body` — evita recorte por contenedores con `overflow: hidden`
+- Posicionamiento con `getBoundingClientRect()` + coordenadas fijas; 4 lados (top/bottom/left/right)
+- Prop `delay` (default 200ms) con `setTimeout`/`clearTimeout` — evita tooltips parpadeantes
+- `onFocus`/`onBlur` en el wrapper span — visible para usuarios de teclado y lectores de pantalla
+- `React.cloneElement` para inyectar `aria-describedby` al child sin añadir elemento wrapper extra
+- `React.useId()` para IDs únicos de tooltip
+- Guard `mounted` con `useEffect` para SSR (portal solo existe en cliente)
+
+**`src/components/ui/dropdown-menu.tsx`**
+
+Reescrito desde cero. El componente anterior no tenía portal, navegación por teclado ni roles ARIA correctos.
+Nueva implementación:
+
+- `createPortal` a `document.body` con guard `mounted` para SSR
+- `role="menu"` + `aria-orientation="vertical"` en el contenedor; `role="menuitem"` + `tabIndex={-1}` en cada ítem
+- `React.cloneElement` en el trigger — inyecta `onClick`, `aria-haspopup="menu"`, `aria-expanded` y `ref` en
+  el elemento existente sin envolverlo en un segundo `<button>` (consumidores pasan `<button>` → HTML válido)
+- Patrón controlado/no-controlado: prop `open` + `onOpenChange` opcionales
+- Foco automático al primer ítem al abrir (via `requestAnimationFrame` para esperar render del portal)
+- Devolución de foco al trigger al cerrar con Escape
+- Navegación completa: ArrowDown/Up, Home, End, Escape, Tab
+- Click-outside cierra el menú (`mousedown` en `document`)
+- `align="right"` con `transform: translateX(-100%)` anclado al borde derecho del trigger
+
+### Decisiones de implementación
+
+- **`translate` property vs `transform` en `nx-menu-in`**: la animación de entrada usa la propiedad CSS
+  independiente `translate: 0 -4px` (no `transform`). Esto evita conflicto con el `transform: translateX(-100%)`
+  inline que aplica el alineado derecho — ambas propiedades son independientes en cascada CSS.
+- **`cloneElement` vs wrapper div**: envolver el trigger en un `<div>` con `onClick` implicaría un elemento
+  semántico incorrecto. Con `cloneElement`, el trigger mantiene su semántica y recibe los props ARIA directamente.
+- **`requestAnimationFrame` para primer foco**: garantiza que el portal DOM esté pintado antes de llamar a
+  `.focus()` — sin el rAF, `querySelector` devuelve `null` si la corrutina no ha terminado el commit.
+- **`triggerRef` como callback ref**: evita complicaciones de tipado de TypeScript al combinar `cloneElement`
+  con `React.RefObject<HTMLElement>`.
+
+### CSS (`src/styles/components.css`)
+
+Dos nuevos bloques añadidos:
+
+- `.nx-tooltip` — posición fixed z-50, padding 4px 8px, animación `nx-tooltip-in` (scale 0.94→1, 150ms)
+- `.nx-menu`, `.nx-menu__item`, `.nx-menu__item--destructive`, `.nx-menu__separator`, `.nx-menu__label`
+
+### Infraestructura
+
+- `src/config/routes.ts` — rutas `tooltip: '/ui/tooltip'` y `dropdownMenu: '/ui/dropdown-menu'`
+- `src/components/layout/sidebar/sidebar.config.ts` — entries `uiTooltip` y `uiDropdownMenu`
+- `src/messages/{en,es}/common.json` — keys `uiTooltip` y `uiDropdownMenu`
+- `src/app/[locale]/(dashboard)/ui/page.tsx` — nueva categoría `overlays` (count: 2) entre display y feedback
+- `src/features/ui-showcase/i18n/{en,es}.json` — key `overlays` con label y descripción
+- `src/features/ui-showcase/i18n/tooltip-{en,es}.json` — i18n de la página showcase de Tooltip
+- `src/features/ui-showcase/i18n/dropdown-menu-{en,es}.json` — i18n de la página showcase de DropdownMenu
+- `src/i18n/request.ts` — namespaces `tooltip` y `dropdownMenu` registrados
+
+### Showcase pages
+
+- `src/app/[locale]/(dashboard)/ui/tooltip/` — Secciones: Anatomía, Posiciones, Delay, Foco, Props, Limitaciones
+- `src/app/[locale]/(dashboard)/ui/dropdown-menu/` — Secciones: Anatomía, Básico, Secciones, Destructivo,
+  Deshabilitado, Alineado derecha, Teclado (tabla), Props (DropdownMenu + DropdownMenuItem)
+
+### Build
+
+- Lint: 0 errores nuevos (2 warnings preexistentes en `settings-form.tsx` y `avatar.tsx`)
+- Build: 74 páginas (+4 vs B6d.5: tooltip × 2 locales + dropdown-menu × 2 locales), sin errores
+
+---
+
 ## [B6d.5] Hotfix: auth session race condition — 2026-05-08
 
 Bug consistente: primer login correcto navega al dashboard, muestra el toast de bienvenida y

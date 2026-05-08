@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "title": "Tooltip"
+  },
+  "header": {
+    "title": "Tooltip",
+    "subtitle": "A floating label that appears on hover or keyboard focus, providing brief contextual information about an element. Renders in a portal to avoid clipping by overflow containers."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "The Tooltip wraps its child in an inline span. The floating content is portalled to document.body and positioned with fixed coordinates.",
+    "parts": {
+      "wrapper": "Inline span that captures hover and focus events.",
+      "content": "The floating tooltip element, rendered in a portal with role=tooltip.",
+      "child": "The element that triggers the tooltip. Receives aria-describedby pointing to the tooltip."
+    }
+  },
+  "sections": {
+    "sides": {
+      "title": "Sides",
+      "description": "The tooltip can appear on any of the four sides of the trigger."
+    },
+    "delay": {
+      "title": "Delay",
+      "description": "The delay prop controls how many milliseconds to wait before showing the tooltip. Useful to avoid flashing tooltips during fast mouse traversal."
+    },
+    "focus": {
+      "title": "Keyboard focus",
+      "description": "Tooltips also appear when the trigger receives focus — important for keyboard and screen reader users."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Tooltip accepts the following props."
+    },
+    "limitations": {
+      "title": "Limitations",
+      "description": "Known constraints of this implementation."
+    }
+  },
+  "demos": {
+    "hoverMe": "Hover me",
+    "focusMe": "Focus me",
+    "topLabel": "Appears on top",
+    "bottomLabel": "Appears below",
+    "leftLabel": "Appears on the left",
+    "rightLabel": "Appears on the right",
+    "instantLabel": "Appears instantly",
+    "delay500Label": "Wait 500ms",
+    "delay1000Label": "Wait 1 second",
+    "save": "Save document",
+    "copy": "Copy to clipboard",
+    "share": "Share link"
+  },
+  "props": {
+    "content": "The text or node to display inside the tooltip.",
+    "side": "Which side of the trigger the tooltip appears on.",
+    "delay": "Milliseconds to wait before showing the tooltip.",
+    "className": "Additional classes applied to the tooltip container.",
+    "extendsNote": "Tooltip does not extend native element props. The child element receives aria-describedby automatically."
+  },
+  "limitations": {
+    "touch": "Touch devices do not trigger hover events. The tooltip is only visible on devices that support hover or keyboard focus. This is acceptable for supplemental labels — never use a tooltip as the only source of critical information."
+  }
+}

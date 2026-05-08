@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "title": "Tooltip"
+  },
+  "header": {
+    "title": "Tooltip",
+    "subtitle": "Etiqueta flotante que aparece al hacer hover o al recibir el foco del teclado, proporcionando información contextual breve sobre un elemento. Se renderiza en un portal para evitar el recorte por contenedores con overflow."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "El Tooltip envuelve a su hijo en un span inline. El contenido flotante se porta a document.body y se posiciona con coordenadas fijas.",
+    "parts": {
+      "wrapper": "Span inline que captura eventos de hover y foco.",
+      "content": "El elemento flotante del tooltip, renderizado en un portal con role=tooltip.",
+      "child": "El elemento que activa el tooltip. Recibe aria-describedby apuntando al tooltip."
+    }
+  },
+  "sections": {
+    "sides": {
+      "title": "Posiciones",
+      "description": "El tooltip puede aparecer en cualquiera de los cuatro lados del elemento disparador."
+    },
+    "delay": {
+      "title": "Delay",
+      "description": "La prop delay controla cuántos milisegundos esperar antes de mostrar el tooltip. Útil para evitar tooltips parpadeantes durante el movimiento rápido del ratón."
+    },
+    "focus": {
+      "title": "Foco de teclado",
+      "description": "Los tooltips también aparecen cuando el disparador recibe el foco — importante para usuarios de teclado y lectores de pantalla."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Tooltip acepta las siguientes props."
+    },
+    "limitations": {
+      "title": "Limitaciones",
+      "description": "Restricciones conocidas de esta implementación."
+    }
+  },
+  "demos": {
+    "hoverMe": "Pasa el cursor",
+    "focusMe": "Enfoca con Tab",
+    "topLabel": "Aparece arriba",
+    "bottomLabel": "Aparece abajo",
+    "leftLabel": "Aparece a la izquierda",
+    "rightLabel": "Aparece a la derecha",
+    "instantLabel": "Aparece al instante",
+    "delay500Label": "Espera 500ms",
+    "delay1000Label": "Espera 1 segundo",
+    "save": "Guardar documento",
+    "copy": "Copiar al portapapeles",
+    "share": "Compartir enlace"
+  },
+  "props": {
+    "content": "El texto o nodo a mostrar dentro del tooltip.",
+    "side": "Qué lado del disparador ocupa el tooltip.",
+    "delay": "Milisegundos de espera antes de mostrar el tooltip.",
+    "className": "Clases adicionales aplicadas al contenedor del tooltip.",
+    "extendsNote": "Tooltip no extiende props de elementos nativos. El elemento hijo recibe aria-describedby automáticamente."
+  },
+  "limitations": {
+    "touch": "Los dispositivos táctiles no disparan eventos de hover. El tooltip solo es visible en dispositivos que soporten hover o foco de teclado. Esto es aceptable para etiquetas suplementarias — nunca uses un tooltip como única fuente de información crítica."
+  }
+}
