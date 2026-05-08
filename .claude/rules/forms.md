@@ -1,67 +1,133 @@
 ---
-description: Form patterns using React Hook Form and Zod validation
+description: React Hook Form + Zod + i18n pattern for all forms in this project
 paths:
   - src/components/forms/**
   - src/lib/validators/**
+  - src/features/auth/schemas/**
+  - src/features/users/schemas/**
 ---
 
-## Pattern
+# Forms — Reglas
 
-Forms follow a strict separation: schema in `src/lib/validators/`, form component in `src/components/forms/`.
+## Patrón canónico (paso a paso)
 
-### 1. Schema — `src/lib/validators/<entity>.schema.ts`
+**1. Schema en `lib/validators/{name}.schema.ts`**
+
+O en `features/{feature}/schemas/` si es exclusivo de un dominio.
+Siempre una **factory** que recibe los mensajes localizados como parámetros:
 
 ```ts
-import { z } from 'zod';
-
-export const entitySchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  role: z.enum(['admin', 'editor', 'viewer']),
-});
-
-export type EntityFormValues = z.infer<typeof entitySchema>;
+// lib/validators/auth.schema.ts
+export function createLoginSchema(messages: {
+  emailRequired: string;
+  emailInvalid: string;
+  passwordRequired: string;
+}) {
+  return z.object({
+    email: z.string().min(1, messages.emailRequired).email(messages.emailInvalid),
+    password: z.string().min(1, messages.passwordRequired),
+  });
+}
 ```
 
-### 2. Form component — `src/components/forms/<entity>-form.tsx`
+**2. En el componente (client) — instanciar schema + form:**
+
+```ts
+'use client';
+const t = useTranslations('auth');
+const schema = createLoginSchema({
+  emailRequired: t('login.validation.emailRequired'),
+  emailInvalid:  t('login.validation.emailInvalid'),
+  passwordRequired: t('login.validation.passwordRequired'),
+});
+const { register, handleSubmit, formState: { errors, isSubmitting, isDirty } } =
+  useForm<LoginFormValues>({ resolver: zodResolver(schema) });
+```
+
+**3. Render — usar la prop `label` y `error` del wrapper:**
 
 ```tsx
-'use client';
-
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { entitySchema, EntityFormValues } from '@/lib/validators/entity.schema';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-
-interface EntityFormProps {
-  defaultValues?: Partial<EntityFormValues>;
-  onSubmit: (values: EntityFormValues) => Promise<void>;
-}
-
-export function EntityForm({ defaultValues, onSubmit }: EntityFormProps) {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<EntityFormValues>({
-    resolver: zodResolver(entitySchema),
-    defaultValues,
-  });
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <Input label="Name" error={errors.name?.message} {...register('name')} />
-      <Button type="submit" loading={isSubmitting}>Save</Button>
-    </form>
-  );
-}
+<Input
+  label={t('login.form.emailLabel')}
+  type="email"
+  error={errors.email?.message}
+  {...register('email')}
+/>
 ```
 
-## UI Components
+NO usar `<label>` suelto. Los wrappers (Input, Textarea, Select, Checkbox, Switch,
+RadioGroup, Slider) renderizan su propio `<label>` via la prop `label`.
+El componente `Label` fue eliminado (0 consumers, YAGNI).
 
-Use `Input` and `Select` from `@/components/ui/`:
-- `label` prop — renders an accessible label above the field
-- `error` prop — renders the validation message inline below the field
-- Spread `{...register('fieldName')}` directly on the component
+**4. Submit handler:**
 
-No wrapper `FormField`, `FormControl`, or `FormItem` abstraction exists — wire RHF directly to the UI primitives.
+```ts
+async function onSubmit(data: LoginFormValues) {
+  try {
+    await mutateAsync(data);
+    toast.success(t('toasts.success'));
+  } catch {
+    toast.error(t('toasts.error'));
+  }
+}
+// En el form:
+<form onSubmit={handleSubmit(onSubmit)}>
+```
 
-## Enum Fields
+## Errors: inline vs toast
 
-Use `<Select>` with `{...register('field')}` and `<option>` children. Define allowed values as `z.enum([...])` in the schema.
+- **Validation errors** → siempre inline (`error={errors.X?.message}`). Nunca toast.
+- **Server/API errors** → `toast.error`, EXCEPTO en **login**: inline (`ApiError` →
+  mensaje mapeado en el formulario). Razón: el toast desaparece antes de que el usuario
+  pueda releer / reintentar en una pantalla de autenticación.
+- Ver `.claude/rules/feedback.md` → "Mutations and toasts" para la regla completa.
+
+## Form state
+
+```tsx
+<Button type="submit" loading={isSubmitting} disabled={!isDirty}>
+  {isSubmitting ? t('actions.saving') : t('actions.save')}
+</Button>
+```
+
+- `isSubmitting` → prop `loading` en Button (spinner integrado).
+- `isDirty` → para formularios de **edición** (settings). No usar en creación.
+- `isValid` → evitar como único guard; puede mostrar errores prematuramente.
+
+## mutateAsync vs mutate
+
+- `mutateAsync` + try/catch → cuando necesitas cerrar dialog solo en éxito.
+- `mutate(data, { onSuccess, onError })` → fire-and-forget.
+- El toast vive en el **componente**, nunca en el hook.
+- Ver `.claude/rules/feedback.md` → "Mutations and toasts".
+
+## Anti-patrones — NO hacer
+
+- ❌ Validar a mano con `if (!email.includes('@'))` — usar siempre Zod.
+- ❌ `useState` para campo de form — usar siempre RHF `register`.
+- ❌ Mensajes hardcodeados en el schema (`z.string().min(1, 'Required')`) — siempre factory.
+- ❌ Toast para errores de validación — siempre inline.
+- ❌ `'use client'` en el schema — el schema es agnóstico; solo el componente es client.
+- ❌ `<label>` suelto junto a un wrapper que ya tiene prop `label` — duplica el label accesible.
+- ❌ Llamar mutaciones reales desde una demo de showcase — demos usan submit no-op + toast.
+
+## Receta: añadir un formulario nuevo
+
+1. **Schema** → `lib/validators/{name}.schema.ts` con `createXxxSchema(messages)` factory.
+2. **Types** → exportar `XxxFormValues` del schema o del feature.
+3. **Component** → `src/components/forms/{name}-form.tsx` (o en el feature si es privado).
+4. **i18n** → labels, placeholders, mensajes de validación en `en.json` + `es.json`.
+5. **Mutation hook** (si aplica) → en `features/{feature}/api/use-{feature}.ts`.
+
+## Referencias cruzadas
+
+- `.claude/rules/i18n.md` → "Zod schemas con mensajes traducidos"
+- `.claude/rules/feedback.md` → "Mutations and toasts", "Validation errors go inline"
+- `.claude/rules/components.md` → capas de componentes
+
+## Deuda técnica reconocida
+
+`lib/validators/settings.schema.ts` y `lib/validators/user.schema.ts` están en
+`lib/validators/` pero según `architecture.md` deberían vivir en
+`features/{settings,users}/schemas/`. No se mueve en B6f — fuera de scope.
+Pendiente para un bloque de cleanup futuro.

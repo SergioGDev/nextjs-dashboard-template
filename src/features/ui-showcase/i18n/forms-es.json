@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "title": "Formularios"
+  },
+  "header": {
+    "title": "Formularios",
+    "subtitle": "Cómo se construyen los formularios en este proyecto: React Hook Form para el estado, factories Zod con i18n para validación, y primitivas de UI conectadas directamente con register. Tres formularios reales del código, interactivos aquí abajo."
+  },
+  "gallery": {
+    "title": "Galería de formularios",
+    "description": "Réplicas interactivas de los formularios reales. La validación está activa (Zod). El envío es demo — sin efectos secundarios, sin login real, sin datos guardados.",
+    "login": {
+      "title": "Formulario de login",
+      "description": "Formulario de autenticación con email + contraseña, bloque de error del servidor y validación inline. Los errores van inline (no como toasts) porque el toast desaparecería antes de que el usuario pueda leer y corregir.",
+      "note": "Por qué errores inline en login: un toast desaparece en ~4 s. Si el usuario escribe una contraseña incorrecta y obtiene un toast, desaparece antes de que pueda corregirla. El error inline persiste."
+    },
+    "settings": {
+      "title": "Formulario de configuración",
+      "description": "Formulario de perfil con diseño en dos columnas, textarea de bio, campo URL opcional y guardia isDirty. Guardar está desactivado hasta que el usuario cambia algo.",
+      "note": "Por qué guardia isDirty: evita llamadas API innecesarias cuando nada ha cambiado. El label del botón cambia a 'Guardando…' durante el envío."
+    },
+    "user": {
+      "title": "Formulario de usuario",
+      "description": "Formulario de creación de entidad con nombre, email, y selects de rol y estado. Patrón típico para entidades de dominio con campos enum.",
+      "note": "Los formularios de dominio (usuario, informe…) viven en features/*/components/ y se consumen via el barrel del feature. El schema vive en lib/validators/ (deuda técnica: debería estar en features/users/schemas/)."
+    }
+  },
+  "demos": {
+    "login": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "admin@nexdash.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Introduce tu contraseña",
+      "submit": "Iniciar sesión",
+      "submitting": "Iniciando sesión…",
+      "toast": "Formulario enviado (demo)"
+    },
+    "settings": {
+      "nameLabel": "Nombre",
+      "emailLabel": "Email",
+      "bioLabel": "Bio",
+      "bioPlaceholder": "Cuéntanos sobre ti (máx. 200 caracteres)",
+      "websiteLabel": "Sitio web",
+      "websitePlaceholder": "https://tusitio.com",
+      "save": "Guardar cambios",
+      "saving": "Guardando…",
+      "toast": "Configuración guardada (demo)"
+    },
+    "user": {
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Nombre completo",
+      "emailLabel": "Email",
+      "emailPlaceholder": "nombre@empresa.com",
+      "roleLabel": "Rol",
+      "statusLabel": "Estado",
+      "submit": "Crear usuario",
+      "submitting": "Creando…",
+      "toast": "Usuario creado (demo)",
+      "roleAdmin": "Administrador",
+      "roleManager": "Gestor",
+      "roleEditor": "Editor",
+      "roleViewer": "Visor",
+      "statusActive": "Activo",
+      "statusInactive": "Inactivo"
+    },
+    "validation": {
+      "emailRequired": "El email es obligatorio",
+      "emailInvalid": "Introduce una dirección de email válida",
+      "passwordRequired": "La contraseña es obligatoria",
+      "nameMin": "El nombre debe tener al menos 2 caracteres",
+      "bioMax": "La bio no puede superar los 200 caracteres",
+      "websiteInvalid": "Introduce una URL válida (https://…)",
+      "nameRequired": "El nombre es obligatorio",
+      "nameTooLong": "El nombre no puede superar los 50 caracteres",
+      "roleRequired": "Selecciona un rol",
+      "statusRequired": "Selecciona un estado"
+    }
+  },
+  "patterns": {
+    "title": "Patrones",
+    "schema": {
+      "title": "Schema con factory i18n",
+      "description": "Todos los schemas exportan una factory createXxxSchema(messages). Los mensajes los inyecta el componente después de llamar useTranslations — así el mismo schema funciona en cualquier locale sin reimportar."
+    },
+    "timing": {
+      "title": "Timing de validación",
+      "description": "Por defecto: onSubmit. El primer envío activa todos los validadores; los cambios siguientes revalidan onChange. Cambiar a onBlur para una UX más estricta o onChange para feedback inmediato."
+    },
+    "errors": {
+      "title": "Errores de servidor: inline vs toast",
+      "description": "Los errores de validación siempre van inline via el prop error. Los errores del servidor van a toast.error — excepto en la pantalla de login donde los errores deben persistir hasta que el usuario reintente."
+    },
+    "state": {
+      "title": "Estado del formulario: isSubmitting, isDirty, isValid",
+      "description": "Usar isSubmitting para el prop loading del Button (spinner integrado). Usar isDirty para proteger los botones Guardar en formularios de edición. Evitar isValid como única guardia — puede mostrar errores antes de que el usuario haya escrito nada."
+    },
+    "async": {
+      "title": "Submit asíncrono: mutateAsync vs mutate",
+      "description": "Usar mutateAsync + try/catch cuando necesites cerrar un dialog solo en caso de éxito. Usar mutate con callbacks onSuccess/onError para patrones fire-and-forget. El toast siempre vive en el componente, nunca en el hook."
+    },
+    "field": {
+      "title": "Errores a nivel de campo",
+      "description": "Pasar errors.fieldName?.message al prop error del componente wrapper. Los wrappers (Input, Textarea, Select…) renderizan el texto del error debajo del campo en el color semántico de error."
+    }
+  },
+  "ai": {
+    "title": "Trabajar con IA",
+    "description": "Si trabajas con Claude, Cursor u otra herramienta de IA en esta plantilla, las convenciones de formularios viven en .claude/rules/forms.md. Esa regla se carga automáticamente cuando la IA toca archivos en src/components/forms/** o src/lib/validators/**. Esta página enseña al humano; el archivo de reglas instruye a la IA. Mantenemos ambos sincronizados."
+  }
+}

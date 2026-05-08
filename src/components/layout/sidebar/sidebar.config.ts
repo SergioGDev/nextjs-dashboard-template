@@ -68,6 +68,7 @@ export const sidebarConfig: SidebarConfig = [
           { type: 'link', label: 'sidebar.items.skeletons', href: routes.ui.skeletons },
           { type: 'link', label: 'sidebar.items.uiSpinner', href: routes.ui.spinner },
           { type: 'link', label: 'sidebar.items.i18n', href: routes.ui.i18n },
+          { type: 'link', label: 'sidebar.items.uiForms', href: routes.ui.forms },
         ],
       },
       {

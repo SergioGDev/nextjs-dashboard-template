@@ -59,7 +59,8 @@
       "uiSlider": "Slider",
       "uiTooltip": "Tooltip",
       "uiDropdownMenu": "Dropdown Menu",
-      "uiDialog": "Dialog"
+      "uiDialog": "Dialog",
+      "uiForms": "Formularios"
     },
     "actions": {
       "expand": "Expandir barra lateral",

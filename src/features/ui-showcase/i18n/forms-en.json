@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "title": "Forms"
+  },
+  "header": {
+    "title": "Forms",
+    "subtitle": "How forms are built in this project: React Hook Form for state management, Zod factories for i18n-aware validation, and UI primitives wired directly via register. Three real forms from the codebase, made interactive below."
+  },
+  "gallery": {
+    "title": "Form gallery",
+    "description": "Interactive replicas of the real forms. Validation is active (Zod). Submit is a no-op demo — no side effects, no real login, no data saved.",
+    "login": {
+      "title": "Login form",
+      "description": "Auth form with email + password, server error block, and inline validation. Errors go inline (not as toasts) because the toast would disappear before the user can re-read and retry.",
+      "note": "Why inline errors for login: a toast dismisses in ~4 s. If the user types a wrong password and gets a toast, it vanishes before they can correct it. The inline error block persists."
+    },
+    "settings": {
+      "title": "Settings form",
+      "description": "Profile form with two-column layout, bio textarea, optional URL field, and isDirty guard. Save is disabled until the user changes something.",
+      "note": "Why isDirty guard: prevents unnecessary API calls when nothing has changed. The button label switches to 'Saving…' during submission."
+    },
+    "user": {
+      "title": "User form",
+      "description": "Entity creation form with name, email, role, and status selects. Typical pattern for domain entities with enum fields.",
+      "note": "Domain forms (user, report…) live in features/*/components/ and are consumed via the feature barrel. The schema lives in lib/validators/ (deuda técnica: should be in features/users/schemas/)."
+    }
+  },
+  "demos": {
+    "login": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "admin@nexdash.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "toast": "Form submitted (demo)"
+    },
+    "settings": {
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "bioLabel": "Bio",
+      "bioPlaceholder": "Tell us about yourself (max 200 chars)",
+      "websiteLabel": "Website",
+      "websitePlaceholder": "https://yoursite.com",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "toast": "Settings saved (demo)"
+    },
+    "user": {
+      "nameLabel": "Name",
+      "namePlaceholder": "Full name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "name@company.com",
+      "roleLabel": "Role",
+      "statusLabel": "Status",
+      "submit": "Create user",
+      "submitting": "Creating…",
+      "toast": "User created (demo)",
+      "roleAdmin": "Admin",
+      "roleManager": "Manager",
+      "roleEditor": "Editor",
+      "roleViewer": "Viewer",
+      "statusActive": "Active",
+      "statusInactive": "Inactive"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email address",
+      "passwordRequired": "Password is required",
+      "nameMin": "Name must be at least 2 characters",
+      "bioMax": "Bio cannot exceed 200 characters",
+      "websiteInvalid": "Enter a valid URL (https://…)",
+      "nameRequired": "Name is required",
+      "nameTooLong": "Name cannot exceed 50 characters",
+      "roleRequired": "Select a role",
+      "statusRequired": "Select a status"
+    }
+  },
+  "patterns": {
+    "title": "Patterns",
+    "schema": {
+      "title": "Schema with i18n factory",
+      "description": "All schemas export a createXxxSchema(messages) factory. Messages are injected by the component after calling useTranslations — so the same schema works in any locale without re-importing."
+    },
+    "timing": {
+      "title": "Validation timing",
+      "description": "Default: onSubmit. The first submission triggers all validators; subsequent changes re-validate onChange. Change to onBlur for a stricter UX or onChange for immediate feedback."
+    },
+    "errors": {
+      "title": "Server errors: inline vs toast",
+      "description": "Validation errors always go inline via the error prop. Server errors go to toast.error — except on the login screen where errors must persist until the user retries."
+    },
+    "state": {
+      "title": "Form state: isSubmitting, isDirty, isValid",
+      "description": "Use isSubmitting for the Button loading prop (spinner built in). Use isDirty to guard Save buttons on edit forms. Avoid isValid as a sole guard — it can show errors before the user has typed anything."
+    },
+    "async": {
+      "title": "Async submit: mutateAsync vs mutate",
+      "description": "Use mutateAsync + try/catch when you need to close a dialog only on success. Use mutate with onSuccess/onError callbacks for fire-and-forget patterns. Toast always lives in the component, never in the hook."
+    },
+    "field": {
+      "title": "Field-level errors",
+      "description": "Pass errors.fieldName?.message to the error prop of the wrapper component. The wrappers (Input, Textarea, Select…) render the error text below the field in the error semantic color."
+    }
+  },
+  "ai": {
+    "title": "Working with AI",
+    "description": "If you work with Claude, Cursor, or another AI tool on this template, form conventions live in .claude/rules/forms.md. That rule is loaded automatically when the AI touches files in src/components/forms/** or src/lib/validators/**. This page teaches the human; the rules file instructs the AI. We keep both in sync."
+  }
+}

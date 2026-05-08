@@ -40,5 +40,6 @@ export const routes = {
     skeletons: '/ui/skeletons',
     sidebar: '/ui/sidebar',
     i18n: '/ui/i18n',
+    forms: '/ui/forms',
   },
 } as const;
