@@ -437,45 +437,55 @@
 }
 
 /* ===== Table ===== */
+
+/* Scroll container */
+.nx-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* <table> */
 .nx-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  caption-side: bottom;
   font-size: var(--fs-sm);
 }
-.nx-table thead th {
+
+/* Last body row — no bottom border */
+.nx-table__body .nx-table__row:last-child {
+  border-bottom: 0;
+}
+
+/* <tr> — border + hover (hover kept as Tailwind class in the component
+   so DataTable can override it with hover:bg-transparent) */
+.nx-table__row {
+  border-bottom: 1px solid var(--border);
+}
+
+/* <th> */
+.nx-table__th {
+  height: 2.5rem;
+  padding: 0 var(--space-4);
   text-align: left;
-  font: var(--fw-medium) var(--fs-xs)/1 var(--font-sans);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  position: sticky;
-  top: 0;
-}
-.nx-table tbody td {
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border);
-  color: var(--text-primary);
   vertical-align: middle;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
 }
-.nx-table tbody tr {
-  transition: background var(--dur-fast);
+.nx-table__th:has([role=checkbox]) {
+  padding-right: 0;
 }
-.nx-table tbody tr:hover {
-  background: var(--surface-raised);
-}
-.nx-table tbody tr.is-selected {
-  background: var(--accent-muted);
-}
-.nx-table tbody tr.is-selected td {
+
+/* <td> */
+.nx-table__cell {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: middle;
   color: var(--text-primary);
 }
-.nx-table .num {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
+.nx-table__cell:has([role=checkbox]) {
+  padding-right: 0;
 }
 
 /* ===== Misc helpers ===== */

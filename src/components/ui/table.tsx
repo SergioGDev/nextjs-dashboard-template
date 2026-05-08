@@ -3,53 +3,34 @@ import { cn } from '@/lib/utils';
 
 export function Table({ className, ...props }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="w-full overflow-x-auto">
-      <table className={cn('w-full caption-bottom text-sm', className)} {...props} />
+    <div className="nx-table-wrap">
+      <table className={cn('nx-table', className)} {...props} />
     </div>
   );
 }
 
 export function TableHeader({ className, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return <thead className={cn('[&_tr]:border-b [&_tr]:border-[var(--border)]', className)} {...props} />;
+  return <thead className={cn('nx-table__head', className)} {...props} />;
 }
 
 export function TableBody({ className, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return <tbody className={cn('[&_tr:last-child]:border-0', className)} {...props} />;
+  return <tbody className={cn('nx-table__body', className)} {...props} />;
 }
 
 export function TableRow({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   return (
     <tr
-      className={cn(
-        'border-b border-[var(--border)] transition-colors hover:bg-[var(--surface-raised)]',
-        className
-      )}
+      // hover kept as Tailwind utility so DataTable can override with hover:bg-transparent
+      className={cn('nx-table__row transition-colors hover:bg-[var(--surface-raised)]', className)}
       {...props}
     />
   );
 }
 
 export function TableHead({ className, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
-  return (
-    <th
-      className={cn(
-        'h-10 px-4 text-left align-middle text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider',
-        '[&:has([role=checkbox])]:pr-0',
-        className
-      )}
-      {...props}
-    />
-  );
+  return <th className={cn('nx-table__th', className)} {...props} />;
 }
 
 export function TableCell({ className, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
-  return (
-    <td
-      className={cn(
-        'px-4 py-3 align-middle text-[var(--text-primary)] [&:has([role=checkbox])]:pr-0',
-        className
-      )}
-      {...props}
-    />
-  );
+  return <td className={cn('nx-table__cell', className)} {...props} />;
 }

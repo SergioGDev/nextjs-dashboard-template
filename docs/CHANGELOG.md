@@ -6,6 +6,85 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6g.1] Table primitive: nx-* migration + showcase — 2026-05-08
+
+Apertura del bloque B6g (Data tables). Migración cosmética del primitive `Table`
+a clases `nx-table*` sin cambio de API pública. Creación de la showcase `/ui/table`
+y apertura de la categoría "data" en el overview.
+
+### Migración nx-*: `src/components/ui/table.tsx`
+
+Cada wrapper sustituye sus clases Tailwind ad-hoc por clases BEM `nx-table*`:
+- `Table` → wrapper `div.nx-table-wrap` + `table.nx-table`
+- `TableHeader` → `thead.nx-table__head`
+- `TableBody` → `tbody.nx-table__body`
+- `TableRow` → `tr.nx-table__row` (hover sigue como Tailwind utility — ver nota)
+- `TableHead` → `th.nx-table__th`
+- `TableCell` → `td.nx-table__cell`
+
+**Decisión de implementación — hover en Tailwind, no en CSS:**
+El hover de fila (`hover:bg-[var(--surface-raised)]`) se mantiene como utilidad
+Tailwind en `table.tsx` en lugar de moverse al CSS. Razón: `components.css` es
+CSS no-layered (prioridad mayor que `@layer utilities`). Si el hover estuviera en
+CSS, `DataTable` no podría sobreescribirlo con `hover:bg-transparent` (que usa para
+deshabilitar el hover en la fila de cabecera). El resto de estilos estructura/padding/
+tipografía sí van al bloque CSS.
+
+**Selector `:has([role=checkbox])`:** migrado a `.nx-table__th:has([role=checkbox])`
+y `.nx-table__cell:has([role=checkbox])` en el bloque CSS.
+
+### CSS: `src/styles/components.css`
+
+Bloque `/* ===== Table ===== */` reescrito de descendant selectors a BEM:
+- Añadido: `.nx-table-wrap`, `.nx-table__head`, `.nx-table__body`, `.nx-table__row`,
+  `.nx-table__th`, `.nx-table__cell`, y reglas `:has([role=checkbox])`.
+- Eliminado: `.nx-table thead th`, `.nx-table tbody td`, etc. (dead code — el
+  componente nunca usó estas clases antes de este bloque).
+
+### Showcase: `/ui/table`
+
+`src/app/[locale]/(dashboard)/ui/table/page.tsx` + `table-content.tsx`
+
+Secciones:
+1. Header + import snippet
+2. Anatomy (con `<Anatomy>` + tabla de partes)
+3. Basic table
+4. With status badges
+5. With actions column (DropdownMenu con DropdownMenuItem)
+6. Right-aligned numbers (className en TableHead/TableCell)
+7. With avatars (Avatar + nombre)
+8. Table vs DataTable (nota didáctica con bullet lists)
+9. PropsTable
+10. Localization note
+
+### Config y i18n
+
+- `routes.ui.table = '/ui/table'`
+- `sidebar.config.ts`: entrada `sidebar.items.uiTable` en grupo uiComponents
+- `common.json` (en + es): key `sidebar.items.uiTable`
+- `src/features/ui-showcase/i18n/table-{en,es}.json`
+- `src/i18n/request.ts`: namespace `table` registrado
+
+### Overview
+
+`/ui/page.tsx`: categoría `data` — `count 0 → 1`, `href: null → routes.ui.table`.
+Badge "Coming soon" desaparece; aparece el count "1 component".
+
+### DataTable: sin regresión
+
+`DataTable` usa los wrappers sin cambios. La verificación confirma:
+- `hover:bg-transparent` en la fila de cabecera sigue funcionando (hover como utility)
+- `bg-[var(--accent-muted)]` en filas seleccionadas sigue funcionando
+- `:has([role=checkbox])` en checkboxes: migrado a CSS — comportamiento idéntico
+
+### Deuda técnica detectada
+
+- El `DataTable` (en `components/ui/`) es un componente bastante pesado (208 LOC)
+  mezclando sort, pagination y selection. B6g.2 puede refactorizarlo o añadir
+  nuevas features; la migración nx-* de este bloque deja el código más mantenible.
+
+---
+
 ## [B6e.2] Dialog: focus trap, portal, ARIA modal, sizes — 2026-05-08
 
 Cierre del bloque B6e (Overlays). Refactor completo de `dialog.tsx` — el componente

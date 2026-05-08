@@ -41,5 +41,6 @@ export const routes = {
     sidebar: '/ui/sidebar',
     i18n: '/ui/i18n',
     forms: '/ui/forms',
+    table: '/ui/table',
   },
 } as const;

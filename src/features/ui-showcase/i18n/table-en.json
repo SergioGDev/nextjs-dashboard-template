@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "title": "Table"
+  },
+  "header": {
+    "title": "Table",
+    "subtitle": "Semantic HTML table primitive — Table, TableHeader, TableBody, TableRow, TableHead, TableCell. Thin wrappers over standard table elements, styled via nx-table* CSS classes. Use for custom compositions; reach for DataTable when you need sort, pagination, or row selection built-in."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomy",
+      "description": "Each component maps 1:1 to a standard HTML table element. Compose them in the standard order: TableHeader → TableRow → TableHead; TableBody → TableRow × N → TableCell."
+    },
+    "basic": {
+      "title": "Basic table",
+      "description": "Raw composition of Table primitives. No sorting, no pagination — just markup."
+    },
+    "badges": {
+      "title": "With status badges",
+      "description": "TableCell accepts any React content. Drop a Badge inside for status columns."
+    },
+    "actions": {
+      "title": "With actions column",
+      "description": "Last column with an icon button per row. The header cell is left empty — no label for the actions column is convention."
+    },
+    "numbers": {
+      "title": "Right-aligned numbers",
+      "description": "Pass className to TableHead and TableCell to align numeric columns to the right."
+    },
+    "avatars": {
+      "title": "With avatars",
+      "description": "First column with Avatar + name. Standard pattern for user lists."
+    },
+    "usage": {
+      "title": "Table vs DataTable",
+      "tableWhenTitle": "Use Table when",
+      "tableWhen": [
+        "You need full control over the markup structure",
+        "Sorting, pagination, and row selection are not needed",
+        "You are composing a very specific layout (e.g., a comparison table, a key-value list)",
+        "You want to embed the table inside a complex layout that DataTable doesn't accommodate"
+      ],
+      "dataTableWhenTitle": "Use DataTable when",
+      "dataTableWhen": [
+        "You need built-in sort by column",
+        "You need client-side pagination",
+        "You need row selection with checkboxes",
+        "You need loading skeletons handled automatically",
+        "This covers most domain entity lists (users, reports, transactions…)"
+      ],
+      "note": "DataTable is documented in the Data category. It is built on top of these Table primitives."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Each wrapper accepts the standard HTML attributes of its underlying element plus className for overrides."
+    }
+  },
+  "anatomy": {
+    "table": "Root element — <table> wrapper with overflow scroll container",
+    "tableHeader": "Semantic <thead> — contains the header row",
+    "tableBody": "Semantic <tbody> — contains data rows",
+    "tableRow": "A <tr> row, used in both head and body",
+    "tableHead": "A <th> header cell — uppercase label, muted color",
+    "tableCell": "A <td> data cell — standard padding and primary text color"
+  },
+  "props": {
+    "extendsNote": "Each wrapper accepts all standard HTML attributes of its underlying element (table / thead / tbody / tr / th / td) plus className for style overrides via cn()."
+  }
+}

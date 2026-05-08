@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "title": "Tabla"
+  },
+  "header": {
+    "title": "Table",
+    "subtitle": "Primitive de tabla HTML semántica — Table, TableHeader, TableBody, TableRow, TableHead, TableCell. Wrappers finos sobre elementos de tabla estándar, estilizados via clases CSS nx-table*. Úsalo para composiciones personalizadas; usa DataTable cuando necesitas sort, paginación o selección de filas integrados."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "Cada componente mapea 1:1 a un elemento HTML de tabla estándar. Compónalos en el orden estándar: TableHeader → TableRow → TableHead; TableBody → TableRow × N → TableCell."
+    },
+    "basic": {
+      "title": "Tabla básica",
+      "description": "Composición pura de primitivas Table. Sin ordenación, sin paginación — solo markup."
+    },
+    "badges": {
+      "title": "Con badges de estado",
+      "description": "TableCell acepta cualquier contenido React. Incluye un Badge para columnas de estado."
+    },
+    "actions": {
+      "title": "Con columna de acciones",
+      "description": "Última columna con un botón de icono por fila. La celda de cabecera se deja vacía — sin label para la columna de acciones es la convención."
+    },
+    "numbers": {
+      "title": "Números alineados a la derecha",
+      "description": "Pasa className a TableHead y TableCell para alinear columnas numéricas a la derecha."
+    },
+    "avatars": {
+      "title": "Con avatares",
+      "description": "Primera columna con Avatar + nombre. Patrón estándar para listas de usuarios."
+    },
+    "usage": {
+      "title": "Table vs DataTable",
+      "tableWhenTitle": "Usa Table cuando",
+      "tableWhen": [
+        "Necesitas control total sobre la estructura del markup",
+        "No necesitas ordenación, paginación ni selección de filas",
+        "Estás componiendo un layout muy específico (p. ej. una tabla comparativa, una lista clave-valor)",
+        "Quieres incrustar la tabla dentro de un layout complejo que DataTable no admite"
+      ],
+      "dataTableWhenTitle": "Usa DataTable cuando",
+      "dataTableWhen": [
+        "Necesitas ordenación integrada por columna",
+        "Necesitas paginación client-side",
+        "Necesitas selección de filas con checkboxes",
+        "Necesitas skeletons de carga gestionados automáticamente",
+        "Esto cubre la mayoría de listas de entidades de dominio (usuarios, informes, transacciones…)"
+      ],
+      "note": "DataTable está documentado en la categoría Data. Se construye sobre estas primitivas Table."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Cada wrapper acepta los atributos HTML estándar de su elemento subyacente más className para sobreescrituras."
+    }
+  },
+  "anatomy": {
+    "table": "Elemento raíz — wrapper <table> con contenedor de scroll por desbordamiento",
+    "tableHeader": "<thead> semántico — contiene la fila de cabecera",
+    "tableBody": "<tbody> semántico — contiene las filas de datos",
+    "tableRow": "Una fila <tr>, usada tanto en la cabecera como en el cuerpo",
+    "tableHead": "Una celda de cabecera <th> — label en mayúsculas, color apagado",
+    "tableCell": "Una celda de datos <td> — padding estándar y color de texto primario"
+  },
+  "props": {
+    "extendsNote": "Cada wrapper acepta todos los atributos HTML estándar de su elemento subyacente (table / thead / tbody / tr / th / td) más className para sobreescrituras de estilo via cn()."
+  }
+}
