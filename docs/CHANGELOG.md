@@ -6,6 +6,78 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6e.2] Dialog: focus trap, portal, ARIA modal, sizes — 2026-05-08
+
+Cierre del bloque B6e (Overlays). Refactor completo de `dialog.tsx` — el componente
+previo (62 LOC) no tenía portal, ARIA roles, focus trap ni scroll lock seguro.
+
+### Componente refactorizado: `src/components/ui/dialog.tsx`
+
+**Portal + SSR guard**  
+Mismo patrón que Tooltip y DropdownMenu: `mounted` con `useEffect`, portal solo cuando
+`mounted && open`. El componente anterior renderizaba `null` cuando `open=false` — ahora
+el portal se desmonta/monta vía `createPortal` condicionado.
+
+**ARIA completo**  
+`role="dialog"`, `aria-modal="true"`, `aria-labelledby` (apunta a `<h2>` con `useId`),
+`aria-describedby` (apunta a la descripción). Ambas props se omiten condicionalmente si
+`title`/`description` no se proporcionan.
+
+**Focus trap**  
+`getFocusable(container)` con selector `a[href], button:not([disabled]), input:not([disabled]),
+select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])`.
+Keydown listener en `document`: Tab/Shift+Tab ciclan entre primer y último focusable;
+Escape cierra. Restore focus al elemento que tenía el foco antes de abrir, via
+`requestAnimationFrame` tras el cierre (asegura que el portal se desmonta antes de llamar `.focus()`).
+
+**Scroll lock con contador**  
+Variables module-level `lockCount` y `savedOverflow`. Soporta dialogs anidados:
+- Abrir: si `lockCount === 0` → guarda `body.style.overflow` y aplica `'hidden'`. Incrementa.
+- Cerrar: decrementa. Si `lockCount === 0` → restaura valor original.
+El componente anterior usaba `body.style.overflow = ''` directo — rompía si dos dialogs
+estaban abiertos simultáneamente.
+
+**Nuevas props opcionales (no breaking)**
+- `size: 'sm' | 'md' | 'lg'` — max-width 24/32/42rem (default `'md'`, igual al anterior)
+- `closeLabel: string` — aria-label del botón ×; el consumer pasa la cadena traducida
+- `initialFocusRef: RefObject<HTMLElement>` — elemento inicial de foco al abrir
+- `hideCloseButton: boolean` — oculta el × para casos controlados por botones del footer
+
+**Consumer existente `users-content.tsx`**: no modificado. La firma compatible y el
+tamaño por defecto (`md`) reproducen el comportamiento previo.
+
+### CSS (`src/styles/components.css`)
+
+- `.nx-dialog__overlay` — fixed inset-0 z-50, flex center, bg rgba(0,0,0,0.6),
+  backdrop-blur(2px), animación `nx-dialog-overlay-in` (fade 200ms)
+- `.nx-dialog` — panel relativo, bg surface, border, shadow-pop, radius-xl, padding 6
+  animación `nx-dialog-in` (fade + scale 0.96→1 + translateY 8px→0, 200ms)
+- `.nx-dialog--sm/md/lg` — modificadores via `--nx-dialog-max-w` CSS custom property
+- `.nx-dialog__close`, `.nx-dialog__header`, `.nx-dialog__title`, `.nx-dialog__description`
+- `@media (prefers-reduced-motion: reduce)` — anula animaciones de overlay y panel
+
+### Showcase `/ui/dialog`
+
+Secciones: Anatomía, Básico, Tamaños (sm/md/lg), Destructive confirm, Sin botón de
+cierre (`hideCloseButton`), Con formulario (focus trap demo con Input + Textarea),
+Teclado (tabla), Props, Localization note.
+
+### Infraestructura
+
+- `src/config/routes.ts` — `dialog: '/ui/dialog'`
+- `src/components/layout/sidebar/sidebar.config.ts` — entry `uiDialog`
+- `src/messages/{en,es}/common.json` — key `sidebar.items.uiDialog`
+- `src/app/[locale]/(dashboard)/ui/page.tsx` — overlays count 2 → 3
+- `src/features/ui-showcase/i18n/dialog-{en,es}.json` — creados
+- `src/i18n/request.ts` — namespace `dialog` registrado
+
+### Build
+
+- Lint: 0 errores nuevos (2 warnings preexistentes)
+- Build: 76 páginas (+2 vs B6e.1.5: dialog × 2 locales), sin errores
+
+---
+
 ## [B6e.1.5] HOTFIX: floating elements follow scroll — 2026-05-08
 
 Bug: al abrir un Tooltip o DropdownMenu y hacer scroll (de la ventana o de cualquier

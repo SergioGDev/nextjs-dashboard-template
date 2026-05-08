@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "title": "Dialog"
+  },
+  "header": {
+    "title": "Dialog",
+    "subtitle": "Overlay modal que bloquea la interacción con el fondo. Incluye trampa de foco, bloqueo de scroll del body, roles ARIA accesibles y entrada animada. Tres tamaños disponibles."
+  },
+  "anatomy": {
+    "title": "Anatomía",
+    "description": "Dialog porta tanto el overlay como el contenedor a document.body. El overlay captura clics para cerrar; el contenedor detiene la propagación.",
+    "parts": {
+      "overlay": "Fondo de pantalla completa con clic para cerrar. Animado con nx-dialog-overlay-in.",
+      "container": "El panel con role=dialog, aria-modal, aria-labelledby, aria-describedby.",
+      "close": "El botón × en la esquina superior derecha. Ocultable con hideCloseButton=true.",
+      "header": "Slot de título (h2) y descripción. aria-labelledby apunta aquí.",
+      "body": "Slot children — coloca aquí tu contenido o formulario.",
+      "footer": "No hay slot de footer integrado. Compón el tuyo con flex layout dentro de children."
+    }
+  },
+  "sections": {
+    "basic": {
+      "title": "Ejemplo básico",
+      "description": "Un dialog con título, descripción, contenido y un footer con botón de cierre."
+    },
+    "sizes": {
+      "title": "Tamaños",
+      "description": "Tres presets de max-width: sm (24rem), md (32rem, por defecto), lg (42rem)."
+    },
+    "destructive": {
+      "title": "Confirmación destructiva",
+      "description": "El patrón para acciones irreversibles. Cancelar (ghost) a la izquierda, acción destructiva a la derecha."
+    },
+    "withForm": {
+      "title": "Con formulario",
+      "description": "Los dialogs con inputs focusables demuestran la trampa de foco — Tab cicla solo dentro del dialog."
+    },
+    "noCloseButton": {
+      "title": "Sin botón de cierre",
+      "description": "Usa hideCloseButton=true cuando el consumer controla el cierre exclusivamente desde los botones del footer."
+    },
+    "keyboard": {
+      "title": "Navegación por teclado",
+      "description": "Soporte completo de teclado integrado."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Referencia de props del componente."
+    }
+  },
+  "demos": {
+    "open": "Abrir dialog",
+    "openSm": "Pequeño",
+    "openMd": "Mediano",
+    "openLg": "Grande",
+    "basicTitle": "Título del dialog",
+    "basicDescription": "Esta es una descripción del dialog. Proporciona contexto bajo el título.",
+    "basicBody": "Coloca aquí tu contenido. El dialog atrapa el foco y evita el scroll del fondo mientras está abierto.",
+    "deleteTitle": "Eliminar cuenta",
+    "deleteDescription": "Esta acción no se puede deshacer. Todos tus datos serán eliminados permanentemente de nuestros servidores.",
+    "formTitle": "Editar perfil",
+    "formDescription": "Actualiza tu nombre y biografía. Usa Tab entre campos para probar la trampa de foco.",
+    "formNameLabel": "Nombre",
+    "formBioLabel": "Biografía",
+    "formNamePlaceholder": "Tu nombre completo",
+    "formBioPlaceholder": "Una breve descripción sobre ti",
+    "noCloseTitle": "Términos de servicio",
+    "noCloseDescription": "Lee y acepta los términos para continuar.",
+    "noCloseBody": "Al usar NexDash aceptas nuestros términos de servicio y política de privacidad. Tus datos serán tratados según nuestra política de privacidad.",
+    "accept": "Aceptar",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "save": "Guardar cambios",
+    "delete": "Eliminar cuenta"
+  },
+  "keyboard": {
+    "key": "Tecla",
+    "action": "Acción",
+    "tab": "Tab",
+    "shiftTab": "Shift + Tab",
+    "escape": "Escape",
+    "enter": "Enter",
+    "tabDesc": "Mueve el foco al siguiente elemento focusable dentro del dialog",
+    "shiftTabDesc": "Mueve el foco al elemento focusable anterior",
+    "escapeDesc": "Cierra el dialog y devuelve el foco al disparador",
+    "enterDesc": "Activa el botón enfocado"
+  },
+  "props": {
+    "open": "Controla si el dialog es visible.",
+    "onClose": "Se llama cuando el dialog debe cerrarse (clic en backdrop, tecla Escape o botón de cierre).",
+    "title": "Texto del encabezado renderizado con role=heading.",
+    "description": "Texto secundario mostrado bajo el título.",
+    "size": "Controla el max-width del panel del dialog.",
+    "closeLabel": "Label accesible para el botón × de cierre. Pasa una cadena traducida desde el consumer.",
+    "initialFocusRef": "Ref al elemento que debe recibir el foco al abrir el dialog. Por defecto, el primer elemento focusable.",
+    "hideCloseButton": "Oculta el botón ×. El consumer es responsable de proveer una acción de cierre en el footer.",
+    "className": "Clases adicionales aplicadas al panel del dialog.",
+    "extendsNote": "Dialog se renderiza en un portal adjunto a document.body. Los children se colocan tras el header sin wrapper implícito."
+  }
+}

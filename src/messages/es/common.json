@@ -58,7 +58,8 @@
       "uiRadioGroup": "Radio Group",
       "uiSlider": "Slider",
       "uiTooltip": "Tooltip",
-      "uiDropdownMenu": "Dropdown Menu"
+      "uiDropdownMenu": "Dropdown Menu",
+      "uiDialog": "Dialog"
     },
     "actions": {
       "expand": "Expandir barra lateral",

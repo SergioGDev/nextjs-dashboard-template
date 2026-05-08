@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "title": "Dialog"
+  },
+  "header": {
+    "title": "Dialog",
+    "subtitle": "A modal overlay that blocks interaction with the background. Includes a focus trap, body scroll lock, accessible ARIA roles, and animated entry. Three sizes available."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "Dialog portals both the overlay and the container to document.body. The overlay captures clicks to dismiss; the container stops propagation.",
+    "parts": {
+      "overlay": "Full-screen backdrop with click-to-close. Animates in with nx-dialog-overlay-in.",
+      "container": "The white panel with role=dialog, aria-modal, aria-labelledby, aria-describedby.",
+      "close": "The × button in the top-right corner. Hidden with hideCloseButton=true.",
+      "header": "Title (h2) and description slot. aria-labelledby points here.",
+      "body": "children slot — place your content or form here.",
+      "footer": "No built-in footer slot. Compose your own with flex layout inside children."
+    }
+  },
+  "sections": {
+    "basic": {
+      "title": "Basic example",
+      "description": "A dialog with title, description, body content, and a footer with a single close button."
+    },
+    "sizes": {
+      "title": "Sizes",
+      "description": "Three max-width presets: sm (24rem), md (32rem, default), lg (42rem)."
+    },
+    "destructive": {
+      "title": "Destructive confirm",
+      "description": "The pattern for irreversible actions. Cancel (ghost) on the left, destructive action on the right."
+    },
+    "withForm": {
+      "title": "With form",
+      "description": "Dialogs with focusable inputs demonstrate the focus trap — Tab cycles only within the dialog."
+    },
+    "noCloseButton": {
+      "title": "Without close button",
+      "description": "Set hideCloseButton=true when the consumer controls dismissal exclusively through footer buttons."
+    },
+    "keyboard": {
+      "title": "Keyboard navigation",
+      "description": "Full keyboard support is built in."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Component props reference."
+    }
+  },
+  "demos": {
+    "open": "Open dialog",
+    "openSm": "Small",
+    "openMd": "Medium",
+    "openLg": "Large",
+    "basicTitle": "Dialog title",
+    "basicDescription": "This is a description for the dialog. It provides context below the title.",
+    "basicBody": "Place your content here. The dialog traps focus and prevents background scrolling while open.",
+    "deleteTitle": "Delete account",
+    "deleteDescription": "This action cannot be undone. All your data will be permanently removed from our servers.",
+    "formTitle": "Edit profile",
+    "formDescription": "Update your name and bio. Tab between fields to test the focus trap.",
+    "formNameLabel": "Name",
+    "formBioLabel": "Bio",
+    "formNamePlaceholder": "Your full name",
+    "formBioPlaceholder": "A short bio about yourself",
+    "noCloseTitle": "Terms of service",
+    "noCloseDescription": "Please read and accept the terms to continue.",
+    "noCloseBody": "By using NexDash you agree to our terms of service and privacy policy. Your data will be handled in accordance with our privacy policy.",
+    "accept": "Accept",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save changes",
+    "delete": "Delete account"
+  },
+  "keyboard": {
+    "key": "Key",
+    "action": "Action",
+    "tab": "Tab",
+    "shiftTab": "Shift + Tab",
+    "escape": "Escape",
+    "enter": "Enter",
+    "tabDesc": "Move focus to the next focusable element inside the dialog",
+    "shiftTabDesc": "Move focus to the previous focusable element",
+    "escapeDesc": "Close the dialog and return focus to the trigger",
+    "enterDesc": "Activate the focused button"
+  },
+  "props": {
+    "open": "Controls whether the dialog is visible.",
+    "onClose": "Called when the dialog should close (backdrop click, Escape key, or close button).",
+    "title": "Heading text rendered in the dialog header with role=heading.",
+    "description": "Secondary text displayed below the title.",
+    "size": "Controls the max-width of the dialog panel.",
+    "closeLabel": "Accessible label for the × close button. Pass a translated string from the consumer.",
+    "initialFocusRef": "Ref to the element that should receive focus when the dialog opens. Defaults to the first focusable element.",
+    "hideCloseButton": "Hides the × button. The consumer is responsible for providing a close action in the footer.",
+    "className": "Additional classes applied to the dialog panel.",
+    "extendsNote": "Dialog renders in a portal attached to document.body. children are placed after the header with no implicit wrapper."
+  }
+}

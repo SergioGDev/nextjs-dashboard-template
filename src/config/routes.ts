@@ -33,6 +33,7 @@ export const routes = {
     slider: '/ui/slider',
     tooltip: '/ui/tooltip',
     dropdownMenu: '/ui/dropdown-menu',
+    dialog: '/ui/dialog',
     toasts: '/ui/toasts',
     emptyStates: '/ui/empty-states',
     errorStates: '/ui/error-states',
