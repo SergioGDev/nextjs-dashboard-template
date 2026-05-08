@@ -40,6 +40,10 @@ export function UsersContent() {
   const [statusFilter, setStatusFilter] = useState('');
   const [showCreate, setShowCreate] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [showBulkDelete, setShowBulkDelete] = useState(false);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [tableKey, setTableKey] = useState(0);
 
   const hasFilters = search.length > 0 || roleFilter !== '' || statusFilter !== '';
 
@@ -66,6 +70,27 @@ export function UsersContent() {
     } catch {
       toast.error(t('toasts.createFailed'));
     }
+  }
+
+  async function handleBulkDelete() {
+    const ids = Array.from(selected);
+    setBulkDeleting(true);
+    const results = await Promise.allSettled(
+      ids.map((id) => deleteUser.mutateAsync(id))
+    );
+    setBulkDeleting(false);
+    const failed = results.filter((r) => r.status === 'rejected').length;
+    const succeeded = ids.length - failed;
+    if (failed === 0) {
+      toast.success(t('toasts.bulkDeleted', { count: succeeded }));
+    } else if (succeeded === 0) {
+      toast.error(t('toasts.bulkDeleteAllFailed'));
+    } else {
+      toast.error(t('toasts.bulkDeletePartial', { succeeded, failed }));
+    }
+    setSelected(new Set());
+    setTableKey((k) => k + 1);
+    setShowBulkDelete(false);
   }
 
   function confirmDelete() {
@@ -194,6 +219,29 @@ export function UsersContent() {
         </div>
       </div>
 
+      {selected.size > 0 && (
+        <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)]">
+          <span className="text-sm text-[var(--text-secondary)]">
+            {t('bulkActions.selected', { count: selected.size })}
+          </span>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setShowBulkDelete(true)}
+          >
+            <Trash2 size={13} />
+            {t('bulkActions.delete')}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => { setSelected(new Set()); setTableKey((k) => k + 1); }}
+          >
+            {t('bulkActions.clear')}
+          </Button>
+        </div>
+      )}
+
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
@@ -229,11 +277,13 @@ export function UsersContent() {
             )
           ) : (
             <DataTable<User>
+              key={tableKey}
               columns={columns}
               data={filtered}
               getRowId={(r) => r.id}
               pageSize={10}
               selectable
+              onSelectionChange={setSelected}
             />
           )}
         </CardContent>
@@ -264,6 +314,22 @@ export function UsersContent() {
             onClick={confirmDelete}
           >
             {t('deleteDialog.confirm')}
+          </Button>
+        </div>
+      </Dialog>
+
+      <Dialog
+        open={showBulkDelete}
+        onClose={!bulkDeleting ? () => setShowBulkDelete(false) : () => {}}
+        title={t('bulkDeleteDialog.title')}
+        description={t('bulkDeleteDialog.description', { count: selected.size })}
+      >
+        <div className="flex justify-end gap-2 pt-2">
+          <Button variant="ghost" onClick={() => setShowBulkDelete(false)} disabled={bulkDeleting}>
+            {t('bulkDeleteDialog.cancel')}
+          </Button>
+          <Button variant="destructive" loading={bulkDeleting} onClick={handleBulkDelete}>
+            {t('bulkDeleteDialog.confirm')}
           </Button>
         </div>
       </Dialog>

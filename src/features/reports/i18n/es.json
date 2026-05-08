@@ -43,6 +43,9 @@
       "description": "Algo salió mal. Intenta de nuevo o vuelve al panel."
     }
   },
+  "filters": {
+    "searchPlaceholder": "Buscar informes…"
+  },
   "actions": {
     "download": "Descargar"
   },

@@ -61,13 +61,27 @@
     "confirm": "Delete",
     "cancel": "Cancel"
   },
+  "bulkActions": {
+    "selected": "{count, plural, one {1 selected} other {# selected}}",
+    "delete": "Delete selected",
+    "clear": "Clear"
+  },
+  "bulkDeleteDialog": {
+    "title": "Delete selected users?",
+    "description": "{count, plural, one {This will permanently delete 1 user.} other {This will permanently delete # users.}} This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  },
   "toasts": {
     "created": "User created",
     "createFailed": "Failed to create user",
     "deleted": "User deleted",
     "deleteFailed": "Failed to delete user",
     "updated": "User updated",
-    "updateFailed": "Failed to update user"
+    "updateFailed": "Failed to update user",
+    "bulkDeleted": "{count, plural, one {1 user deleted} other {# users deleted}}",
+    "bulkDeleteAllFailed": "Failed to delete selected users",
+    "bulkDeletePartial": "{succeeded} deleted, {failed} failed"
   },
   "validation": {
     "nameRequired": "Name must be at least 2 characters",

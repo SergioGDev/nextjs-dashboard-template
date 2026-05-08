@@ -117,6 +117,8 @@ export function ReportsContent() {
               data={reports ?? []}
               getRowId={(r) => r.id}
               pageSize={15}
+              searchable
+              searchPlaceholder={t('filters.searchPlaceholder')}
             />
           )}
         </CardContent>

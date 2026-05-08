@@ -6,6 +6,87 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6g.3] DataTable consumer adaptations — 2026-05-08
+
+Cierre definitivo del bloque B6g. Aprovecha las APIs añadidas en B6g.2
+(`searchable`, `onSelectionChange`) en los consumers reales del proyecto.
+
+### users-content: bulk delete vía `onSelectionChange`
+
+`src/app/[locale]/(dashboard)/users/users-content.tsx`
+
+**Estado nuevo:**
+- `selected: Set<string>` — espejo del estado interno de DataTable, sincronizado vía callback.
+- `showBulkDelete: boolean` — controla el Dialog de confirmación.
+- `bulkDeleting: boolean` — estado del batch (separado de `deleteUser.isPending` que solo cubre una mutación).
+- `tableKey: number` — clave React para resetear el estado interno de DataTable tras el bulk delete.
+
+**`onSelectionChange={setSelected}`** — DataTable llama `setSelected` síncronamente en cada
+toggle. El consumer mantiene el espejo; la verdad fuente sigue siendo el estado interno de DataTable.
+
+**Reset de DataTable:** incrementar `tableKey` desmonta/remonta el componente, limpiando
+sort, page y selection interna. Se hace en bulk delete completado y en "Clear".
+
+**Toolbar de bulk actions** — aparece cuando `selected.size > 0`, encima del Card:
+
+```
+[X selected]  [Delete selected]  [Clear]
+```
+
+Estilizado con `border border-[var(--border)] bg-[var(--surface-raised)]`.
+
+**`handleBulkDelete`:**
+- `Promise.allSettled` — todos los deletes se intentan aunque alguno falle.
+- Tres estados de feedback:
+  - Todo OK → `toast.success(t('toasts.bulkDeleted', { count }))` — ICU plural.
+  - Todo falló → `toast.error(t('toasts.bulkDeleteAllFailed'))`.
+  - Parcial → `toast.error(t('toasts.bulkDeletePartial', { succeeded, failed }))`.
+- Limpia `selected` y reinicia `tableKey` al finalizar.
+
+**Dialog de confirmación:**
+- Texto description con ICU plural: "This will permanently delete # users."
+- `onClose` bloqueado durante `bulkDeleting` (deletes ya en vuelo, no interrumpir).
+- Botón Cancel deshabilitado durante `bulkDeleting`.
+
+### reports-content: `searchable={true}`
+
+`src/app/[locale]/(dashboard)/reports/reports-content.tsx`
+
+Añadidos dos props a la DataTable existente:
+- `searchable` — activa el input de búsqueda integrado.
+- `searchPlaceholder={t('filters.searchPlaceholder')}` — "Search reports…" / "Buscar informes…".
+
+Sin cambios en la estructura de la card, columnas ni lógica de fetching.
+
+### analytics-content y dashboard-content — sin cambios (decisión explícita)
+
+- **analytics:** la tabla de daily metrics filtraría fechas como strings ("2024-01-01"),
+  lo cual es antinatural y confuso para el usuario.
+- **dashboard:** la campaigns table tiene ~5 filas fijas; el search aportaría valor marginal.
+
+Ambas decisiones documentadas aquí. No se añaden features por completar.
+
+### i18n — nuevos strings
+
+**`src/features/users/i18n/{en,es}.json`:**
+- `bulkActions.selected` — ICU plural: "1 selected" / "# selected"
+- `bulkActions.delete`, `bulkActions.clear`
+- `bulkDeleteDialog.{title,description,cancel,confirm}` — description con ICU plural
+- `toasts.bulkDeleted` — ICU plural
+- `toasts.bulkDeleteAllFailed`
+- `toasts.bulkDeletePartial` — interpolación `{succeeded}` + `{failed}`
+
+**`src/features/reports/i18n/{en,es}.json`:**
+- `filters.searchPlaceholder`
+
+### Cierre del bloque B6g
+
+B6g.1 migró Table a nx-*, B6g.2 añadió searchable/onSelectionChange + showcase, B6g.3
+cierra aplicando las APIs donde aportan valor real. La categoría "data" del overview
+muestra 2 componentes (Table + DataTable). El bloque queda cerrado.
+
+---
+
 ## [B6g.2] DataTable: searchable + row selection + nx-* CSS + showcase — 2026-05-08
 
 Cierre del bloque B6g (Data tables). Tres nuevas props en `DataTable`, migración de

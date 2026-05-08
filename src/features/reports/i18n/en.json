@@ -43,6 +43,9 @@
       "description": "Something went wrong. Try again or return to the dashboard."
     }
   },
+  "filters": {
+    "searchPlaceholder": "Search reports…"
+  },
   "actions": {
     "download": "Download"
   },

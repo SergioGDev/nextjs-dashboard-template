@@ -61,13 +61,27 @@
     "confirm": "Eliminar",
     "cancel": "Cancelar"
   },
+  "bulkActions": {
+    "selected": "{count, plural, one {1 seleccionado} other {# seleccionados}}",
+    "delete": "Eliminar seleccionados",
+    "clear": "Limpiar"
+  },
+  "bulkDeleteDialog": {
+    "title": "¿Eliminar usuarios seleccionados?",
+    "description": "{count, plural, one {Se eliminará de forma permanente 1 usuario.} other {Se eliminarán de forma permanente # usuarios.}} Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm": "Eliminar"
+  },
   "toasts": {
     "created": "Usuario creado",
     "createFailed": "Error al crear el usuario",
     "deleted": "Usuario eliminado",
     "deleteFailed": "Error al eliminar el usuario",
     "updated": "Usuario actualizado",
-    "updateFailed": "Error al actualizar el usuario"
+    "updateFailed": "Error al actualizar el usuario",
+    "bulkDeleted": "{count, plural, one {1 usuario eliminado} other {# usuarios eliminados}}",
+    "bulkDeleteAllFailed": "Error al eliminar los usuarios seleccionados",
+    "bulkDeletePartial": "{succeeded} eliminados, {failed} con error"
   },
   "validation": {
     "nameRequired": "El nombre debe tener al menos 2 caracteres",
