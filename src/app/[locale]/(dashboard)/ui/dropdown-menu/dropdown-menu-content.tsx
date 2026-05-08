@@ -193,6 +193,32 @@ export function DropdownMenuContent() {
         </ShowcaseDemo>
       </ShowcaseSection>
 
+      {/* Scrollable container */}
+      <ShowcaseSection title={t('sections.scrollable.title')} description={t('sections.scrollable.description')}>
+        <ShowcaseDemo
+          title="inside scrollable container"
+          code={`// Menu stays anchored to its trigger during scroll\n<div style={{ maxHeight: 200, overflowY: 'auto' }}>\n  {rows.map((row) => (\n    <div key={row}>\n      <span>Row {row}</span>\n      <DropdownMenu trigger={<Button>Actions</Button>}>\n        <DropdownMenuItem>Edit</DropdownMenuItem>\n        <DropdownMenuItem>Duplicate</DropdownMenuItem>\n        <DropdownMenuItem destructive>Delete</DropdownMenuItem>\n      </DropdownMenu>\n    </div>\n  ))}\n</div>`}
+        >
+          <div
+            className="max-h-[200px] overflow-y-auto rounded-lg border border-[var(--border)] divide-y divide-[var(--border)]"
+          >
+            {Array.from({ length: 10 }, (_, i) => i + 1).map((row) => (
+              <div key={row} className="flex items-center justify-between px-4 py-2.5">
+                <span className="text-sm text-[var(--text-secondary)]">
+                  {t('demos.scrollRow')} {row}
+                </span>
+                <DropdownMenu trigger={<Button variant="ghost" size="sm">{t('demos.scrollActions')}</Button>}>
+                  <DropdownMenuItem>{t('demos.edit')}</DropdownMenuItem>
+                  <DropdownMenuItem>{t('demos.duplicate')}</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem destructive>{t('demos.delete')}</DropdownMenuItem>
+                </DropdownMenu>
+              </div>
+            ))}
+          </div>
+        </ShowcaseDemo>
+      </ShowcaseSection>
+
       {/* Keyboard navigation */}
       <ShowcaseSection title={t('sections.keyboard.title')} description={t('sections.keyboard.description')}>
         <div className="overflow-hidden rounded-xl border border-[var(--border)]">

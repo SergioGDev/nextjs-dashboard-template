@@ -6,6 +6,59 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B6e.1.5] HOTFIX: floating elements follow scroll — 2026-05-08
+
+Bug: al abrir un Tooltip o DropdownMenu y hacer scroll (de la ventana o de cualquier
+contenedor ancestro con `overflow: auto/scroll`), el overlay se quedaba congelado en las
+coordenadas de viewport calculadas al abrir, en vez de seguir al trigger.
+
+### Causa
+
+`getBoundingClientRect()` se llamaba una sola vez (al abrir el overlay) y el resultado
+se usaba como posición fija en el portal. El portal está en `document.body` con
+`position: fixed`, por lo que no participaba en el scroll del trigger.
+
+### Solución
+
+**Nuevo hook `src/hooks/use-floating-position.ts`**
+
+Hook reutilizable que, mientras `isOpen` es `true`, suscribe handlers a:
+- `window.addEventListener('scroll', handler, { capture: true, passive: true })`  
+  El flag `capture: true` intercepta el evento en fase de captura desde la raíz del
+  documento, cubriendo scroll de `window` Y de cualquier contenedor ancestro con
+  `overflow: scroll/auto`, sin enumerarlos explícitamente. Es la misma estrategia que
+  usa Radix UI internamente.
+- `window.addEventListener('resize', handler, { passive: true })`
+
+Throttling con `requestAnimationFrame` — un único `setPos` por frame de animación,
+independientemente de cuántos eventos dispare el navegador. Cero overhead cuando el
+overlay está cerrado (cleanup completo en el `return` del efecto).
+
+**`src/components/ui/tooltip.tsx`** y **`src/components/ui/dropdown-menu.tsx`**
+
+Ambos importan y llaman a `useFloatingPosition(visible/open, reposition)`, donde
+`reposition` es un `useCallback` que llama a `getBoundingClientRect()` y actualiza
+el estado de posición. La lógica de posicionamiento inicial al abrir se mantiene.
+
+### Showcase
+
+Nueva sección **"Inside scrollable container"** en `/ui/dropdown-menu`:
+demo con 10 filas dentro de un `div` con `max-h-[200px] overflow-y-auto`. Reproduce
+exactamente el caso de uso reportado (dropdown en tabla scrollable).
+
+### Comportamiento cuando el trigger sale del viewport
+
+Se mantiene el overlay abierto y siguiendo al trigger (Opción A). Comportamiento
+coherente con Radix/Floating UI. Si en el futuro se necesita cierre automático,
+añadir prop `closeOnTriggerOutOfView` — no entra en este bloque.
+
+### Build
+
+- Lint: 0 errores nuevos
+- Build: 74 páginas, sin errores (sin páginas nuevas — solo lógica de componentes)
+
+---
+
 ## [B6e.1] Overlays: Tooltip + DropdownMenu — 2026-05-08
 
 Refactor completo de `Tooltip` y `DropdownMenu` con accesibilidad full ARIA, portal rendering y

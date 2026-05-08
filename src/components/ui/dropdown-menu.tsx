@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+import { useFloatingPosition } from '@/hooks/use-floating-position';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -91,6 +92,18 @@ export function DropdownMenu({
     }
     setOpen(!open);
   }, [open, align, setOpen]);
+
+  const reposition = React.useCallback(() => {
+    if (wrapperRef.current) {
+      const rect = wrapperRef.current.getBoundingClientRect();
+      setPos({
+        top: rect.bottom + 4,
+        left: align === 'right' ? rect.right : rect.left,
+      });
+    }
+  }, [align]);
+
+  useFloatingPosition(open, reposition);
 
   // Focus first item when menu opens
   React.useEffect(() => {

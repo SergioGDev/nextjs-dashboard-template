@@ -42,6 +42,10 @@
       "title": "Keyboard navigation",
       "description": "Full keyboard support is built in."
     },
+    "scrollable": {
+      "title": "Inside scrollable container",
+      "description": "The menu tracks its trigger's position during scroll. Open a menu and scroll the container — the menu follows."
+    },
     "props": {
       "title": "Props",
       "description": "Component props reference."
@@ -67,7 +71,9 @@
     "share": "Share",
     "copyLink": "Copy link",
     "disabledItem": "Disabled action",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "scrollRow": "Row",
+    "scrollActions": "Actions"
   },
   "keyboard": {
     "key": "Key",

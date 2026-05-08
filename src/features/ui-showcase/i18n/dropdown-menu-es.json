@@ -42,6 +42,10 @@
       "title": "Navegación por teclado",
       "description": "Soporte completo de teclado integrado."
     },
+    "scrollable": {
+      "title": "Dentro de un contenedor scrollable",
+      "description": "El menú rastrea la posición del disparador durante el scroll. Abre un menú y desplaza el contenedor — el menú le sigue."
+    },
     "props": {
       "title": "Props",
       "description": "Referencia de props de los componentes."
@@ -67,7 +71,9 @@
     "share": "Compartir",
     "copyLink": "Copiar enlace",
     "disabledItem": "Acción deshabilitada",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "scrollRow": "Fila",
+    "scrollActions": "Acciones"
   },
   "keyboard": {
     "key": "Tecla",

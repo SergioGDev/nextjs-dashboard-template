@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+import { useFloatingPosition } from '@/hooks/use-floating-position';
 
 const OFFSET = 8;
 
@@ -59,6 +60,14 @@ export function Tooltip({ content, children, side = 'top', className, delay = 20
   const clearTimer = () => {
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
   };
+
+  const reposition = React.useCallback(() => {
+    if (wrapperRef.current) {
+      setPos(computePos(wrapperRef.current.getBoundingClientRect(), side));
+    }
+  }, [side]);
+
+  useFloatingPosition(visible, reposition);
 
   const show = () => {
     clearTimer();
