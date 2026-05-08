@@ -73,6 +73,8 @@ export const sidebarConfig: SidebarConfig = [
           { type: 'link', label: 'sidebar.items.uiDataTable', href: routes.ui.dataTable },
           { type: 'link', label: 'sidebar.items.uiAreaChart', href: routes.ui.areaChart },
           { type: 'link', label: 'sidebar.items.uiBarChart', href: routes.ui.barChart },
+          { type: 'link', label: 'sidebar.items.uiLineChart', href: routes.ui.lineChart },
+          { type: 'link', label: 'sidebar.items.uiDonutChart', href: routes.ui.donutChart },
         ],
       },
       {

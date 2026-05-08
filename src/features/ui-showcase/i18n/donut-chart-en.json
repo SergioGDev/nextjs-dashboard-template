@@ -1,0 +1,90 @@
+{
+  "metadata": { "title": "Donut Chart" },
+  "header": {
+    "title": "Donut Chart",
+    "subtitle": "Categorical donut chart built on Recharts PieChart. Each slice carries its own color token inline, giving full control over the palette. The Tooltip formats values as percentages by default."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomy",
+      "description": "The chart renders a PieChart with a Pie element inside. Each data entry maps to a Cell that carries the per-slice fill color. The Legend is rendered automatically using the name field of each data entry."
+    },
+    "basic": {
+      "title": "Basic",
+      "description": "Pass a data array with name, value, and color per entry. The Tooltip formats values as percentages automatically."
+    },
+    "palette": {
+      "title": "Suggested palette",
+      "description": "Use system design tokens for all slice colors. This ensures the chart adapts to theme and accent changes automatically — never use hardcoded hex values."
+    },
+    "radius": {
+      "title": "Radius variants",
+      "description": "Control the donut ring via innerRadius and outerRadius. A larger outerRadius with the same innerRadius produces a thicker ring; increasing both together scales the whole chart up."
+    },
+    "localized": {
+      "title": "Localized slice names",
+      "description": "Translate slice names before passing them to the chart. The component renders the name field directly in the Legend — no internal translation occurs."
+    },
+    "loading": {
+      "title": "Loading and error states",
+      "description": "The same loading and error pattern documented on the Area Chart page applies here. Use ChartSkeleton with type=\"donut\" for the correct skeleton shape."
+    },
+    "limitations": {
+      "title": "Limitations",
+      "description": "Known constraints of the current DonutChart API."
+    },
+    "props": {
+      "title": "Props",
+      "description": "All props except data are optional."
+    },
+    "dataItem": {
+      "title": "Data item",
+      "description": "Each object in the data array describes one slice."
+    }
+  },
+  "anatomy": {
+    "responsiveContainer": "Responsive wrapper — fills parent width, uses the height prop",
+    "pieChart": "Recharts PieChart root — container for the Pie and overlay components",
+    "pie": "Slice container — receives data array, innerRadius, outerRadius, paddingAngle, dataKey",
+    "cell": "One Cell per data entry — carries the per-slice fill color",
+    "tooltip": "Hover overlay — formats values as percentages; styled via chartTooltipStyle",
+    "legend": "Auto-rendered legend with circle icons — uses data[].name as labels; styled via chartLegendStyle"
+  },
+  "palette": {
+    "tableHeaders": {
+      "slot": "Slot",
+      "token": "Token",
+      "use": "Use case"
+    },
+    "slot1": { "token": "var(--accent)",   "use": "Primary / dominant" },
+    "slot2": { "token": "var(--success)",  "use": "Secondary / positive" },
+    "slot3": { "token": "var(--warning)",  "use": "Tertiary / attention" },
+    "slot4": { "token": "var(--info)",     "use": "Neutral informational" },
+    "slot5": { "token": "var(--error)",    "use": "Rare / critical / outlier" },
+    "overflow": "For more than 5 slices, repeat the palette or use lighter tints of the same tokens. Never hardcode colors — always reference design system tokens so the chart adapts to theme and accent changes automatically."
+  },
+  "limitations": {
+    "noFormatter": "DonutChart does not expose a formatTooltip prop — the Tooltip always renders values as percentages. If custom tooltip formatting is needed, fork the component.",
+    "noAutoPalette": "Colors must be passed inline per slice via data[].color. There is no auto-palette mode — explicit is preferred over magic.",
+    "overflowPalette": "For more than 5 categories, palette repetition or tinting is the consumer's responsibility."
+  },
+  "demos": {
+    "compact": "Compact",
+    "default": "Default",
+    "large": "Large",
+    "localized": {
+      "note": "Map data entries to translated names before passing to DonutChart. The component renders name as-is — no translation occurs internally."
+    }
+  },
+  "props": {
+    "data": "Array of slice descriptors. Each entry must have name, value, and color.",
+    "height": "Chart height in pixels. Defaults to 220.",
+    "innerRadius": "Inner radius of the donut hole in pixels. Defaults to 55.",
+    "outerRadius": "Outer radius of the donut ring in pixels. Defaults to 85."
+  },
+  "dataItem": {
+    "name": "Slice label shown in the Legend.",
+    "value": "Numeric value. The Tooltip renders this as a percentage string.",
+    "color": "Fill color. Use CSS custom properties (var(--accent), var(--success), etc.) for theme compatibility."
+  }
+}

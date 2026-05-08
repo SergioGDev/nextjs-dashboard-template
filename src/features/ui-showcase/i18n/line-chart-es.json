@@ -1,0 +1,92 @@
+{
+  "metadata": { "title": "Gráfico de líneas" },
+  "header": {
+    "title": "Gráfico de líneas",
+    "subtitle": "Gráfico de líneas multi-serie construido sobre Recharts LineChart. Renderiza una línea por serie con Legend y Tooltip compartidos. El callback formatTooltip recibe el valor y la clave de serie, lo que permite formatear distinto según la serie."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "El gráfico envuelve primitivas de Recharts en un ResponsiveContainer. Cada entrada en la prop series[] renderiza un elemento Line. El Legend siempre se renderiza y resuelve las etiquetas desde series[].label."
+    },
+    "single": {
+      "title": "Serie única",
+      "description": "Un array series con un solo elemento renderiza una línea. El Legend se sigue mostrando usando la etiqueta de esa entrada."
+    },
+    "multi": {
+      "title": "Multi-serie",
+      "description": "Pasa dos o más objetos en series[]. Cada entrada aporta su propio key, color y label. El Legend se renderiza automáticamente usando esas etiquetas."
+    },
+    "formatters": {
+      "title": "Con formateadores — por clave de serie",
+      "description": "formatTooltip recibe (value, key), lo que permite aplicar un formato distinto por serie. Esta es la diferencia clave con AreaChart y BarChart, cuyo formatTooltip solo recibe el valor."
+    },
+    "colors": {
+      "title": "Colores semánticos",
+      "description": "Usa siempre tokens del sistema — var(--accent), var(--success), var(--warning) — para que las líneas se adapten automáticamente a los cambios de tema y acento."
+    },
+    "localized": {
+      "title": "Etiquetas localizadas",
+      "description": "Pasa strings traducidos como series[].label. El Legend y el Tooltip muestran esas etiquetas — el key en bruto nunca se muestra al usuario."
+    },
+    "loading": {
+      "title": "Estados de carga y error",
+      "description": "El mismo patrón de carga y error documentado en la página Area Chart aplica aquí. Usa ChartSkeleton con type=\"line\" para la forma correcta del skeleton."
+    },
+    "props": {
+      "title": "Props",
+      "description": "data, xKey y series son obligatorias. Las demás props son opcionales."
+    },
+    "seriesProps": {
+      "title": "Series",
+      "description": "Cada objeto en el array series describe una línea."
+    }
+  },
+  "anatomy": {
+    "responsiveContainer": "Contenedor responsivo — ocupa el ancho del padre, usa la prop height",
+    "lineChart": "Raíz Recharts LineChart — recibe el array de datos y la configuración de márgenes",
+    "cartesianGrid": "Líneas de cuadrícula horizontales — usa chartGridProps de @lib/charts",
+    "xAxis": "Eje inferior — renderiza etiquetas de tick desde xKey; usa chartAxisProps",
+    "yAxis": "Eje izquierdo — renderiza etiquetas de tick vía formatY; usa chartAxisProps",
+    "tooltip": "Overlay de hover — el formatter recibe (value, key) para formateo por serie",
+    "legend": "Leyenda auto-renderizada — resuelve etiquetas desde series[].label; usa chartLegendStyle",
+    "lines": "Un elemento Line por entrada de serie — curva monótona, sin puntos, punto activo al hacer hover"
+  },
+  "demos": {
+    "single": {
+      "revenue": "Ingresos"
+    },
+    "multi": {
+      "revenue": "Ingresos",
+      "users": "Usuarios activos",
+      "note": "Cada serie aporta su propio key, color y label. El Legend se renderiza automáticamente usando esas etiquetas."
+    },
+    "formatters": {
+      "revenue": "Ingresos",
+      "users": "Usuarios activos"
+    },
+    "colors": {
+      "revenue": "Ingresos",
+      "users": "Usuarios activos",
+      "churn": "Churn"
+    },
+    "localized": {
+      "revenue": "Ingresos",
+      "users": "Usuarios activos",
+      "note": "Pasa t('series.revenue') desde el call site. El gráfico nunca llama a t() internamente — las etiquetas llegan ya traducidas."
+    }
+  },
+  "props": {
+    "data": "Array de objetos de datos. Cada objeto debe contener el campo xKey y cada clave de serie.",
+    "xKey": "Clave del campo usado para las etiquetas del eje X.",
+    "series": "Array de descriptores de serie. Cada entrada define una línea.",
+    "formatY": "Formatea las etiquetas de tick del eje Y. Recibe un número y devuelve un string.",
+    "formatTooltip": "Formatea los valores del tooltip. Recibe (value: number, key: string) — usa la clave para aplicar formato por serie.",
+    "height": "Altura del gráfico en píxeles. Por defecto 240."
+  },
+  "seriesProps": {
+    "key": "Nombre del campo en el array de datos a usar como valores de esta línea.",
+    "color": "Color del trazo. Usa propiedades CSS personalizadas para compatibilidad con el tema.",
+    "label": "Etiqueta legible mostrada en el Legend y el Tooltip. Opcional — usa el key en bruto como fallback."
+  }
+}

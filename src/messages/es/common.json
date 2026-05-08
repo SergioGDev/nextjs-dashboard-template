@@ -64,7 +64,9 @@
       "uiTable": "Tabla",
       "uiDataTable": "Tabla de datos",
       "uiAreaChart": "Gráfico de área",
-      "uiBarChart": "Gráfico de barras"
+      "uiBarChart": "Gráfico de barras",
+      "uiLineChart": "Gráfico de líneas",
+      "uiDonutChart": "Gráfico de dona"
     },
     "actions": {
       "expand": "Expandir barra lateral",

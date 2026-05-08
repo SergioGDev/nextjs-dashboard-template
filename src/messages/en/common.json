@@ -64,7 +64,9 @@
       "uiTable": "Table",
       "uiDataTable": "Data Table",
       "uiAreaChart": "Area Chart",
-      "uiBarChart": "Bar Chart"
+      "uiBarChart": "Bar Chart",
+      "uiLineChart": "Line Chart",
+      "uiDonutChart": "Donut Chart"
     },
     "actions": {
       "expand": "Expand sidebar",

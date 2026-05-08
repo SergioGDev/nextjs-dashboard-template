@@ -45,5 +45,7 @@ export const routes = {
     dataTable: '/ui/data-table',
     areaChart: '/ui/area-chart',
     barChart: '/ui/bar-chart',
+    lineChart: '/ui/line-chart',
+    donutChart: '/ui/donut-chart',
   },
 } as const;

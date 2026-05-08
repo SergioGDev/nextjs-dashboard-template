@@ -1,0 +1,92 @@
+{
+  "metadata": { "title": "Line Chart" },
+  "header": {
+    "title": "Line Chart",
+    "subtitle": "Multi-series line chart built on Recharts LineChart. Renders one line per series with a shared Legend and Tooltip. The formatTooltip callback receives both the value and the series key, enabling per-series formatting."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomy",
+      "description": "The chart wraps Recharts primitives in a ResponsiveContainer. Each series in the series[] prop renders one Line element. The Legend is always rendered and resolves labels from series[].label."
+    },
+    "single": {
+      "title": "Single series",
+      "description": "A single-element series array renders one line. The Legend is still rendered using the label from that entry."
+    },
+    "multi": {
+      "title": "Multi-series",
+      "description": "Pass two or more objects in series[]. Each entry provides its own key, color, and label. The Legend is rendered automatically using those labels."
+    },
+    "formatters": {
+      "title": "With formatters — key-aware",
+      "description": "formatTooltip receives (value, key), enabling different formatting per series. This is the key difference from AreaChart and BarChart, whose formatTooltip only receives the value."
+    },
+    "colors": {
+      "title": "Semantic colors",
+      "description": "Always reference system tokens — var(--accent), var(--success), var(--warning) — so lines adapt to theme and accent changes automatically."
+    },
+    "localized": {
+      "title": "Localized labels",
+      "description": "Pass localised strings as series[].label. The Legend and Tooltip both display those labels — the raw key is never shown to users."
+    },
+    "loading": {
+      "title": "Loading and error states",
+      "description": "The same loading and error pattern documented on the Area Chart page applies here. Use ChartSkeleton with type=\"line\" for the correct skeleton shape."
+    },
+    "props": {
+      "title": "Props",
+      "description": "data, xKey, and series are required. All other props are optional."
+    },
+    "seriesProps": {
+      "title": "Series",
+      "description": "Each object in the series array describes one line."
+    }
+  },
+  "anatomy": {
+    "responsiveContainer": "Responsive wrapper — fills parent width, uses the height prop",
+    "lineChart": "Recharts LineChart root — receives data array and margin config",
+    "cartesianGrid": "Horizontal grid lines — uses chartGridProps from @lib/charts",
+    "xAxis": "Bottom axis — renders tick labels from xKey; uses chartAxisProps",
+    "yAxis": "Left axis — renders tick labels via formatY; uses chartAxisProps",
+    "tooltip": "Hover overlay — formatter receives (value, key) for per-series formatting",
+    "legend": "Auto-rendered legend — resolves item labels from series[].label; uses chartLegendStyle",
+    "lines": "One Line element per series entry — monotone curve, no dots, active dot on hover"
+  },
+  "demos": {
+    "single": {
+      "revenue": "Revenue"
+    },
+    "multi": {
+      "revenue": "Revenue",
+      "users": "Active users",
+      "note": "Each series provides its own key, color, and label. The Legend is rendered automatically using those labels."
+    },
+    "formatters": {
+      "revenue": "Revenue",
+      "users": "Active users"
+    },
+    "colors": {
+      "revenue": "Revenue",
+      "users": "Active users",
+      "churn": "Churn"
+    },
+    "localized": {
+      "revenue": "Revenue",
+      "users": "Active users",
+      "note": "Pass t('series.revenue') at the call site. The chart never calls t() internally — labels arrive ready-translated."
+    }
+  },
+  "props": {
+    "data": "Array of data objects. Each object must contain the xKey field and every series key.",
+    "xKey": "Key of the field used for X-axis labels.",
+    "series": "Array of series descriptors. Each entry defines one line.",
+    "formatY": "Formats Y-axis tick labels. Receives a number, returns a string.",
+    "formatTooltip": "Formats tooltip values. Receives (value: number, key: string) — use the key to apply per-series formatting.",
+    "height": "Chart height in pixels. Defaults to 240."
+  },
+  "seriesProps": {
+    "key": "Field name in the data array to use as this line's values.",
+    "color": "Stroke color. Use CSS custom properties for theme compatibility.",
+    "label": "Human-readable label shown in the Legend and Tooltip. Optional — falls back to the raw key."
+  }
+}

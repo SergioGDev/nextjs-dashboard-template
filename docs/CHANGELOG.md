@@ -6,6 +6,58 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B7.2] Charts (2/2) — Line Chart & Donut Chart showcases — 2026-05-08
+
+Cierre del bloque B7. Documenta los dos charts restantes y sube la categoría
+"charts" del overview a 4. Bloque B7 cerrado en su totalidad.
+
+### Showcase /ui/line-chart
+
+Énfasis en la feature diferencial: `formatTooltip(value, key)` permite aplicar
+un formateador distinto por serie (ej. `$USD` para revenue, número plano para users).
+Secciones: Anatomy · Single series · Multi-series · With formatters (key-aware) ·
+Semantic colors · Localized labels · Loading (referencial → /ui/area-chart) ·
+Props · Series · Localization note.
+
+- Tabla `Series` separada de la tabla principal de Props.
+- Nota explicativa inline en la sección Multi-series y Localized labels.
+
+### Showcase /ui/donut-chart
+
+Énfasis en la paleta de tokens del sistema y las variantes de radio.
+Secciones: Anatomy · Basic · Suggested palette (tabla con swatch visual) ·
+Radius variants (3 demos en grid) · Localized slice names · Loading (referencial) ·
+Limitations · Props · Data item · Localization note.
+
+**Limitations documentadas** (3 bullets):
+1. `formatTooltip` no expuesto — el Tooltip siempre muestra porcentajes.
+2. Sin auto-palette — los colores vienen inline en `data[].color`.
+3. Para >5 categorías, la repetición/tinting es responsabilidad del consumer.
+
+**Paleta sugerida**: tabla con 5 slots (`--accent` → `--error`) y swatches visuales
+renderizados con CSS custom properties. Nunca hex hardcoded.
+
+### Configuración
+
+- `routes.ui.lineChart = '/ui/line-chart'`, `routes.ui.donutChart = '/ui/donut-chart'`
+- Sidebar: 2 nuevos links en el grupo de components UI (junto a Area + Bar)
+- `common.json` en/es: claves `uiLineChart` / `uiDonutChart`
+- Overview page: categoría `charts` 2 → 4
+- `src/i18n/request.ts`: namespaces `lineChart` y `donutChart` registrados
+
+### Nota de regresión
+
+No se modificó ningún componente de chart ni lógica de analytics — solo se añaden
+páginas de showcase. `/analytics` con LineChart + DonutChart no tiene regresión.
+
+### Cierre B7
+
+Bloque B7 cerrado. Todos los charts del sistema (AreaChart, BarChart, LineChart,
+DonutChart) tienen su página de showcase canónica o referencial. Categoría "charts"
+del overview rellena (count 4). Siguiente bloque: B8 (Layout polish, opcional).
+
+---
+
 ## [B7.1] Charts category — Area Chart & Bar Chart showcases — 2026-05-08
 
 Abre la categoría Charts en el design system. Extrae constantes de estilo compartidas,

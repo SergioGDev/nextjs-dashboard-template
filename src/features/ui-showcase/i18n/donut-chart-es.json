@@ -1,0 +1,90 @@
+{
+  "metadata": { "title": "Gráfico de dona" },
+  "header": {
+    "title": "Gráfico de dona",
+    "subtitle": "Gráfico de dona categórico construido sobre Recharts PieChart. Cada slice lleva su propio token de color inline, dando control total sobre la paleta. El Tooltip formatea los valores como porcentajes por defecto."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "El gráfico renderiza un PieChart con un elemento Pie en su interior. Cada entrada del array de datos se mapea a una Cell que lleva el color de relleno del slice. El Legend se renderiza automáticamente usando el campo name de cada entrada."
+    },
+    "basic": {
+      "title": "Básico",
+      "description": "Pasa un array de datos con name, value y color por entrada. El Tooltip formatea los valores como porcentajes automáticamente."
+    },
+    "palette": {
+      "title": "Paleta sugerida",
+      "description": "Usa tokens del sistema de diseño para todos los colores de los slices. Esto garantiza que el gráfico se adapte automáticamente a los cambios de tema y acento — nunca uses colores hexadecimales hardcodeados."
+    },
+    "radius": {
+      "title": "Variantes de radio",
+      "description": "Controla el anillo de la dona mediante innerRadius y outerRadius. Un outerRadius mayor con el mismo innerRadius produce un anillo más grueso; aumentar ambos escala todo el gráfico."
+    },
+    "localized": {
+      "title": "Nombres de slices localizados",
+      "description": "Traduce los nombres de los slices antes de pasarlos al gráfico. El componente renderiza el campo name directamente en el Legend — no ocurre ninguna traducción interna."
+    },
+    "loading": {
+      "title": "Estados de carga y error",
+      "description": "El mismo patrón de carga y error documentado en la página Area Chart aplica aquí. Usa ChartSkeleton con type=\"donut\" para la forma correcta del skeleton."
+    },
+    "limitations": {
+      "title": "Limitaciones",
+      "description": "Restricciones conocidas de la API actual de DonutChart."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Todas las props excepto data son opcionales."
+    },
+    "dataItem": {
+      "title": "Elemento de datos",
+      "description": "Cada objeto en el array de datos describe un slice."
+    }
+  },
+  "anatomy": {
+    "responsiveContainer": "Contenedor responsivo — ocupa el ancho del padre, usa la prop height",
+    "pieChart": "Raíz Recharts PieChart — contenedor del Pie y los componentes de overlay",
+    "pie": "Contenedor de slices — recibe el array de datos, innerRadius, outerRadius, paddingAngle, dataKey",
+    "cell": "Una Cell por entrada de datos — lleva el color de relleno del slice",
+    "tooltip": "Overlay de hover — formatea los valores como porcentajes; estilizado vía chartTooltipStyle",
+    "legend": "Leyenda auto-renderizada con iconos de círculo — usa data[].name como etiquetas; estilizada vía chartLegendStyle"
+  },
+  "palette": {
+    "tableHeaders": {
+      "slot": "Slot",
+      "token": "Token",
+      "use": "Caso de uso"
+    },
+    "slot1": { "token": "var(--accent)",   "use": "Principal / dominante" },
+    "slot2": { "token": "var(--success)",  "use": "Secundario / positivo" },
+    "slot3": { "token": "var(--warning)",  "use": "Terciario / atención" },
+    "slot4": { "token": "var(--info)",     "use": "Informativo neutro" },
+    "slot5": { "token": "var(--error)",    "use": "Raro / crítico / atípico" },
+    "overflow": "Para más de 5 slices, repite la paleta o usa tintes más claros de los mismos tokens. Nunca hardcodees colores — referencia siempre tokens del sistema de diseño para que el gráfico se adapte automáticamente a los cambios de tema y acento."
+  },
+  "limitations": {
+    "noFormatter": "DonutChart no expone una prop formatTooltip — el Tooltip siempre renderiza los valores como porcentajes. Si se necesita formato personalizado en el tooltip, crea un fork del componente.",
+    "noAutoPalette": "Los colores deben pasarse inline por slice vía data[].color. No existe modo auto-paleta — lo explícito se prefiere sobre la magia.",
+    "overflowPalette": "Para más de 5 categorías, la repetición de paleta o el uso de tintes es responsabilidad del consumer."
+  },
+  "demos": {
+    "compact": "Compacto",
+    "default": "Por defecto",
+    "large": "Grande",
+    "localized": {
+      "note": "Mapea las entradas de datos a nombres traducidos antes de pasarlos a DonutChart. El componente renderiza name tal cual — no ocurre ninguna traducción internamente."
+    }
+  },
+  "props": {
+    "data": "Array de descriptores de slices. Cada entrada debe tener name, value y color.",
+    "height": "Altura del gráfico en píxeles. Por defecto 220.",
+    "innerRadius": "Radio interior del agujero de la dona en píxeles. Por defecto 55.",
+    "outerRadius": "Radio exterior del anillo de la dona en píxeles. Por defecto 85."
+  },
+  "dataItem": {
+    "name": "Etiqueta del slice mostrada en el Legend.",
+    "value": "Valor numérico. El Tooltip lo renderiza como string de porcentaje.",
+    "color": "Color de relleno. Usa propiedades CSS personalizadas (var(--accent), var(--success), etc.) para compatibilidad con el tema."
+  }
+}
