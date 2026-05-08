@@ -56,12 +56,12 @@
     }
   },
   "anatomy": {
-    "table": "Elemento raíz — wrapper <table> con contenedor de scroll por desbordamiento",
-    "tableHeader": "<thead> semántico — contiene la fila de cabecera",
-    "tableBody": "<tbody> semántico — contiene las filas de datos",
-    "tableRow": "Una fila <tr>, usada tanto en la cabecera como en el cuerpo",
-    "tableHead": "Una celda de cabecera <th> — label en mayúsculas, color apagado",
-    "tableCell": "Una celda de datos <td> — padding estándar y color de texto primario"
+    "table": "Elemento raíz — wrapper table con contenedor de scroll por desbordamiento",
+    "tableHeader": "thead semántico — contiene la fila de cabecera",
+    "tableBody": "tbody semántico — contiene las filas de datos",
+    "tableRow": "Una fila tr, usada tanto en la cabecera como en el cuerpo",
+    "tableHead": "Una celda de cabecera th — label en mayúsculas, color apagado",
+    "tableCell": "Una celda de datos td — padding estándar y color de texto primario"
   },
   "props": {
     "extendsNote": "Cada wrapper acepta todos los atributos HTML estándar de su elemento subyacente (table / thead / tbody / tr / th / td) más className para sobreescrituras de estilo via cn()."

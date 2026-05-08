@@ -56,12 +56,12 @@
     }
   },
   "anatomy": {
-    "table": "Root element — <table> wrapper with overflow scroll container",
-    "tableHeader": "Semantic <thead> — contains the header row",
-    "tableBody": "Semantic <tbody> — contains data rows",
-    "tableRow": "A <tr> row, used in both head and body",
-    "tableHead": "A <th> header cell — uppercase label, muted color",
-    "tableCell": "A <td> data cell — standard padding and primary text color"
+    "table": "Root element — table wrapper with overflow scroll container",
+    "tableHeader": "Semantic thead — contains the header row",
+    "tableBody": "Semantic tbody — contains data rows",
+    "tableRow": "A tr row, used in both head and body",
+    "tableHead": "A th header cell — uppercase label, muted color",
+    "tableCell": "A td data cell — standard padding and primary text color"
   },
   "props": {
     "extendsNote": "Each wrapper accepts all standard HTML attributes of its underlying element (table / thead / tbody / tr / th / td) plus className for style overrides via cn()."
