@@ -13,7 +13,7 @@ import { AUTH_LOGOUT_EVENT } from '@/lib/auth-events';
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
+  const { data: session, isFetching } = useSession();
   const { mutateAsync: logout } = useLogout();
   const setUser = useUserStore((s) => s.setUser);
   const clearedRef = useRef(false);
@@ -21,6 +21,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   // Sync session → store; redirect if session resolves to null (invalid cookie)
   useEffect(() => {
     if (session === undefined) return;
+    // Don't act on stale null while a refetch is in flight (prevents premature logout)
+    if (isFetching) return;
     setUser(session ? session.user : null);
     if (session === null && !clearedRef.current) {
       clearedRef.current = true;
@@ -29,7 +31,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       // /login and bounces back to /.
       logout().catch(() => {}).finally(() => router.push(routes.login));
     }
-  }, [session, setUser, router, logout]);
+  }, [session, isFetching, setUser, router, logout]);
 
   // Handle forced logout triggered by the 401 interceptor
   useEffect(() => {
