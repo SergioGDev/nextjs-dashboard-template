@@ -6,6 +6,102 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B8] Layout polish — cierre del design system — 2026-05-10
+
+Cierre formal del design system. Elimina tres diccionarios hardcoded de rutas y
+los sustituye por una única fuente de verdad. Añade tres showcases de layout.
+La categoría "layout" del overview pasa de 1 a 4 ítems.
+
+### Single source of truth: `src/lib/route-info.ts`
+
+Creado `src/lib/route-info.ts` como utilidad pura (sin hooks ni React) que lee
+`sidebarConfig` y expone dos funciones:
+
+- `getRouteLabel(pathname)` — devuelve la i18n key del título de página para la
+  Topbar. Antes: diccionario `pageTitleKeys` hardcoded en `topbar.tsx` (~8 entradas).
+- `getRouteAncestors(pathname)` — devuelve el contexto completo del ancestro
+  (section, group, link) para construir breadcrumbs.
+
+**Eliminados** tras la refactorización:
+- `routeLabelKeys` en `breadcrumbs.tsx` (~30 líneas)
+- `uiGroupLabelKeys` en `breadcrumbs.tsx` (~10 líneas)
+- `pageTitleKeys` en `topbar.tsx` (~10 líneas)
+
+**Estrategia de matching**: exact match → longest `startsWith` prefix (para
+segmentos dinámicos como `/users/123`). Los links con `exact: true` quedan
+excluidos del matching por prefijo.
+
+**Reglas especiales**:
+- `/ui` → muestra el título de sección ("UI"), no el label del link "Overview"
+- `/reports` → muestra el label del grupo ("Reports"), no el del child "Overview"
+- `/users/123` → muestra "Users" (prefix match) + segmento extra como hoja final
+
+### Refactor `breadcrumbs.tsx`
+
+- Eliminados los dos diccionarios hardcoded; toda la lógica de derivación se
+  delega a `getRouteAncestors`.
+- **Nueva prop `crumbs?: Crumb[]`**: modo controlado que permite al consumer
+  proporcionar la cadena completa (útil para segmentos dinámicos como
+  `/users/[id]` donde el id debe resolverse en el server component).
+- Exportado el tipo `Crumb` desde el módulo para que los consumers puedan tipar.
+- Comportamiento por defecto (sin `crumbs`) idéntico al anterior.
+
+### Refactor `topbar.tsx`
+
+- Eliminado `pageTitleKeys`; el título se obtiene con `getRouteLabel(pathname)`.
+- Todas las rutas del sidebar se muestran automáticamente con su label correcto
+  sin necesidad de mantener un diccionario paralelo.
+
+### Showcase /ui/theme-toggle
+
+Documenta el componente de cambio de tema. Secciones:
+- Anatomy (Tooltip + Button + Sun/Moon icon)
+- Live demo (renderiza el componente real — afecta el tema global)
+- Hydration guard: snippet del patrón `mounted` + `useEffect`
+- Composition: fuente completa del componente ThemeToggle (~25 líneas)
+- Props: ninguna (componente sin props — documentado explícitamente)
+- Localization note
+
+### Showcase /ui/breadcrumbs
+
+Documenta el componente Breadcrumbs y el modo controlado. Secciones:
+- Anatomy (nav · Crumb[] · ChevronRight · last crumb)
+- Auto-derived: renderiza `<Breadcrumbs />` vivo (lee la ruta actual)
+- Controlled mode: 5 demos (1 crumb = null render, 2 niveles, 3 niveles + grupo
+  virtual, segmento dinámico "Ana García", path personalizado)
+- Single source of truth: prosa + snippet de `route-info.ts`
+- Props: tabla de `crumbs?` + tabla separada del tipo `Crumb`
+- Localization note
+
+### Showcase /ui/topbar
+
+Documenta la estructura de la Topbar (no se renderiza una segunda Topbar). Secciones:
+- Visual schema: diagrama HTML mostrando el layout izquierda/derecha con bordes
+  discontinuos
+- Anatomy: tabla con 6 regiones (Title · Breadcrumbs · Spacer · Search · Lang ·
+  Bell · Theme · User)
+- Extension points: 3 bullets (notificaciones, búsqueda, profile settings)
+- Title derivation: snippet de `getRouteLabel` con ejemplos de pathname → key
+- Related: chips de enlace a ThemeToggle, Breadcrumbs, DropdownMenu, Sidebar
+- Localization note
+
+### Configuración
+
+- `src/config/routes.ts`: añadidos `topbar`, `breadcrumbs`, `themeToggle`
+- `sidebar.config.ts`: grupo `uiLayout` ampliado de 1 a 4 hijos (sidebar,
+  topbar, breadcrumbs, themeToggle)
+- `src/messages/{en,es}/common.json`: `uiTopbar`, `uiBreadcrumbs`, `uiThemeToggle`
+- `src/i18n/request.ts`: namespaces `themeToggle`, `breadcrumbs`, `topbar` añadidos
+- Overview `/ui/page.tsx`: categoría "layout" pasa de 1 a 4
+
+### Estado tras B8
+
+Design system cerrado: 4 categorías (Foundation, Charts, Components, Layout),
+todas con sus showcases. `src/lib/route-info.ts` es ahora la única fuente de
+verdad para títulos de página y breadcrumbs. Lint ✓, build ✓.
+
+---
+
 ## [B7.2] Charts (2/2) — Line Chart & Donut Chart showcases — 2026-05-08
 
 Cierre del bloque B7. Documenta los dos charts restantes y sube la categoría

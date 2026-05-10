@@ -1,0 +1,35 @@
+{
+  "metadata": { "title": "Cambio de tema" },
+  "header": {
+    "title": "Cambio de tema",
+    "subtitle": "Un botón fantasma de icono que cambia entre los modos claro y oscuro globalmente. Usa next-themes para la persistencia del estado y un guard de montaje para prevenir el mismatch de hidratación SSR."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "Un Tooltip envuelve un Button fantasma con iconOnly. El icono alterna entre Sol (modo oscuro) y Luna (modo claro) según el tema resuelto tras el montaje."
+    },
+    "live": {
+      "title": "Demo en vivo",
+      "description": "El toggle de abajo es el componente real — al hacer clic cambia el tema para toda la aplicación. No está aislado en esta demo.",
+      "note": "Al hacer clic en este toggle se cambia el tema de toda la aplicación. Es el componente real, no una demo en sandbox."
+    },
+    "hydration": {
+      "title": "Guard de hidratación",
+      "description": "Antes de que el componente se monte en el cliente, el tema resuelto desde localStorage no está disponible. Un flag de estado mounted previene el mismatch Sol/Luna entre la salida SSR y el primer render del cliente."
+    },
+    "composition": {
+      "title": "Composición",
+      "description": "El código fuente completo del componente — copia y pega en cualquier layout que necesite un toggle de tema."
+    },
+    "props": {
+      "title": "Props",
+      "description": "ThemeToggle no tiene props. El estado del tema es gestionado globalmente por next-themes."
+    }
+  },
+  "anatomy": {
+    "tooltip": "Envoltorio Tooltip — proporciona la etiqueta accesible al hacer hover",
+    "button": "Button variante ghost con iconOnly — se renderiza como un botón cuadrado de icono sin borde visible",
+    "icon": "Icono Sol en modo oscuro, Luna en modo claro — cambia tras el montaje basándose en resolvedTheme"
+  }
+}

@@ -31,7 +31,7 @@ const categories: Category[] = [
   { key: 'feedback', count: 5, href: routes.ui.toasts, icon: Bell },
   { key: 'data', count: 2, href: routes.ui.table, icon: Database },
   { key: 'charts', count: 4, href: routes.ui.areaChart, icon: BarChart2 },
-  { key: 'layout', count: 1, href: routes.ui.sidebar, icon: PanelLeft },
+  { key: 'layout', count: 4, href: routes.ui.sidebar, icon: PanelLeft },
 ];
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {

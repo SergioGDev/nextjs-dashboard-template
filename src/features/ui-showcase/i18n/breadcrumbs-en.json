@@ -1,0 +1,68 @@
+{
+  "metadata": { "title": "Breadcrumbs" },
+  "header": {
+    "title": "Breadcrumbs",
+    "subtitle": "A navigation trail that shows the current page's position in the route hierarchy. Derives its crumbs automatically from the pathname via src/lib/route-info.ts, or accepts a controlled crumbs prop for dynamic segments and custom labels."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomy",
+      "description": "A nav element containing a list of Crumb items separated by ChevronRight icons. All crumbs except the last are rendered as links; the last crumb is a bold span with no link."
+    },
+    "auto": {
+      "title": "Auto-derived (default)",
+      "description": "With no props, Breadcrumbs reads the current pathname and derives the crumb chain from src/lib/route-info.ts. Navigate to any page — the breadcrumbs at the top of this page are the real component in action."
+    },
+    "controlled": {
+      "title": "Controlled mode",
+      "description": "Pass a crumbs array to override auto-derivation. Use this for dynamic segments where you have a meaningful label to show instead of the raw URL slug."
+    },
+    "singleSource": {
+      "title": "Single source of truth",
+      "description": "Auto-derivation reads sidebar.config.ts via src/lib/route-info.ts. When you add a new route to the sidebar config, both the topbar title and the breadcrumbs update automatically — no separate dictionaries to keep in sync."
+    },
+    "props": {
+      "title": "Props",
+      "description": "crumbs is the only prop. When omitted, the component auto-derives from the pathname."
+    },
+    "crumbProps": {
+      "title": "Crumb",
+      "description": "Each object in the crumbs array describes one step in the trail."
+    }
+  },
+  "anatomy": {
+    "nav": "nav element — the accessible landmark container for the trail",
+    "crumbs": "Array of Crumb items — rendered as links (except the last) separated by chevrons",
+    "chevron": "ChevronRight icon — visual separator between crumbs",
+    "lastCrumb": "The current page crumb — rendered as a bold span with no link (not navigable)"
+  },
+  "demos": {
+    "single": {
+      "title": "1 level (returns null)",
+      "description": "When the chain has only one crumb (Dashboard), the component returns null and renders nothing. This is the behavior on the root / page."
+    },
+    "two": {
+      "title": "2 levels",
+      "description": "Dashboard and a direct child — the most common pattern."
+    },
+    "three": {
+      "title": "3 levels with virtual group",
+      "description": "Dashboard, the UI section, a non-linkable group label, and the leaf page."
+    },
+    "dynamic": {
+      "title": "Dynamic segment",
+      "description": "Use controlled mode when you have a meaningful label for a dynamic URL segment instead of the raw ID."
+    },
+    "custom": {
+      "title": "Custom path",
+      "description": "Any sequence of crumbs can be passed — the component does not validate against the sidebar config in controlled mode."
+    }
+  },
+  "props": {
+    "crumbs": "Optional array of Crumb objects. When provided, used directly instead of auto-derivation."
+  },
+  "crumbProps": {
+    "label": "Human-readable text shown in the trail.",
+    "href": "Navigation target. Pass null to render as a non-clickable span (useful for virtual group labels)."
+  }
+}

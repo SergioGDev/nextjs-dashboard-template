@@ -1,0 +1,69 @@
+{
+  "metadata": { "title": "Barra superior" },
+  "header": {
+    "title": "Barra superior",
+    "subtitle": "El encabezado persistente renderizado en la parte superior de cada página del dashboard. Compuesto por un título de página, migas de pan, campo de búsqueda, selector de idioma, campana de notificaciones, cambio de tema y un menú desplegable de usuario."
+  },
+  "sections": {
+    "schema": {
+      "title": "Esquema visual",
+      "description": "La barra superior se divide en dos lados separados por un espaciador flex. Lado izquierdo: contexto de página. Lado derecho: controles globales."
+    },
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "Cada región de la barra superior y el componente que la impulsa."
+    },
+    "extensionPoints": {
+      "title": "Puntos de extensión",
+      "description": "Tres áreas en la implementación actual son stubs intencionales — documentados aquí para equipos que extiendan la plantilla."
+    },
+    "titleDerivation": {
+      "title": "Derivación del título de página",
+      "description": "El título de página se deriva del pathname actual usando src/lib/route-info.ts — la fuente única de verdad para las etiquetas de ruta."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Topbar no tiene props. Todo el estado (usuario, tema, idioma) se consume desde stores globales y hooks."
+    }
+  },
+  "anatomy": {
+    "region1": {
+      "name": "Título + Migas de pan",
+      "component": "Breadcrumbs",
+      "description": "Título de página derivado de getRouteLabel(pathname). Migas derivadas automáticamente de getRouteAncestors(pathname). Ambas leen sidebar.config.ts como fuente única de verdad."
+    },
+    "region2": {
+      "name": "Campo de búsqueda",
+      "component": "Input",
+      "description": "Campo de búsqueda compacto con icono Search. Actualmente solo visual — ver Puntos de extensión."
+    },
+    "region3": {
+      "name": "Selector de idioma",
+      "component": "LanguageSwitcher",
+      "description": "Selector de locale compacto. Persiste el locale seleccionado en la cookie NEXT_LOCALE mediante next-intl."
+    },
+    "region4": {
+      "name": "Campana de notificaciones",
+      "component": "(botón inline)",
+      "description": "Icono de campana con un badge que muestra el número de no leídos. Actualmente hardcodeado a 3 — ver Puntos de extensión."
+    },
+    "region5": {
+      "name": "Cambio de tema",
+      "component": "ThemeToggle",
+      "description": "Alterna entre modo claro y oscuro. Ver la página Theme Toggle para documentación completa."
+    },
+    "region6": {
+      "name": "Menú desplegable de usuario",
+      "component": "DropdownMenu",
+      "description": "Avatar, nombre y un dropdown con Perfil, Configuración y Cerrar sesión. Perfil y Configuración son actualmente no-op — ver Puntos de extensión."
+    }
+  },
+  "extensionPoints": {
+    "notification": "El número de notificaciones está hardcodeado a 3. Reemplaza con un hook (p. ej. useUnreadNotifications()) que obtenga el contador desde tu backend.",
+    "search": "El campo de búsqueda es solo visual. Conecta onChange a un estado de búsqueda, luego navega a una página de resultados o muestra resultados inline.",
+    "profileSettings": "Los ítems de menú Perfil y Configuración llaman a onClick sin efecto. Reemplaza con router.push(routes.settings) o un trigger de modal."
+  },
+  "titleDerivation": {
+    "note": "getRouteLabel lee sidebar.config.ts — añadir una ruta a la configuración del sidebar hace que su título aparezca automáticamente en la barra superior."
+  }
+}

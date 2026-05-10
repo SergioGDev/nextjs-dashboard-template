@@ -1,0 +1,68 @@
+{
+  "metadata": { "title": "Migas de pan" },
+  "header": {
+    "title": "Migas de pan",
+    "subtitle": "Un rastro de navegación que muestra la posición de la página actual en la jerarquía de rutas. Deriva sus migas automáticamente del pathname mediante src/lib/route-info.ts, o acepta una prop crumbs controlada para segmentos dinámicos y etiquetas personalizadas."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomía",
+      "description": "Un elemento nav que contiene una lista de elementos Crumb separados por iconos ChevronRight. Todas las migas excepto la última se renderizan como links; la última miga es un span en negrita sin link."
+    },
+    "auto": {
+      "title": "Auto-derivación (por defecto)",
+      "description": "Sin props, Breadcrumbs lee el pathname actual y deriva la cadena de migas desde src/lib/route-info.ts. Navega a cualquier página — las migas en la parte superior de esta página son el componente real en acción."
+    },
+    "controlled": {
+      "title": "Modo controlado",
+      "description": "Pasa un array crumbs para anular la auto-derivación. Úsalo para segmentos dinámicos donde tienes una etiqueta significativa que mostrar en lugar del slug bruto de la URL."
+    },
+    "singleSource": {
+      "title": "Fuente única de verdad",
+      "description": "La auto-derivación lee sidebar.config.ts mediante src/lib/route-info.ts. Al añadir una nueva ruta a la configuración del sidebar, tanto el título de la topbar como las migas se actualizan automáticamente — no hay diccionarios separados que mantener sincronizados."
+    },
+    "props": {
+      "title": "Props",
+      "description": "crumbs es la única prop. Cuando se omite, el componente auto-deriva desde el pathname."
+    },
+    "crumbProps": {
+      "title": "Crumb",
+      "description": "Cada objeto en el array crumbs describe un paso en el rastro."
+    }
+  },
+  "anatomy": {
+    "nav": "Elemento nav — el contenedor landmark accesible para el rastro",
+    "crumbs": "Array de elementos Crumb — renderizados como links (excepto el último) separados por chevrons",
+    "chevron": "Icono ChevronRight — separador visual entre migas",
+    "lastCrumb": "La miga de la página actual — renderizada como un span en negrita sin link (no navegable)"
+  },
+  "demos": {
+    "single": {
+      "title": "1 nivel (devuelve null)",
+      "description": "Cuando la cadena tiene solo una miga (Dashboard), el componente devuelve null y no renderiza nada. Este es el comportamiento en la página raíz /."
+    },
+    "two": {
+      "title": "2 niveles",
+      "description": "Dashboard y un hijo directo — el patrón más común."
+    },
+    "three": {
+      "title": "3 niveles con grupo virtual",
+      "description": "Dashboard, la sección UI, una etiqueta de grupo no enlazable y la página hoja."
+    },
+    "dynamic": {
+      "title": "Segmento dinámico",
+      "description": "Usa el modo controlado cuando tienes una etiqueta significativa para un segmento de URL dinámico en lugar del ID bruto."
+    },
+    "custom": {
+      "title": "Ruta personalizada",
+      "description": "Se puede pasar cualquier secuencia de migas — el componente no valida contra la configuración del sidebar en modo controlado."
+    }
+  },
+  "props": {
+    "crumbs": "Array opcional de objetos Crumb. Cuando se proporciona, se usa directamente en lugar de la auto-derivación."
+  },
+  "crumbProps": {
+    "label": "Texto legible mostrado en el rastro.",
+    "href": "Destino de navegación. Pasa null para renderizar como span no clicable (útil para etiquetas de grupo virtuales)."
+  }
+}

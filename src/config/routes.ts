@@ -47,5 +47,8 @@ export const routes = {
     barChart: '/ui/bar-chart',
     lineChart: '/ui/line-chart',
     donutChart: '/ui/donut-chart',
+    topbar: '/ui/topbar',
+    breadcrumbs: '/ui/breadcrumbs',
+    themeToggle: '/ui/theme-toggle',
   },
 } as const;

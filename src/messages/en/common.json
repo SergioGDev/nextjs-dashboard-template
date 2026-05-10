@@ -66,7 +66,10 @@
       "uiAreaChart": "Area Chart",
       "uiBarChart": "Bar Chart",
       "uiLineChart": "Line Chart",
-      "uiDonutChart": "Donut Chart"
+      "uiDonutChart": "Donut Chart",
+      "uiTopbar": "Topbar",
+      "uiBreadcrumbs": "Breadcrumbs",
+      "uiThemeToggle": "Theme Toggle"
     },
     "actions": {
       "expand": "Expand sidebar",

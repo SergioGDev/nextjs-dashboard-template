@@ -1,0 +1,35 @@
+{
+  "metadata": { "title": "Theme Toggle" },
+  "header": {
+    "title": "Theme Toggle",
+    "subtitle": "A ghost icon-only button that switches between light and dark mode globally. Uses next-themes for state persistence and a mounted guard to prevent SSR hydration mismatch."
+  },
+  "sections": {
+    "anatomy": {
+      "title": "Anatomy",
+      "description": "A Tooltip wraps a ghost icon-only Button. The icon switches between Sun (dark mode) and Moon (light mode) based on the resolved theme after mount."
+    },
+    "live": {
+      "title": "Live demo",
+      "description": "The toggle below is the real component — clicking it changes the theme for the entire application. It is not isolated to this demo.",
+      "note": "Clicking this toggle changes the theme of the entire application. It is the real component, not a sandboxed demo."
+    },
+    "hydration": {
+      "title": "Hydration guard",
+      "description": "Before the component mounts on the client, the resolved theme from localStorage is unavailable. A mounted state flag prevents a Sun/Moon mismatch between the SSR output and the first client render."
+    },
+    "composition": {
+      "title": "Composition",
+      "description": "The full component source — copy-paste into any layout that needs a theme toggle."
+    },
+    "props": {
+      "title": "Props",
+      "description": "ThemeToggle takes no props. Theme state is managed globally by next-themes."
+    }
+  },
+  "anatomy": {
+    "tooltip": "Tooltip wrapper — provides the accessible label on hover",
+    "button": "Button variant ghost with iconOnly — renders as a square icon button with no visible border",
+    "icon": "Sun icon in dark mode, Moon icon in light mode — switches after mount based on resolvedTheme"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "metadata": { "title": "Topbar" },
+  "header": {
+    "title": "Topbar",
+    "subtitle": "The persistent header rendered at the top of every dashboard page. Composed of a page title, breadcrumbs, search input, language switcher, notification bell, theme toggle, and a user dropdown."
+  },
+  "sections": {
+    "schema": {
+      "title": "Visual schema",
+      "description": "The topbar is divided into two sides separated by a flex spacer. Left side: page context. Right side: global controls."
+    },
+    "anatomy": {
+      "title": "Anatomy",
+      "description": "Each region of the topbar and the component that drives it."
+    },
+    "extensionPoints": {
+      "title": "Extension points",
+      "description": "Three areas in the current implementation are intentional stubs — documented here for teams extending the template."
+    },
+    "titleDerivation": {
+      "title": "Page title derivation",
+      "description": "The page title is derived from the current pathname using src/lib/route-info.ts — the single source of truth for route labels."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Topbar takes no props. All state (user, theme, locale) is consumed from global stores and hooks."
+    }
+  },
+  "anatomy": {
+    "region1": {
+      "name": "Title + Breadcrumbs",
+      "component": "Breadcrumbs",
+      "description": "Page title derived from getRouteLabel(pathname). Breadcrumbs derived automatically from getRouteAncestors(pathname). Both read sidebar.config.ts as the single source of truth."
+    },
+    "region2": {
+      "name": "Search input",
+      "component": "Input",
+      "description": "Compact search field with a Search icon. Currently visual only — see Extension points."
+    },
+    "region3": {
+      "name": "Language switcher",
+      "component": "LanguageSwitcher",
+      "description": "Compact locale picker. Persists the selected locale in the NEXT_LOCALE cookie via next-intl."
+    },
+    "region4": {
+      "name": "Notification bell",
+      "component": "(inline button)",
+      "description": "Bell icon with a badge showing the unread count. Currently hardcoded to 3 — see Extension points."
+    },
+    "region5": {
+      "name": "Theme toggle",
+      "component": "ThemeToggle",
+      "description": "Switches between light and dark mode. See the Theme Toggle page for full documentation."
+    },
+    "region6": {
+      "name": "User dropdown",
+      "component": "DropdownMenu",
+      "description": "Avatar, first name, and a dropdown with Profile, Settings, and Sign out. Profile and Settings are currently no-ops — see Extension points."
+    }
+  },
+  "extensionPoints": {
+    "notification": "Notification count is hardcoded to 3. Replace with a hook (e.g. useUnreadNotifications()) that fetches the count from your backend.",
+    "search": "Search input is visual only. Wire onChange to a search state, then route to a results page or show inline results.",
+    "profileSettings": "Profile and Settings menu items call onClick with no effect. Replace with router.push(routes.settings) or a modal trigger."
+  },
+  "titleDerivation": {
+    "note": "getRouteLabel reads sidebar.config.ts — adding a route to the sidebar config makes its title appear in the topbar automatically."
+  }
+}

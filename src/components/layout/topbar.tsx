@@ -11,17 +11,7 @@ import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/compone
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { useUserStore } from '@/store/user.store';
 import { useLogoutAction } from '@/hooks/use-logout-action';
-
-const pageTitleKeys: Record<string, string> = {
-  '/': 'sidebar.items.dashboard',
-  '/analytics': 'sidebar.items.analytics',
-  '/reports': 'sidebar.items.reports',
-  '/reports/scheduled': 'sidebar.items.reportsScheduled',
-  '/reports/archived': 'sidebar.items.reportsArchived',
-  '/users': 'sidebar.items.users',
-  '/settings': 'sidebar.items.settings',
-  '/ui': 'sidebar.sections.ui',
-};
+import { getRouteLabel } from '@/lib/route-info';
 
 export function Topbar() {
   const t = useTranslations('common');
@@ -29,7 +19,7 @@ export function Topbar() {
   const user = useUserStore((s) => s.user);
   const { logout, isPending: isLoggingOut } = useLogoutAction();
 
-  const titleKey = Object.entries(pageTitleKeys).findLast(([key]) => pathname.startsWith(key))?.[1] ?? 'sidebar.items.dashboard';
+  const titleKey = getRouteLabel(pathname);
 
   return (
     <header className="h-14 flex items-center gap-4 px-6 border-b border-[var(--border)] bg-[var(--surface)] shrink-0">

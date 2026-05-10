@@ -83,6 +83,9 @@ export const sidebarConfig: SidebarConfig = [
         icon: PanelLeft,
         children: [
           { type: 'link', label: 'sidebar.items.uiSidebar', href: routes.ui.sidebar },
+          { type: 'link', label: 'sidebar.items.uiTopbar', href: routes.ui.topbar },
+          { type: 'link', label: 'sidebar.items.uiBreadcrumbs', href: routes.ui.breadcrumbs },
+          { type: 'link', label: 'sidebar.items.uiThemeToggle', href: routes.ui.themeToggle },
         ],
       },
     ],

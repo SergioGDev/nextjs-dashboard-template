@@ -51,6 +51,9 @@ async function loadMessages(locale: string) {
     barChart,
     lineChart,
     donutChart,
+    themeToggle,
+    breadcrumbs,
+    topbar,
   ] = await Promise.all([
     import(`../messages/${locale}/common.json`).then((m) => m.default),
     import(`../features/auth/i18n/${locale}.json`).then((m) => m.default),
@@ -87,6 +90,9 @@ async function loadMessages(locale: string) {
     import(`../features/ui-showcase/i18n/bar-chart-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/line-chart-${locale}.json`).then((m) => m.default),
     import(`../features/ui-showcase/i18n/donut-chart-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/theme-toggle-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/breadcrumbs-${locale}.json`).then((m) => m.default),
+    import(`../features/ui-showcase/i18n/topbar-${locale}.json`).then((m) => m.default),
   ]);
 
   return {
@@ -125,5 +131,8 @@ async function loadMessages(locale: string) {
     barChart,
     lineChart,
     donutChart,
+    themeToggle,
+    breadcrumbs,
+    topbar,
   };
 }

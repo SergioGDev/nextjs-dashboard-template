@@ -66,7 +66,10 @@
       "uiAreaChart": "Gráfico de área",
       "uiBarChart": "Gráfico de barras",
       "uiLineChart": "Gráfico de líneas",
-      "uiDonutChart": "Gráfico de dona"
+      "uiDonutChart": "Gráfico de dona",
+      "uiTopbar": "Barra superior",
+      "uiBreadcrumbs": "Migas de pan",
+      "uiThemeToggle": "Cambio de tema"
     },
     "actions": {
       "expand": "Expandir barra lateral",
