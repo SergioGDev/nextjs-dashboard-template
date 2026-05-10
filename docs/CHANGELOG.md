@@ -6,6 +6,20 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B9.0] Tech debt audit (read-only) — 2026-05-10
+
+Auditoría exhaustiva de ~30 items de deuda técnica acumulados a lo largo de los bloques B6–B8. Sin cambios en código de producción.
+
+Verified 38 items across the project. See `docs/B9-audit.md` for status, evidence, and proposed bucketing for B9.1+.
+
+**Resultados**: 11 ✅ resueltos · 20 ⏳ pendientes · 3 ⚠️ parciales · 4 ❓ requieren decisión.
+
+**Hallazgos clave**: B6f/B6g/B6h ejecutados en main (B7.x, B8) tras el branching del worktree. `label.tsx` eliminado (confirmado en forms.md). DataTable tiene filter client-side. Varios items originales resueltos en B7/B8.
+
+**Buckets propuestos**: B9.1 (Architectural cleanup, ~8 items) · B9.2 (Component refinements, ~7 items) · B9.3 (DataTable keyboard nav & pagination refinements, ~4 items).
+
+---
+
 ## [B8] Layout polish — cierre del design system — 2026-05-10
 
 Cierre formal del design system. Elimina tres diccionarios hardcoded de rutas y
