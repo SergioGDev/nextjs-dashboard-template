@@ -5,13 +5,8 @@ export type ProfileSettingsValues = {
   email: string;
   bio?: string;
   website?: string;
-};
-
-export type NotificationSettingsValues = {
   emailNotifications: boolean;
-  pushNotifications: boolean;
-  weeklyDigest: boolean;
-  marketingEmails: boolean;
+  compactMode: boolean;
 };
 
 export function createProfileSettingsSchema(messages: {
@@ -25,12 +20,8 @@ export function createProfileSettingsSchema(messages: {
     email: z.string().email(messages.emailInvalid),
     bio: z.string().max(200, messages.bioMax).optional(),
     website: z.string().url(messages.websiteInvalid).optional().or(z.literal('')),
+    emailNotifications: z.boolean(),
+    compactMode: z.boolean(),
   });
 }
 
-export const notificationSettingsSchema = z.object({
-  emailNotifications: z.boolean(),
-  pushNotifications: z.boolean(),
-  weeklyDigest: z.boolean(),
-  marketingEmails: z.boolean(),
-});

@@ -520,7 +520,7 @@ function TypographySection() {
               <div
                 style={{
                   fontSize: 'var(--fs-3xl)',
-                  fontWeight: w.value as unknown as number,
+                  fontWeight: Number(w.value),
                   letterSpacing: 'var(--tracking-tight)',
                   color: 'var(--text-primary)',
                   lineHeight: 1,

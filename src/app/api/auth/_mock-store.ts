@@ -12,7 +12,12 @@ type MockCredentials = {
 };
 
 export type SessionData = {
-  user: Omit<MockCredentials, 'password'>;
+  user: Omit<MockCredentials, 'password'> & {
+    bio?: string;
+    website?: string;
+    emailNotifications?: boolean;
+    compactMode?: boolean;
+  };
   expiresAt: string;
 };
 

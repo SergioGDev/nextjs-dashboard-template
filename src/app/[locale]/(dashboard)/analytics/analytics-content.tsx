@@ -7,7 +7,7 @@ import { LineChart } from '@components/charts/line-chart';
 import { DonutChart } from '@components/charts/donut-chart';
 import { DataTable, Column } from '@components/ui/data-table';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@components/ui/card';
-import { KPICard } from '@features/dashboard';
+import { KPICard } from '@components/dashboard/kpi-card';
 import { useAnalyticsMonthly, useAnalyticsDaily, useTrafficSources, DailyMetric, DateRange } from '@features/analytics';
 import { Button } from '@components/ui/button';
 import { ChartSkeleton, TableSkeleton } from '@components/feedback/skeleton';

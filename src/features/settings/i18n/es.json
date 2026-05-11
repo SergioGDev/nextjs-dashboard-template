@@ -13,7 +13,11 @@
       "bioLabel": "Biografía",
       "bioPlaceholder": "Cuéntanos algo sobre ti…",
       "websiteLabel": "Sitio web",
-      "websitePlaceholder": "https://tusitio.com"
+      "websitePlaceholder": "https://tusitio.com",
+      "emailNotificationsLabel": "Notificaciones por email",
+      "emailNotificationsHint": "Recibe actualizaciones del producto y anuncios por email.",
+      "compactModeLabel": "Modo compacto",
+      "compactModeHint": "Usa un diseño más denso con menos espaciado."
     },
     "actions": {
       "save": "Guardar cambios",

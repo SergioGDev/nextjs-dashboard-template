@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { usePathname } from '@/i18n/navigation';
+import { usePathname, useRouter } from '@/i18n/navigation';
 import { Bell, Search } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { Breadcrumbs } from './breadcrumbs';
@@ -12,9 +12,11 @@ import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { useUserStore } from '@/store/user.store';
 import { useLogoutAction } from '@/hooks/use-logout-action';
 import { getRouteLabel } from '@/lib/route-info';
+import { routes } from '@config/routes';
 
 export function Topbar() {
   const t = useTranslations('common');
+  const router = useRouter();
   const pathname = usePathname();
   const user = useUserStore((s) => s.user);
   const { logout, isPending: isLoggingOut } = useLogoutAction();
@@ -81,7 +83,7 @@ export function Topbar() {
           <p className="text-xs text-[var(--text-muted)]">{user?.email}</p>
         </div>
         <DropdownMenuItem onClick={() => {}}>{t('userMenu.profile')}</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => {}}>{t('userMenu.settings')}</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push(routes.settings)}>{t('userMenu.settings')}</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout} destructive>
           {isLoggingOut ? t('userMenu.signingOut') : t('userMenu.signOut')}

@@ -7,13 +7,16 @@ import { createProfileSettingsSchema, ProfileSettingsValues } from '@/lib/valida
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useUserStore } from '@/store/user.store';
-import { sleep } from '@/lib/utils';
+import { useUpdateProfile } from '@features/auth';
 import { toast } from '@components/feedback/toast';
 
 export function SettingsForm() {
   const t = useTranslations('settings');
   const user = useUserStore((s) => s.user);
+  const updateProfile = useUpdateProfile();
 
   const schema = createProfileSettingsSchema({
     nameMin: t('profile.validation.nameMin'),
@@ -31,14 +34,16 @@ export function SettingsForm() {
     defaultValues: {
       name: user?.name ?? '',
       email: user?.email ?? '',
-      bio: '',
-      website: '',
+      bio: user?.bio ?? '',
+      website: user?.website ?? '',
+      emailNotifications: user?.emailNotifications ?? false,
+      compactMode: user?.compactMode ?? false,
     },
   });
 
-  async function onSubmit(_data: ProfileSettingsValues) {
+  async function onSubmit(data: ProfileSettingsValues) {
     try {
-      await sleep(500);
+      await updateProfile.mutateAsync(data);
       toast.success(t('profile.toasts.saved'));
     } catch {
       toast.error(t('profile.toasts.saveFailed'));
@@ -62,6 +67,16 @@ export function SettingsForm() {
         placeholder={t('profile.form.websitePlaceholder')}
         error={errors.website?.message}
         {...register('website')}
+      />
+      <Switch
+        label={t('profile.form.emailNotificationsLabel')}
+        description={t('profile.form.emailNotificationsHint')}
+        {...register('emailNotifications')}
+      />
+      <Checkbox
+        label={t('profile.form.compactModeLabel')}
+        description={t('profile.form.compactModeHint')}
+        {...register('compactMode')}
       />
       <div className="flex justify-end">
         <Button type="submit" loading={isSubmitting} disabled={!isDirty}>

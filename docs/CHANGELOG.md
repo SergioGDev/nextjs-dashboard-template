@@ -6,6 +6,48 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B9.1] Tech debt cleanup — 2026-05-11
+
+8 items del bucket B9.1 resueltos. Sin nuevas features; sólo correcciones de arquitectura, lint y datos.
+
+### S-3 — Dead schema eliminado
+
+`NotificationSettingsValues` + `notificationSettingsSchema` (4 campos de notificaciones nunca consumidos) borrados de `lib/validators/settings.schema.ts`. Cero consumers confirmados en el audit.
+
+### L-2 — ESLint `argsIgnorePattern`
+
+`eslint.config.mjs` — añadido override con `argsIgnorePattern: '^_'` + `varsIgnorePattern: '^_'` en `@typescript-eslint/no-unused-vars`. Elimina 4 warnings de `_data` en handlers/hooks.
+
+### V-2 — `fontWeight` cast eliminado
+
+`foundations-content.tsx:523` — `w.value as unknown as number` → `Number(w.value)`. El array `WEIGHT_TOKENS` usa `as const` (strings literales), así que el cast doble era incorrecto.
+
+### T-3 — Settings dropdown → `routes.settings`
+
+`topbar.tsx` — Settings `DropdownMenuItem` ya no es un no-op. Añadido `useRouter` de `@/i18n/navigation` + import de `routes`; el click navega a `/settings`. Profile sigue sin acción (pendiente).
+
+### L-3 — Avatar: `<img>` → `<Image>` + `remotePatterns`
+
+`avatar.tsx` migrado a `next/image` con mapa de tamaños explícito `{xs:24, sm:32, md:36, lg:44, xl:64}`. `next.config.ts` añade `images.remotePatterns` para `ui-avatars.com`.
+
+### C-3 — `KPICard` movido a `components/dashboard/`
+
+`src/features/dashboard/components/kpi-card.tsx` → `src/components/dashboard/kpi-card.tsx`. Los componentes shared de dashboard pertenecen a la capa `components/`, no a `features/`. Barrels y consumers actualizados (`dashboard-content.tsx`, `analytics-content.tsx`).
+
+### FM-1 — `useUpdateProfile` + endpoint mock
+
+- `AuthUserSchema` extendido con `bio?`, `website?`, `emailNotifications?`, `compactMode?`.
+- `SessionData.user` ampliado con los mismos campos opcionales.
+- Nuevo `POST /api/auth/profile` (mock route handler) — actualiza el store y retorna `AuthSession`.
+- `authHandler.updateProfile(input)` + `useUpdateProfile()` hook con `setQueryData` + `useUserStore.getState().setUser(session.user)` en `onSuccess`.
+- Exportado desde `@features/auth`.
+
+### C-4 — SettingsForm conectado a `useUpdateProfile`
+
+`settings-form.tsx` — reemplazado `sleep(500)` por `updateProfile.mutateAsync(data)`. Schema `createProfileSettingsSchema` + tipo `ProfileSettingsValues` ampliados con `emailNotifications: z.boolean()` y `compactMode: z.boolean()`. Añadidos `<Switch>` y `<Checkbox>` en el formulario con i18n en `en.json` + `es.json`.
+
+---
+
 ## [B9.0] Tech debt audit (read-only) — 2026-05-10
 
 Auditoría exhaustiva de ~30 items de deuda técnica acumulados a lo largo de los bloques B6–B8. Sin cambios en código de producción.

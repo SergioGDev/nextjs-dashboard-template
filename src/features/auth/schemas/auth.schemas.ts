@@ -11,6 +11,10 @@ export const AuthUserSchema = z.object({
   email: z.string().email(),
   role: z.enum(['admin', 'user']),
   avatar: z.string(),
+  bio: z.string().optional(),
+  website: z.string().optional(),
+  emailNotifications: z.boolean().optional(),
+  compactMode: z.boolean().optional(),
 });
 
 export const AuthSessionSchema = z.object({

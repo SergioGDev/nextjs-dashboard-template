@@ -1,2 +1,2 @@
-export { useLogin, useLogout, useSession } from './api/use-auth';
-export type { LoginInput, AuthSession, AuthUser } from './types/auth.types';
+export { useLogin, useLogout, useSession, useUpdateProfile } from './api/use-auth';
+export type { LoginInput, AuthSession, AuthUser, ProfileUpdateInput } from './types/auth.types';

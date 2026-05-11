@@ -3,7 +3,7 @@ import { ApiError } from '@lib/api/errors';
 import { validate } from '@lib/api/validate';
 import { USE_MOCKS } from '@lib/api/config';
 import { AuthSessionSchema, LoginResponseSchema } from '../schemas/auth.schemas';
-import { type LoginInput, type AuthSession } from '../types/auth.types';
+import { type LoginInput, type AuthSession, type ProfileUpdateInput } from '../types/auth.types';
 
 type Opts = { signal?: AbortSignal };
 
@@ -28,5 +28,11 @@ export const authHandler = {
       if (ApiError.is(err) && err.status === 401) return null;
       throw err;
     }
+  },
+
+  async updateProfile(input: ProfileUpdateInput, opts: Opts = {}): Promise<AuthSession> {
+    const path = USE_MOCKS ? '/api/auth/profile' : '/auth/profile';
+    const data = await api.post<unknown>(path, input, opts);
+    return validate(AuthSessionSchema, data);
   },
 };

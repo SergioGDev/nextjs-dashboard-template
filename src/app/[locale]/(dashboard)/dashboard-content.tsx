@@ -3,7 +3,8 @@
 import * as React from 'react';
 import { useTranslations, useFormatter } from 'next-intl';
 import { DollarSign, Users, Activity, TrendingUp } from 'lucide-react';
-import { KPICard, ActivityFeed, useDashboardKPIs, useRecentActivity, useCampaigns } from '@features/dashboard';
+import { ActivityFeed, useDashboardKPIs, useRecentActivity, useCampaigns } from '@features/dashboard';
+import { KPICard } from '@components/dashboard/kpi-card';
 import { useAnalyticsMonthly } from '@features/analytics';
 import { DataTable, Column } from '@components/ui/data-table';
 import { AreaChart } from '@components/charts/area-chart';

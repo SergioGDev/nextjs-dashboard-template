@@ -8,3 +8,12 @@ import {
 export type LoginInput = z.infer<typeof LoginInputSchema>;
 export type AuthUser = z.infer<typeof AuthUserSchema>;
 export type AuthSession = z.infer<typeof AuthSessionSchema>;
+
+export type ProfileUpdateInput = {
+  name: string;
+  email: string;
+  bio?: string;
+  website?: string;
+  emailNotifications?: boolean;
+  compactMode?: boolean;
+};

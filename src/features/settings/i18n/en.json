@@ -13,7 +13,11 @@
       "bioLabel": "Bio",
       "bioPlaceholder": "Tell us about yourself…",
       "websiteLabel": "Website",
-      "websitePlaceholder": "https://yoursite.com"
+      "websitePlaceholder": "https://yoursite.com",
+      "emailNotificationsLabel": "Email notifications",
+      "emailNotificationsHint": "Receive product updates and announcements via email.",
+      "compactModeLabel": "Compact mode",
+      "compactModeHint": "Use a denser layout with smaller spacing."
     },
     "actions": {
       "save": "Save changes",
