@@ -6,7 +6,7 @@ paths:
 
 ## Project type
 
-Next.js 15 analytics dashboard template with App Router, React 19, React Compiler. Mock data by default; real API with `NEXT_PUBLIC_USE_MOCKS=false`.
+Next.js 16 analytics dashboard template with App Router, React 19, React Compiler. Mock data by default; real API with `NEXT_PUBLIC_USE_MOCKS=false`.
 
 Full reference: `docs/architecture.md`.
 

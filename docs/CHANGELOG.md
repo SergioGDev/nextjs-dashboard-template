@@ -6,6 +6,57 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B10] Realineamiento de documentación — 2026-07-27
+
+Sin cambios en código de producción. La documentación describía un estado del proyecto que ya no
+existía: el README anunciaba "B6 next" con B6–B9 ya cerrados en `main`, y varios documentos
+(README, CLAUDE.md, docs/architecture.md, `.claude/rules/architecture.md` y `auth.md`) fijaban un
+número de major de Next.js desfasado — una versión por detrás de la que instala `package.json`
+(`next@16.2.4`) desde hace varios bloques. El README también afirmaba "No test suite yet — added
+in B6", que era falso incluso en el momento en que se escribió (B6 nunca añadió tests).
+
+### Documentos corregidos
+
+- **README.md**: status actualizado a B1–B9 completos / B10 en curso; número de major de Next.js
+  corregido (líneas 3 y 11); tabla de roadmap reescrita para reflejar B6–B9 como Done y B10–B13
+  como planificación real (tests en B11, CI/CD en B12, deuda visible restante en B13); línea de
+  tests corregida a "planned for B11".
+- **CLAUDE.md**: número de major de Next.js corregido. La línea "No test suite is configured" se
+  mantiene intacta a propósito — sigue siendo cierta y queda lista para que B11 la actualice en un
+  solo sitio.
+- **docs/architecture.md**: número de major de Next.js corregido en el overview.
+- **.claude/rules/architecture.md**: número de major de Next.js corregido.
+- **.claude/rules/auth.md**: la explicación del patrón `globalThis` para `sessionStore` fijaba un
+  número de major de Next.js como causa del bundling por Route Handler. Se reescribe sin número de
+  versión (comportamiento vigente en cualquier versión reciente de Next.js), para no volver a
+  caducar en el próximo bump.
+
+### Decisiones incorporadas al decision log (`docs/architecture.md`)
+
+Dos decisiones que ya estaban vigentes en el código pero no escritas en ningún sitio:
+
+1. **Roadmap renumbering: quality block deferred to B11** — documenta por qué los slots B7/B8
+   originalmente reservados para tests/CI se reasignaron a Charts y Layout polish, y el bloque de
+   calidad se movió a B11–B12.
+2. **CSS-driven animation over Framer Motion** — documenta que Framer Motion, listado
+   originalmente en el plan de B8, se descartó a favor de animación 100% CSS (custom properties +
+   keyframes), ya cubierta por el sistema de tokens de `/ui/foundations`.
+
+### Por qué el CHANGELOG histórico no se toca
+
+Este documento es un registro histórico inmutable. La entrada de B6d.5, que documenta el patrón
+`globalThis` de `sessionStore` y menciona la versión de Next.js vigente en aquel momento del
+proyecto, es correcta en su contexto y no se reescribe. Solo se corrigen afirmaciones que
+describen el estado ACTUAL del repo, nunca el histórico.
+
+### Housekeeping
+
+- Eliminadas las ramas locales muertas `claude/elegant-lamarr-ec548a` y `claude/goofy-kilby-25ce10`
+  (verificado con `git log main..<rama>` que no contenían commits sin mergear).
+- Eliminado el directorio `.claire/` (solo contenía subdirectorios vacíos).
+
+---
+
 ## [B9.1] Tech debt cleanup — 2026-05-11
 
 8 items del bucket B9.1 resueltos. Sin nuevas features; sólo correcciones de arquitectura, lint y datos.

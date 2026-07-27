@@ -2,7 +2,7 @@
 
 ## Overview
 
-NexDash is a Next.js 15 analytics dashboard template designed to be cloned, configured, and extended. It ships with mock data so it works immediately without a backend. When you're ready to connect a real API, a single environment variable flips the entire data layer without touching any component.
+NexDash is a Next.js 16 analytics dashboard template designed to be cloned, configured, and extended. It ships with mock data so it works immediately without a backend. When you're ready to connect a real API, a single environment variable flips the entire data layer without touching any component.
 
 The architecture is **feature-based**: each business domain (users, analytics, reports, dashboard) lives in a self-contained folder under `src/features/`. A feature owns everything related to its domain — data fetching, validation, types, and domain-specific UI components. Pages in `src/app/` consume features via barrel imports and are kept intentionally thin. Shared, reusable UI primitives live in `src/components/`.
 
@@ -319,6 +319,27 @@ Two named themes: **Midnight Pro** (dark, default) and **Arctic Light** (light).
 **Decided**: split the architectural refactor into five independent, green sub-blocks rather than one large branch.  
 **Why**: each sub-block leaves the repo in a passing state (`lint + build`). Reviewers can inspect the evolution step by step. Any sub-block can be reverted without losing the others.  
 **Discarded**: single "big-bang" refactor PR. High conflict risk, hard to review, all-or-nothing rollback.
+
+### Roadmap renumbering: quality block deferred to B11
+
+**Decided**: the B7 and B8 slots were reassigned to Charts showcases and Layout
+polish. The quality block originally planned as B7 (tests, CI) moves to B11–B12.  
+**Why**: closing the design system end to end produced a coherent, demonstrable
+artifact sooner. Test infrastructure has no dependency on showcase work, so
+deferring it caused no rework.  
+**Discarded**: keeping the original numbering with empty slots, or renumbering
+retroactively — the latter would break every cross-reference in the CHANGELOG.
+
+### CSS-driven animation over Framer Motion
+
+**Decided**: all motion is expressed with CSS custom properties and keyframes
+(see the Motion section of `/ui/foundations`). Framer Motion is not adopted.  
+**Why**: the animation surface is small — toasts, dialogs, sidebar, skeleton
+shimmer — and fully covered by CSS transitions with tokenised durations and
+easings. A runtime animation library would grow the client bundle without a
+matching gain.  
+**Discarded**: Framer Motion, originally listed in the B8 polish block.
+Reconsidered once tokenised motion in foundations proved sufficient.
 
 ---
 

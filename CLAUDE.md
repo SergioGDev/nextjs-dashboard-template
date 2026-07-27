@@ -15,7 +15,7 @@ No test suite is configured.
 
 ## Architecture
 
-NexDash is a Next.js 15 analytics dashboard template using the App Router with two route groups:
+NexDash is a Next.js 16 analytics dashboard template using the App Router with two route groups:
 - `(auth)` — public pages (login)
 - `(dashboard)` — protected pages with a shared layout (sidebar + topbar)
 

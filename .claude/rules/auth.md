@@ -70,7 +70,7 @@ El cliente HTTP ya tiene `credentials: 'include'` — no hay que modificar nada 
 
 **Patrón globalThis para mock stores**: `sessionStore` en `_mock-store.ts` usa el patrón
 singleton de `globalThis` (`g._nexdashSessionStore ??= new Map()`). Esto es necesario porque
-Next.js 15 compila cada Route Handler como bundle webpack independiente; sin este patrón, cada
+Next.js compila cada Route Handler como bundle webpack independiente; sin este patrón, cada
 handler evalúa el módulo en su propia instancia y obtiene un `Map` diferente. La sesión creada
 en `POST /login` sería invisible para `GET /me`. El singleton también sobrevive a HMR (hot module
 reload durante desarrollo). Las sesiones se pierden solo con reinicio completo del servidor —

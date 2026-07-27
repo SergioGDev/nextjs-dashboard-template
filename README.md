@@ -1,14 +1,14 @@
 # NexDash
 
-A Next.js 15 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API. Multi-language ready (English + Spanish, easily extensible).
+A Next.js 16 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API. Multi-language ready (English + Spanish, easily extensible).
 
-> **Status**: B1–B5 complete (architecture, data layer, auth, UX feedback, i18n). B6 next: complete UI showcase. See [CHANGELOG](docs/CHANGELOG.md).
+> **Status**: B1–B9 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit). B10 in progress: documentation realignment. See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
 | Technology | Purpose |
 |---|---|
-| Next.js 15 (App Router) | Framework + routing |
+| Next.js 16 (App Router) | Framework + routing |
 | React 19 + React Compiler | UI with automatic memoization |
 | TypeScript 5 (strict) | Type safety |
 | Tailwind CSS v4 | Styling via CSS custom properties |
@@ -96,7 +96,7 @@ npm run build    # Production build
 npm run lint     # ESLint (0 errors policy)
 ```
 
-No test suite yet — added in B6.
+No test suite yet — planned for B11.
 
 ## Documentation
 
@@ -118,6 +118,14 @@ No test suite yet — added in B6.
 | B3 | ✅ Done | Auth: middleware, login/logout, cookie, 401 interceptor |
 | B4 | ✅ Done | UX: toasts, empty states, error states, skeletons |
 | B5 | ✅ Done | i18n: next-intl, locale routing, language switcher, full translation pass |
-| B6 | 🔄 Next | Complete UI showcase: foundations, charts, data-table, remaining components |
-| B7 | Pending | Quality: Vitest, Testing Library, Husky, GitHub Actions CI |
-| B8 | Pending | Polish: Framer Motion, a11y, metadata, next/image |
+| B6 | ✅ Done | UI showcase: foundations, components, table, data-table |
+| B7 | ✅ Done | Charts showcases: area, bar, line, donut |
+| B8 | ✅ Done | Layout polish: single source of truth for routes + showcases |
+| B9 | ✅ Done | Tech debt audit (38 items) + cleanup of 8 |
+| B10 | 🔄 Current | Documentation realignment |
+| B11 | Pending | Test suite: Vitest + Testing Library |
+| B12 | Pending | CI/CD: Dockerfile, GitHub Actions, Dokploy deployment |
+| B13 | Pending | Remaining demo-visible tech debt |
+
+B9.2 and B9.3 remain partially open: items with visible demo impact are addressed in B13; the
+rest is tracked as known debt in [docs/B9-audit.md](docs/B9-audit.md).
