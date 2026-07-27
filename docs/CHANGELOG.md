@@ -6,6 +6,67 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B11.1] Arnés de tests: Vitest + Testing Library — 2026-07-27
+
+Primer sub-bloque de B11. Monta exclusivamente la infraestructura de tests — sin tests reales
+de lógica ni de componentes (eso es B11.2). Objetivo deliberado: si el arnés falla, que sea un
+problema aislado y no mezclado con la primera tanda de tests.
+
+### Añadido
+
+- **Dependencias** (`devDependencies`): `vitest@^4.1.10`, `@vitejs/plugin-react@^6.0.4`,
+  `jsdom@^29.1.1`, `vite-tsconfig-paths@^6.1.1`, `@testing-library/react@^16.3.2`,
+  `@testing-library/user-event@^14.6.1`, `@testing-library/jest-dom@^7.0.0`.
+- **`vitest.config.ts`**: entorno `jsdom`, plugin React, resolución de alias vía
+  `vite-tsconfig-paths` (lee `tsconfig.json`, sin duplicar el mapa de paths), `setupFiles`
+  apuntando a `src/test/setup.ts`.
+- **`src/test/setup.ts`**: matchers de `@testing-library/jest-dom` (vía el entrypoint
+  `@testing-library/jest-dom/vitest`), `cleanup()` tras cada test.
+- **`src/test/render.tsx`**: `renderWithProviders(ui, options?)` — el arnés. Envuelve en un
+  `QueryClient` nuevo por llamada (`retry: false`, `staleTime: 0`) y en
+  `NextIntlClientProvider` con `locale`/`messages` inyectables por opción (default `{}`).
+  Re-exporta todo `@testing-library/react`. No incluye `Toaster` ni `AuthInterceptor` por
+  defecto (opt-in por test).
+- **`src/test/harness.smoke.test.tsx`**: un único test que ejercita `useTranslations` y
+  `useQuery` simultáneamente para validar que ambos providers funcionan.
+- **Scripts** en `package.json`: `test` (`vitest run`), `test:watch` (`vitest`), `typecheck`
+  (`tsc --noEmit`) — este último no existía y lo necesitará B12.2 para CI.
+- **`docs/testing.md`**: cómo correr los tests, razonamiento completo del arnés (por qué no
+  reutiliza `Providers` de la app, por qué `messages` por defecto vacío, limitación conocida
+  de correr sin React Compiler).
+- **`.claude/rules/testing.md`**: reglas cortas y accionables para escribir tests, con
+  `paths:` apuntando a `src/test/**` y `**/*.test.{ts,tsx}` para carga automática.
+
+### Decisiones
+
+- **`globals: false`** en `vitest.config.ts` — cada test importa `describe/it/expect`
+  explícitamente desde `'vitest'`. Coherente con el estilo del repo (nada implícito) y evita
+  añadir `"vitest/globals"` a `compilerOptions.types`.
+- **Mensajes de next-intl por defecto vacíos (OPCIÓN B, no OPCIÓN A)**: cada test declara solo
+  las claves que usa, en vez de cargar `common.json` real. Evita que un cambio de copy rompa
+  tests que no van de copy. Ver `docs/testing.md` para el razonamiento completo.
+- **Tests sin React Compiler**: `reactCompiler: true` en `next.config.ts` lo aplica el
+  pipeline de build de Next; Vitest no pasa por ahí. Se documenta como limitación conocida en
+  vez de replicar el pipeline de compilación en el arnés de test.
+- **`jsdom@^29.1.1`, no `^30`**: `jsdom@30` exige Node `^22.22.2 || ^24.15.0 || >=26.0.0`; este
+  entorno corre Node `22.16.0`. `npm install` resolvió automáticamente la versión más reciente
+  compatible.
+
+### Verificación
+
+`npm test`, `npm run typecheck`, `npm run lint` y `npm run build` en verde. `npm test`
+ejecutado dos veces seguidas con el mismo resultado (sin estado de `QueryClient` filtrado
+entre tests). Alias `@config/*` verificado manualmente en el smoke test y retirado tras
+confirmar que resuelve.
+
+### No incluido (queda para B11.2)
+
+Tests de `route-info`, schemas Zod, `validate()` y componentes reales. README.md y
+`CLAUDE.md:14` ("No test suite is configured") no se tocan — siguen siendo ciertos hasta que
+B11.2 añada tests de verdad.
+
+---
+
 ## [B10] Realineamiento de documentación — 2026-07-27
 
 Sin cambios en código de producción. La documentación describía un estado del proyecto que ya no
