@@ -30,6 +30,10 @@ paths:
 | `@store/*` | `src/store/*` | Zustand stores |
 | `@/*` | `src/*` | Escape hatch — prefer specific aliases |
 
+`tsconfig.json` also declares `@app/*`, `@types/*` and `@styles/*`. All three have **zero usages**
+in `src/` — dead config. Don't adopt them: either they get removed, or the decision to keep them
+needs a reason. Tracked as debt.
+
 ## Import rules (strict)
 
 1. **Features are consumed via barrel only**:

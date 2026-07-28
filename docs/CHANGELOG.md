@@ -6,6 +6,81 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B11.6] Realineamiento del contexto de Claude — 2026-07-28
+
+B10 realineó la documentación **para humanos** (README, docs/). Este bloque hace lo mismo con la
+documentación **para agentes**: `CLAUDE.md` y `.claude/rules/`. Sin cambios en código de producción.
+
+### Por qué era urgente
+
+`CLAUDE.md` es el fichero que lee todo agente antes de tocar el repo. Desde el refactor B2.5
+—que movió el data layer a `src/features/*/api/`— seguía publicando un diagrama que apuntaba a
+`src/mocks/data/` y `src/mocks/handlers/`, **directorios que no existen**. Todos los agentes
+lanzados en los bloques B6 a B11.5 lo leyeron.
+
+### Método: comprobación ejecutable, no lectura
+
+B10 falló en detectar esto porque su verificación fue un grep de números de versión. Aquí la
+verificación fue distinta: **extraer cada path citado en `CLAUDE.md` y en las 15 reglas, y
+comprobar su existencia en disco**. Eso convierte "¿está la doc al día?" en un check binario.
+
+Limitación encontrada al aplicarlo: el check no distingue un ejemplo de un **contraejemplo**.
+`testing.md` cita `src/lib/__tests__/route-info.test.ts` marcado explícitamente como `✗ never`,
+y el script lo reporta como roto. Un gate automatizado necesitaría un mecanismo de exclusión —
+propuesto para B12 como paso de CI, no implementado aquí para no introducir un check que rompa
+en falso.
+
+### Correcciones en `CLAUDE.md`
+
+- **Data Flow**: reescrito. El patrón real es `src/features/{name}/api/` con `_mock-data.ts`,
+  `{name}.handler.ts`, `{name}.keys.ts` y `use-{name}.ts`. Añadida la aclaración de que
+  `src/hooks/` contiene sólo hooks transversales, nunca de fetching.
+- **Component Layers**: `src/components/dashboard/` sólo contiene `kpi-card`. `DataTable` está en
+  `ui/`, y `activity-feed` sigue siendo feature-local en `src/features/dashboard/components/`.
+  Añadidas tres capas que faltaban: `feedback/`, `auth/`, `i18n/`.
+- **State Management**: faltaba `sidebar.store.ts` (creado en B6). Añadido, junto a la nota de que
+  `user.store` no se persiste.
+- **Theming**: dos errores. Los bloques de tema viven en `src/styles/tokens.css`, no en
+  `globals.css`; y el mecanismo son **clases** `.theme-dark`/`.theme-light` (next-themes con
+  `attribute="class"`), no atributos `[data-theme]`.
+- **Path Aliases**: declaraba uno (`@/*`) de los nueve del `tsconfig.json`. Corregido a los seis
+  en uso real, señalando que `@app/*`, `@types/*` y `@styles/*` tienen **cero usos** — config
+  muerta que no debe adoptarse.
+- **Índice de reglas**: listaba 5 de las 15 reglas existentes. Completado, más un índice de los
+  docs de referencia marcando `B6-audit.md` y `B9-audit.md` como snapshots que no se editan.
+
+### Correcciones en `.claude/rules/`
+
+- **`styling.md`** — el hallazgo más dañino. Su receta "Adding a New Accent Color" mandaba añadir
+  bloques `[data-theme="dark"][data-accent="teal"]` en `globals.css`: fichero equivocado **y**
+  selector equivocado. Un agente siguiéndola habría escrito CSS que compila y nunca aplica.
+  Corregido a `.theme-dark[data-accent="teal"]` en `src/styles/tokens.css`, con una nota explícita
+  de que los dos selectores no son intercambiables.
+  Además, su frontmatter `paths:` sólo incluía `src/app/globals.css` — es decir, **la regla no se
+  cargaba al editar los ficheros de los que habla**. Añadido `src/styles/**`.
+- **`components.md`** — listaba `Label` entre las primitivas. Fue eliminado en B6 (0 consumers),
+  y `forms.md` ya lo documentaba como eliminado: las dos reglas se contradecían. Corregidas
+  también las capas, igual que en `CLAUDE.md`.
+- **`architecture.md`** — el folder layout omitía `src/i18n/`, `src/messages/`, `src/styles/`,
+  `src/test/` y `src/proxy.ts`. Y la "Feature anatomy", que es la receta que siguen los agentes al
+  crear un feature, **omitía el directorio `i18n/`** — obligatorio en todos los features. Un agente
+  siguiendo la receta habría violado las reglas de i18n en su primer label. Documentadas también
+  las dos desviaciones legítimas: `settings/` es sólo i18n y `ui-showcase/` no tiene `api/`.
+- **`state.md`** — la tabla de stores omitía `useSidebarStore` (`nexdash-sidebar`, persistido).
+- **`conventions.md`** — su tabla de alias listaba 6 de 9; añadida la nota de que los tres
+  restantes son config muerta.
+
+### Deuda detectada, no corregida
+
+- `@app/*`, `@types/*`, `@styles/*` declarados en `tsconfig.json` con cero usos. Eliminarlos es un
+  cambio de config fuera del alcance de un bloque de documentación.
+- Ficheros `.gitkeep` residuales en `src/features/{analytics,dashboard,reports,users}/` junto a
+  contenido real, sobrantes del scaffolding inicial.
+- `docs/B6-audit.md` sitúa `KPICard` en `features/dashboard/`, correcto en su momento y movido en
+  B9.1. Es un snapshot histórico y no se edita, igual que el CHANGELOG.
+
+---
+
 ## [B11.5] Seguridad: Next 16.2.4 → 16.2.12 — 2026-07-28
 
 Bloque corto, intercalado entre B11 y B12 a propósito. Sin features: sólo el bump de Next y su

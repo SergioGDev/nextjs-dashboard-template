@@ -139,6 +139,7 @@ covered, what's deliberately out of scope, and why.
 | B10 | ✅ Done | Documentation realignment |
 | B11 | ✅ Done | Test suite: Vitest + Testing Library |
 | B11.5 | ✅ Done | Security: Next 16.2.4 → 16.2.12 (22 high advisories closed) |
+| B11.6 | ✅ Done | Realigned agent context: `CLAUDE.md` + `.claude/rules/` |
 | B12 | 🔄 Next | CI/CD: Dockerfile, GitHub Actions, Dokploy deployment |
 | B13 | Pending | Remaining demo-visible tech debt |
 

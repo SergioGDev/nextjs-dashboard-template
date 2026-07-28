@@ -2,6 +2,7 @@
 description: Tailwind v4 setup, CSS custom properties, and theming system
 paths:
   - src/app/globals.css
+  - src/styles/**
   - src/components/**
 ---
 
@@ -22,12 +23,17 @@ This means you can write `bg-surface` or `bg-[var(--surface)]` — both work.
 
 ## Theme System
 
-Two attributes on `<html>` control the active theme, managed by next-themes + Zustand:
+Two things on `<html>` control the active theme, managed by next-themes + Zustand:
 
-- `data-theme="dark | light"` — color palette
-- `data-accent="indigo | violet | emerald | rose | amber | cyan"` — accent color
+- **A class** — `.theme-dark` or `.theme-light` — color palette. next-themes is configured with
+  `attribute="class"` and `value={{ light: 'theme-light', dark: 'theme-dark' }}` in
+  `src/app/providers.tsx`. It is **not** a `data-theme` attribute.
+- `data-accent="indigo | violet | emerald | rose | amber | cyan"` — accent color (this one *is*
+  an attribute, set by `AccentSync` in `providers.tsx`).
 
-Each combination has its own CSS block in `globals.css`. Dark default: `indigo`. Light default: `violet`.
+Each combination has its own CSS block in **`src/styles/tokens.css`**, selected as
+`.theme-dark[data-accent="indigo"]`. `globals.css` only holds `@theme inline` plus base styles
+and imports `tokens.css` and `components.css`.
 
 ## Available Tokens
 
@@ -50,19 +56,21 @@ Each combination has its own CSS block in `globals.css`. Dark default: `indigo`.
 
 ## Adding a New Accent Color
 
-1. Add two CSS blocks in `globals.css` (one per theme):
+1. Add two CSS blocks in `src/styles/tokens.css` (one per theme), next to the existing accents:
    ```css
-   [data-theme="dark"][data-accent="teal"] {
+   .theme-dark[data-accent="teal"] {
      --accent: #14B8A6;
      --accent-hover: #0D9488;
      --accent-muted: rgba(20, 184, 166, 0.15);
      --accent-foreground: #FFFFFF;
    }
-   [data-theme="light"][data-accent="teal"] {
+   .theme-light[data-accent="teal"] {
      --accent: #0D9488;
      --accent-hover: #0F766E;
      --accent-muted: rgba(13, 148, 136, 0.08);
      --accent-foreground: #FFFFFF;
    }
    ```
+   The class-plus-attribute selector is not interchangeable with `[data-theme="dark"]` — that
+   attribute is never set, so such a block would compile fine and never apply.
 2. Add the new value to the options list in the settings form and in `useUIStore` if needed.

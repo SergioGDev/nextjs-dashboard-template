@@ -44,4 +44,5 @@ export const useMyStore = create<MyState>()(
 | Store | Key | Persisted | Contents |
 |---|---|---|---|
 | `useUIStore` | `nexdash-ui` | Yes | `sidebarCollapsed`, `accent` |
-| `useUserStore` | — | No | Current logged-in user |
+| `useSidebarStore` | `nexdash-sidebar` | Yes | `expandedGroups` — which sidebar groups are open |
+| `useUserStore` | — | No | Current logged-in user (hydrated from `/me`, never persisted) |

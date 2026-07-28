@@ -14,13 +14,18 @@ Full reference: `docs/architecture.md`.
 
 ```
 src/app/         Pages and layouts (thin — delegate to features)
-src/features/    Business domains (users, analytics, reports, dashboard)
-src/components/  Shared UI (ui/, charts/, forms/, layout/)
-src/config/      Configuration (env, constants, routes)
-src/lib/         Domain-free utilities (api client, validate, utils)
-src/hooks/       Cross-feature hooks (use-sidebar, use-media-query)
-src/store/       Zustand stores (ui.store, user.store)
+src/features/    Business domains (users, analytics, reports, dashboard, auth, settings, ui-showcase)
+src/components/  Shared UI (ui/, charts/, forms/, layout/, feedback/, dashboard/, auth/, i18n/)
+src/config/      Configuration (env, constants, routes, i18n)
+src/lib/         Domain-free utilities (api client, validate, utils, route-info, charts)
+src/hooks/       Cross-feature hooks (use-sidebar, use-media-query, use-floating-position, use-logout-action)
+src/store/       Zustand stores (ui.store, sidebar.store, user.store)
+src/i18n/        next-intl request config and localized navigation wrappers
+src/messages/    Cross-cutting translations (common.json per locale)
+src/styles/      tokens.css (themes + accents) and components.css (nx-* classes)
+src/test/        Vitest setup and the renderWithProviders harness
 src/types/       Global types (api.types.ts only)
+src/proxy.ts     Edge middleware — auth gate on dashboard routes
 ```
 
 ## Feature anatomy
@@ -37,9 +42,17 @@ schemas/
   {name}.schemas.ts     Zod schemas — source of truth for all types
 types/
   {name}.types.ts       z.infer<> exports + UI-only types
+i18n/
+  en.json / es.json     Feature strings — MANDATORY, registered in src/i18n/request.ts
 components/             Domain-specific components (optional)
 index.ts                Public barrel — hooks, types, components ONLY
 ```
+
+Do not skip `i18n/`: every user-visible string must live in a translation file (see `i18n.md`).
+A feature created without it will violate the i18n rules on its first rendered label.
+
+Two features deviate on purpose: `settings/` is i18n-only (its form schema lives in
+`src/lib/validators/`), and `ui-showcase/` has no `api/` or `schemas/` because it fetches nothing.
 
 ## Dependency rules
 

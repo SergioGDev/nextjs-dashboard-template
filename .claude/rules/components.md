@@ -9,11 +9,14 @@ paths:
 Build from the bottom up — never reach across layers or skip one:
 
 ```
-src/components/ui/          # Primitives: Button, Card, Input, Label, Select, etc.
+src/components/ui/          # Primitives: Button, Card, Input, Select, Table, DataTable, etc.
 src/components/forms/       # Form compositions: login-form, user-form, settings-form
 src/components/charts/      # Recharts wrappers: area-chart, bar-chart, line-chart, donut-chart
 src/components/layout/      # App shell: sidebar, topbar, breadcrumbs, theme-toggle
-src/components/dashboard/   # Feature components: kpi-card, activity-feed, data-table
+src/components/feedback/    # toast, empty-state, error-state, skeleton
+src/components/dashboard/   # kpi-card
+src/components/auth/        # session-provider
+src/components/i18n/        # language-switcher
 ```
 
 ## Class Merging
