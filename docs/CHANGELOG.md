@@ -6,6 +6,92 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B11.2] Tests: lógica + componentes — 2026-07-27
+
+Segundo sub-bloque de B11. B11.1 dejó el arnés montado y verde; este sub-bloque escribe los
+tests reales. 36 tests en 13 ficheros (35 nuevos + el smoke test de B11.1), todos colocados
+junto al fuente que cubren. Cero cambios en código de producción.
+
+### Config: alias nativos (punto 0)
+
+- **`vitest.config.ts`**: sustituido el plugin `vite-tsconfig-paths` por la opción nativa de
+  Vite `resolve: { tsconfigPaths: true }`. Mismo objetivo (leer `tsconfig.json` sin duplicar
+  el mapa de alias), una dependencia menos, y desaparece el aviso de deprecación que
+  `vite-tsconfig-paths` imprimía en cada `npm test` recomendando exactamente este cambio.
+- **`package.json`**: `vite-tsconfig-paths` desinstalado de `devDependencies`.
+- Verificado manualmente que los nueve alias del tsconfig (`@/`, `@app/`, `@features/`,
+  `@components/`, `@lib/`, `@config/`, `@store/`, `@types/`, `@styles/`) siguen resolviendo —
+  incluidos alias distintos de `@/` (`@config/routes`, `@lib/utils`, `@lib/api/errors`).
+
+### Añadido — tests de lógica pura
+
+- **`src/lib/route-info.test.ts`** (9 tests) — el fichero de test más importante del repo.
+  Match exacto, match por prefijo con segmento dinámico (`/users/123` → Users), links con
+  `exact: true` excluidos del match por prefijo, la regla `/ui` → título de sección, la regla
+  `/reports` → label del grupo, ruta inexistente (fallback + `null`), y la cadena completa de
+  ancestros para un hijo de grupo.
+- **`src/lib/api/validate.test.ts`** (2 tests) — caso válido devuelve el valor tipado; caso
+  inválido lanza `ApiError` con `code: 'VALIDATION_ERROR'`, nunca un `ZodError` crudo.
+- **`src/lib/validators/{auth,user,settings}.schema.test.ts`** (2 tests cada uno, 6 total) —
+  un fichero por factory Zod. Verifica que el mensaje INYECTADO (strings de prueba
+  reconocibles como `'REQUIRED_EMAIL'`, no los mensajes reales) llega a
+  `safeParse().error.issues`, y que el caso válido pasa.
+
+### Añadido — auth
+
+- **`src/features/auth/api/auth.handler.test.ts`** (3 tests) — `authHandler.me()`: 401 →
+  `null`, 500 → propaga `ApiError`, respuesta válida → sesión validada.
+  **Decisión — OPCIÓN A**: `vi.mock('@lib/api/client', ...)`. Se mockea el módulo exacto que
+  importa `auth.handler.ts` (`import { api } from '@lib/api/client'`, no el barrel
+  `@lib/api`), para que el test no dependa de cómo se construye la request (headers,
+  `credentials`, URL) — contrato que el handler no controla.
+
+### Añadido — componentes (RTL vía `renderWithProviders`)
+
+5 componentes elegidos por tener lógica real, no solo variantes CSS: `Button` (2 tests —
+`loading` deshabilita y muestra `Spinner`; `iconOnly` exige y renderiza nombre accesible),
+`Avatar` (2 tests — fallback a iniciales sin `src`, y tras el `onError` de `next/image`),
+`Badge` (2 tests — `onRemove` se invoca y detiene la propagación hacia un handler padre; sin
+botón de remove si no hay `onRemove`), `ErrorState` (3 tests — `onRetry` se invoca al pulsar;
+detalles técnicos de dev solo se muestran con `error`), `EmptyState` (2 tests — título por
+variante desde i18n; `title` explícito gana al default de i18n). Ningún test asierta
+`toHaveClass(...)` — todas las aserciones son sobre comportamiento observable.
+
+### Añadido — DataTable
+
+- **`src/components/ui/data-table.test.tsx`** (4 tests) — filtro por input de búsqueda,
+  case-insensitive, término sin resultados muestra `table.noResults`, y un **test de
+  contrato** que demuestra la limitación conocida D-5 (`docs/B9-audit.md`): el filtro lee el
+  valor crudo de columna, así que una query que solo coincide con el texto transformado por
+  `col.render` no encuentra nada. El test asierta el comportamiento ACTUAL a propósito — es
+  documentación ejecutable de la limitación, no un test que finge que funciona.
+
+### Documentación
+
+- **`docs/testing.md`**: sección "Coverage" nueva con el mapeo completo de qué cubre cada
+  suite, más la razón de la Decisión 1 (por qué los componentes con `@/i18n/navigation` — 9
+  módulos: `login-form`, `session-provider`, `sidebar/*` ×4, `topbar`, `breadcrumbs`,
+  `language-switcher` — no se testean en B11.2: su lógica de negocio real ya vive en
+  `route-info.ts`, que sí se testea a fondo). Actualizadas las referencias a
+  `vite-tsconfig-paths` → alias nativo.
+- **`README.md`**: comandos de test añadidos a la sección Development, enlace a
+  `docs/testing.md`, B11 marcado como ✅ Done en el roadmap.
+- **`CLAUDE.md`**: comandos `typecheck`/`test`/`test:watch` añadidos junto a
+  dev/build/start/lint.
+
+### Verificación
+
+`npm test` (36/36 verde, dos corridas seguidas con resultado idéntico — sin fuga de estado
+entre tests), `npm run typecheck`, `npm run lint`, `npm run build` en verde. Aserción de
+`route-info.test.ts` rota a propósito y confirmado que el test falla, luego revertida.
+
+### Deuda técnica detectada (no corregida — fuera de scope)
+
+Ninguna nueva. Se referencia D-5 (`docs/B9-audit.md`), ya documentada en B9.0, ahora con un
+test que la demuestra en lugar de solo describirla.
+
+---
+
 ## [B11.1] Arnés de tests: Vitest + Testing Library — 2026-07-27
 
 Primer sub-bloque de B11. Monta exclusivamente la infraestructura de tests — sin tests reales

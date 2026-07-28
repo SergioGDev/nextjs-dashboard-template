@@ -1,8 +1,8 @@
 # Testing
 
-Vitest + Testing Library harness. This document covers the infrastructure added in
-**B11.1**. Actual test coverage (route-info, Zod schemas, `validate()`, components) is
-**B11.2** — none of that exists yet.
+Vitest + Testing Library harness. **B11.1** added the infrastructure (config, `renderWithProviders`,
+setup file). **B11.2** added the actual test suite — see [Coverage](#coverage) below for what's
+tested and, just as importantly, what's deliberately not.
 
 ---
 
@@ -28,7 +28,7 @@ pre-existing `# testing` section) for whenever one is added.
 | Rendering | `@testing-library/react` | Renders components, queries the DOM |
 | Interaction | `@testing-library/user-event` | Simulates real user input (click, type, tab) |
 | Matchers | `@testing-library/jest-dom` | `toBeInTheDocument()`, `toHaveTextContent()`, etc. |
-| Alias resolution | `vite-tsconfig-paths` | Reads `tsconfig.json` `paths` — single source of truth |
+| Alias resolution | Vite's native `resolve.tsconfigPaths` | Reads `tsconfig.json` `paths` — single source of truth |
 | React plugin | `@vitejs/plugin-react` | JSX transform for Vitest's Vite pipeline |
 
 Config lives in `vitest.config.ts` (repo root) and `src/test/setup.ts` (global setup, runs
@@ -147,11 +147,15 @@ those itself, scoped to that test — not have them silently active in every ren
 
 ## Path aliases in tests
 
-`vitest.config.ts` resolves aliases via the `vite-tsconfig-paths` plugin, which reads
-`tsconfig.json`'s `compilerOptions.paths` directly. There is no second alias map in the
-Vitest config — `tsconfig.json` is the single source of truth for all nine aliases (`@/`,
+`vitest.config.ts` resolves aliases via Vite's native `resolve: { tsconfigPaths: true }` option,
+which reads `tsconfig.json`'s `compilerOptions.paths` directly. There is no second alias map in
+the Vitest config — `tsconfig.json` is the single source of truth for all nine aliases (`@/`,
 `@app/`, `@features/`, `@components/`, `@lib/`, `@config/`, `@store/`, `@types/`, `@styles/`).
 A test can `import { QUERY } from '@config/constants'` exactly like application code.
+
+**B11.2**: replaced the `vite-tsconfig-paths` plugin with this native option (uninstalled the
+dependency). Same source of truth, one fewer dependency, and it silences the deprecation notice
+`vite-tsconfig-paths` printed on every `npm test` run recommending exactly this switch.
 
 ---
 
@@ -176,6 +180,75 @@ This is accepted, not worked around:
 correctness (e.g., something that only "works" because an auto-memoized value never becomes
 stale). If that's ever suspected, verify manually against the dev/build output — don't add
 the compiler to the test pipeline to check it.
+
+---
+
+## Coverage
+
+Added in **B11.2**. 36 tests across 13 files (35 new + the B11.1 harness smoke test). All
+colocated with the source they cover.
+
+### Pure logic
+
+- **`src/lib/route-info.test.ts`** — the most important suite in the repo. Covers exact match,
+  longest-prefix match for dynamic segments (`/users/123` → Users), `exact: true` links being
+  excluded from prefix matching, the `/ui` → section-title rule, the `/reports` → group-label
+  rule, unknown routes, and the full ancestor chain for a group child.
+- **`src/lib/api/validate.test.ts`** — valid data returns the typed value; invalid data throws
+  `ApiError` with `code: 'VALIDATION_ERROR'`, never a raw `ZodError`.
+- **`src/lib/validators/{auth,user,settings}.schema.test.ts`** — one file per Zod factory.
+  Confirms the *injected* message (not a hardcoded one) surfaces in `safeParse().error.issues`,
+  and that valid input passes. Test messages use recognizable strings like `'REQUIRED_EMAIL'`
+  to make the injection visible.
+
+### Auth
+
+- **`src/features/auth/api/auth.handler.test.ts`** — `authHandler.me()`: a 401 resolves to
+  `null` (no session is not an app error, per `.claude/rules/auth.md`), a 500 propagates as
+  `ApiError`, and a valid response returns the validated session.
+  **Isolation choice: OPCIÓN A** (`vi.mock('@lib/api/client', ...)`). Mocks the exact module
+  `auth.handler.ts` imports (`import { api } from '@lib/api/client'` — not the `@lib/api`
+  barrel), so the test stays stable across changes to request construction, headers, or
+  `credentials` handling, none of which the handler's contract depends on.
+
+### Components (RTL, via `renderWithProviders`)
+
+Five components, chosen for having real logic (not just CSS variants): `Button` (loading
+disables + shows a spinner; `iconOnly` requires and renders an accessible name), `Avatar`
+(falls back to initials with no `src`, and after the `next/image` `onError` fires), `Badge`
+(`onRemove` fires and stops propagation to a parent handler; no remove button renders without
+`onRemove`), `ErrorState` (`onRetry` fires on click; dev-only technical details render only
+when an `error` is passed), `EmptyState` (per-variant i18n title resolution; explicit `title`
+prop wins over the i18n default).
+
+None of these assert `toHaveClass(...)` — every assertion is on observable behavior (DOM text,
+`disabled`, callbacks, presence/absence of elements), so renaming a CSS class can't break a
+test that isn't testing CSS.
+
+### `DataTable` search filter
+
+`src/components/ui/data-table.test.tsx` — typing in the search input filters rows, matching is
+case-insensitive, a query with no matches shows `table.noResults`, and a **contract test**
+proves the known limitation D-1/D-5 (see `docs/B9-audit.md`): the filter reads raw column
+values, so a query that only matches a `col.render`-transformed string (e.g. searching
+`"currently"` when `render` displays "Currently active" but the raw value is `"active"`) finds
+nothing. That test asserts the *current* (limited) behavior on purpose — it will need updating,
+not deleting, if D-5 is ever fixed.
+
+### Deliberately NOT covered — Decision 1
+
+Nine modules depend on `@/i18n/navigation` (`useRouter`/`usePathname`/`Link`): `login-form`,
+`session-provider`, the four `sidebar/*` files, `topbar`, `breadcrumbs`, `language-switcher`.
+None of these have component tests in B11.2.
+
+**Reasoning**: router-dependent components need router mocks, and the mock cost is paid per
+test with little payoff here, because the logic that actually matters in `Topbar` and
+`Breadcrumbs` — deriving a page title and an ancestor chain from a pathname — has already been
+extracted into `src/lib/route-info.ts`, a pure function with zero React or router dependency.
+`route-info.test.ts` tests that logic directly and exhaustively. A component test for `Topbar`
+would only be testing that it calls `getRouteLabel()` and renders the result — wiring, not
+logic — for the cost of a full router mock. If `Topbar`/`Breadcrumbs` ever grow real
+conditional logic beyond "call route-info and render", revisit this decision.
 
 ---
 

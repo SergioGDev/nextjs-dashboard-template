@@ -2,7 +2,7 @@
 
 A Next.js 16 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API. Multi-language ready (English + Spanish, easily extensible).
 
-> **Status**: B1–B9 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit). B10 in progress: documentation realignment. See [CHANGELOG](docs/CHANGELOG.md).
+> **Status**: B1–B11 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, test suite). B12 next: CI/CD and deployment. See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
@@ -58,6 +58,7 @@ src/
 ├── lib/              API client, validation helper, utilities
 ├── hooks/            Cross-feature hooks (sidebar, media query)
 ├── store/            Zustand stores (ui preferences, current user)
+├── test/             Vitest setup and the renderWithProviders harness
 └── types/            Global types (api.types.ts)
 ```
 
@@ -91,12 +92,18 @@ in components.
 ## Development
 
 ```bash
-npm run dev      # Start dev server (localhost:3000)
-npm run build    # Production build
-npm run lint     # ESLint (0 errors policy)
+npm run dev        # Start dev server (localhost:3000)
+npm run build      # Production build
+npm run lint       # ESLint (0 errors policy)
+npm run typecheck  # tsc --noEmit
+npm test           # Vitest — single pass, CI-style
+npm run test:watch # Vitest — watch mode for local development
 ```
 
-No test suite yet — planned for B11.
+Test suite: Vitest + Testing Library (jsdom). Covers pure logic (`route-info`, `validate()`,
+Zod validator factories), `authHandler.me()`, a handful of UI components (behavior, not CSS
+classes), and the `DataTable` search filter. See [docs/testing.md](docs/testing.md) for what's
+covered, what's deliberately out of scope, and why.
 
 ## Documentation
 
@@ -106,6 +113,7 @@ No test suite yet — planned for B11.
 - [Auth](docs/auth.md) — session, middleware, login/logout flow
 - [Feedback](docs/feedback.md) — toasts, empty states, error states, skeletons
 - [i18n](docs/i18n.md) — locale routing, namespaces, adding a language, glossary
+- [Testing](docs/testing.md) — Vitest + Testing Library harness, coverage, conventions
 - [Changelog](docs/CHANGELOG.md) — block-by-block history
 
 ## Roadmap
@@ -122,9 +130,9 @@ No test suite yet — planned for B11.
 | B7 | ✅ Done | Charts showcases: area, bar, line, donut |
 | B8 | ✅ Done | Layout polish: single source of truth for routes + showcases |
 | B9 | ✅ Done | Tech debt audit (38 items) + cleanup of 8 |
-| B10 | 🔄 Current | Documentation realignment |
-| B11 | Pending | Test suite: Vitest + Testing Library |
-| B12 | Pending | CI/CD: Dockerfile, GitHub Actions, Dokploy deployment |
+| B10 | ✅ Done | Documentation realignment |
+| B11 | ✅ Done | Test suite: Vitest + Testing Library |
+| B12 | 🔄 Next | CI/CD: Dockerfile, GitHub Actions, Dokploy deployment |
 | B13 | Pending | Remaining demo-visible tech debt |
 
 B9.2 and B9.3 remain partially open: items with visible demo impact are addressed in B13; the

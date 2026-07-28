@@ -5,13 +5,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev      # Start dev server (localhost:3000)
-npm run build    # Production build
-npm run start    # Run production server
-npm run lint     # ESLint (v9 flat config)
+npm run dev        # Start dev server (localhost:3000)
+npm run build      # Production build
+npm run start      # Run production server
+npm run lint       # ESLint (v9 flat config)
+npm run typecheck  # tsc --noEmit
+npm test           # Vitest — single pass, CI-style
+npm run test:watch # Vitest — watch mode
 ```
-
-No test suite is configured.
 
 ## Architecture
 
