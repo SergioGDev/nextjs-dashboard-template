@@ -1,0 +1,40 @@
+# dependencies — reinstalled in the deps stage via npm ci
+node_modules
+
+# build output — regenerated in the builder stage
+.next
+out
+build
+
+# vcs / editor / agent tooling
+.git
+.gitignore
+.claude
+.vscode
+.idea
+.DS_Store
+
+# tests & coverage — not needed at runtime
+coverage
+**/*.test.ts
+**/*.test.tsx
+src/test
+
+# env files — never bake secrets into the image; config comes from build args / runtime env
+.env
+.env*.local
+!.env.example
+
+# docs — irrelevant to the build, keep the context small
+docs
+*.md
+!README.md
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# misc caches
+*.tsbuildinfo

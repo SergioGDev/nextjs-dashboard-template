@@ -2,7 +2,7 @@
 
 A Next.js 16 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API. Multi-language ready (English + Spanish, easily extensible).
 
-> **Status**: B1–B11 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, test suite). B12 next: CI/CD and deployment. See [CHANGELOG](docs/CHANGELOG.md).
+> **Status**: B1–B11.6 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, test suite, security bump). B12.1 done: Dockerized, validated locally. B12.2–B12.3 next: CI/CD and VPS deployment. See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
@@ -111,6 +111,20 @@ Zod validator factories), `authHandler.me()`, a handful of UI components (behavi
 classes), and the `DataTable` search filter. See [docs/testing.md](docs/testing.md) for what's
 covered, what's deliberately out of scope, and why.
 
+## Deployment
+
+```bash
+docker build -t nexdash .
+docker run -d -p 3000:3000 nexdash
+```
+
+Multi-stage Dockerfile producing a minimal, non-root runtime image via Next's `output:
+'standalone'`. `NEXT_PUBLIC_*` vars are build args (`--build-arg NEXT_PUBLIC_USE_MOCKS=false`),
+not runtime env vars — they're inlined into the client bundle at build time. Healthcheck at
+`/api/health`.
+
+→ Full reasoning, traps, and verification steps: [docs/deployment.md](docs/deployment.md)
+
 ## Documentation
 
 - [Architecture](docs/architecture.md) — layers, features, dependency rules, decision log
@@ -120,6 +134,7 @@ covered, what's deliberately out of scope, and why.
 - [Feedback](docs/feedback.md) — toasts, empty states, error states, skeletons
 - [i18n](docs/i18n.md) — locale routing, namespaces, adding a language, glossary
 - [Testing](docs/testing.md) — Vitest + Testing Library harness, coverage, conventions
+- [Deployment](docs/deployment.md) — Docker, build args vs. runtime env, traps, verification
 - [Changelog](docs/CHANGELOG.md) — block-by-block history
 
 ## Roadmap
@@ -140,7 +155,9 @@ covered, what's deliberately out of scope, and why.
 | B11 | ✅ Done | Test suite: Vitest + Testing Library |
 | B11.5 | ✅ Done | Security: Next 16.2.4 → 16.2.12 (22 high advisories closed) |
 | B11.6 | ✅ Done | Realigned agent context: `CLAUDE.md` + `.claude/rules/` |
-| B12 | 🔄 Next | CI/CD: Dockerfile, GitHub Actions, Dokploy deployment |
+| B12.1 | ✅ Done | Dockerized: multi-stage build, `output: standalone`, `/api/health`, verified locally |
+| B12.2 | 🔄 Next | CI/CD: GitHub Actions |
+| B12.3 | Pending | Dokploy deployment |
 | B13 | Pending | Remaining demo-visible tech debt |
 
 B9.2 and B9.3 remain partially open: items with visible demo impact are addressed in B13; the

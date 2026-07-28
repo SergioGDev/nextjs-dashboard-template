@@ -6,6 +6,102 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B12.1] Dockerizar — 2026-07-28
+
+Primer sub-bloque de B12 (CI/CD y despliegue). Produce una imagen Docker multi-stage que
+funciona, validada **íntegramente en local** con Docker 29.2.1 — sin tocar el VPS. B12.2
+(GitHub Actions) y B12.3 (Dokploy) quedan para después.
+
+### Decisiones ya fijadas (no reabiertas aquí)
+
+- Base `node:22.16-slim` (Debian/glibc), no alpine — `sharp` es frágil sobre musl y el fallo
+  aparece en runtime sirviendo un avatar, no en build.
+- Node 22, declarado en `engines` de `package.json` (`>=22.16`).
+- Usuario no-root en el runner.
+- `NEXT_PUBLIC_USE_MOCKS` con default `true` en el `ARG` de build — la imagen funciona sin
+  backend salvo que se reconstruya con `--build-arg`.
+- Multi-stage `deps → builder → runner`; el runner sólo recibe el output `standalone`.
+
+Razonamiento completo, trampas y tabla de verificación: **[docs/deployment.md](deployment.md)**.
+
+### Cambios
+
+**Nuevos:**
+- `Dockerfile` — build multi-stage (`deps`, `builder`, `runner`)
+- `.dockerignore`
+- `src/app/api/health/route.ts` — healthcheck mínimo (`{ status: 'ok' }`), fuera del gate de
+  `proxy.ts` por construcción (matcher ya excluye `/api`; verificado explícitamente, no asumido)
+- `docs/deployment.md`
+
+**Modificados:**
+- `next.config.ts` — `output: 'standalone'`
+- `package.json` — `engines.node: ">=22.16"`; `sharp` promovido de dependencia transitiva
+  (vía `next`) a dependencia directa — recomendación oficial de Next para despliegues
+  `standalone`, y garantiza que `sharp` se resuelva pase lo que pase en el resto del árbol
+- `package-lock.json` — ver "Deuda encontrada y corregida" abajo
+- `README.md` — sección de despliegue enlazando a `docs/deployment.md`; tabla de roadmap y
+  línea de estado actualizadas
+
+### Deuda encontrada y corregida: `package-lock.json` incompleto para binarios nativos
+
+No era el objetivo del bloque, pero bloqueaba `npm ci` en Linux por completo, así que se
+corrigió aquí en vez de dejarlo para B12.2.
+
+`sharp`, `next-intl` (→ `@parcel/watcher`, y anidado, `@swc/core`), `tailwindcss`
+(→ `@tailwindcss/oxide`), `lightningcss`, y en devDependencies `vitest` (→ `rolldown`) y el
+resolver de ESLint (`unrs-resolver`) declaran binarios nativos por plataforma como
+optionalDependencies **de segundo nivel** (dentro del `package.json` de la propia dependencia,
+no en el raíz del proyecto). npm sólo escribe en el lockfile la entrada completa
+(`resolved`/`integrity`) de esos binarios para la plataforma en la que se generó el lockfile
+por última vez — a diferencia de optionalDependencies de primer nivel como `next` →
+`@next/swc-*`, que npm siempre expande a las 8 plataformas (confirmado ya en B11.5). Antes de
+este bloque, el lockfile sólo tenía las variantes `darwin-arm64`. `npm ci` en Linux no falla al
+instalar — simplemente no instala lo que el lockfile no lista — y el fallo sólo aparece después,
+al hacer `require()` del binario que falta: primero `next build` cargando `next.config.ts`
+(`@parcel/watcher`), luego compilando CSS (`lightningcss` vía Tailwind v4).
+
+**Corrección**: añadidas al lockfile las entradas que faltaban para las 6 familias, usando los
+metadatos reales del registro de npm (URL + integrity) para cada variante de plataforma, sin
+cambiar ninguna versión ya resuelta. Verificado con `npm audit` antes/después (mismas 7
+vulnerabilidades conocidas, mismo listado — cero deriva) y con una pasada completa de
+`npm test` / `npm run lint` / `npm run typecheck` / `npm run build` en verde tras el cambio.
+
+**Implicación a futuro**: si una actualización de dependencias vuelve a mostrar
+`Cannot find module '<paquete>-linux-...'` o `No prebuild or local build of <paquete> found` al
+construir en Docker, es la misma clase de problema, no un Dockerfile roto. Detalle completo en
+`docs/deployment.md`.
+
+### Verificación (los 10 pasos, en local)
+
+| Paso | Resultado |
+|---|---|
+| `docker build -t nexdash:test .` | ✓ completa sin error |
+| `docker run -d -p 3001:3000 ...` | ✓ arranca y se mantiene up |
+| `GET /en/login` | 200 |
+| `GET /api/health` | 200 `{ "status": "ok" }` (no 307) |
+| `GET /en/users` sin cookie | 307 → `/en/login` |
+| `POST /api/auth/login` (admin@nexdash.com/admin123) | 200 + cookie `nexdash_session` |
+| `GET /api/auth/me` con cookie | 200 + usuario |
+| `GET /en/users` con cookie | 200, sin redirección |
+| Estáticos (`/_next/static/...` referenciado en el HTML) | 200 |
+| `next/image` vía `sharp` (`/_next/image?url=...`) | 200, `Content-Type: image/png` |
+| Tamaño final de imagen | **308 MB** |
+
+`npm test` (36 tests), `npm run typecheck`, `npm run lint` y `npm run build` — verdes en host,
+antes y después de la cirugía del lockfile.
+
+### Lo que queda explícitamente fuera de B12.1
+
+- Pipeline de GitHub Actions (build + push de la imagen) → **B12.2**
+- Definición del servicio en Dokploy, healthcheck, dominio/TLS, despliegue real al VPS →
+  **B12.3**
+- Backend de sesión real (Redis, DB) que permita >1 réplica → no planificado; cambiaría la
+  arquitectura del mock de auth. Documentado como deuda conocida en `docs/deployment.md`
+  (una sola réplica; las sesiones no sobreviven a un redeploy porque `sessionStore` vive en
+  `globalThis`).
+
+---
+
 ## [B11.6] Realineamiento del contexto de Claude — 2026-07-28
 
 B10 realineó la documentación **para humanos** (README, docs/). Este bloque hace lo mismo con la
