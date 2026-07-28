@@ -33,7 +33,13 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Sign in with any email/password to enter the dashboard (mock auth, no backend needed).
+Open [http://localhost:3000](http://localhost:3000) and sign in with one of the mock accounts
+(no backend needed — they are also listed on the login page):
+
+| Email | Password | Role |
+|---|---|---|
+| `admin@nexdash.com` | `admin123` | admin |
+| `user@nexdash.com` | `user123` | user |
 
 ### Connecting a real backend
 
@@ -132,6 +138,7 @@ covered, what's deliberately out of scope, and why.
 | B9 | ✅ Done | Tech debt audit (38 items) + cleanup of 8 |
 | B10 | ✅ Done | Documentation realignment |
 | B11 | ✅ Done | Test suite: Vitest + Testing Library |
+| B11.5 | ✅ Done | Security: Next 16.2.4 → 16.2.12 (22 high advisories closed) |
 | B12 | 🔄 Next | CI/CD: Dockerfile, GitHub Actions, Dokploy deployment |
 | B13 | Pending | Remaining demo-visible tech debt |
 

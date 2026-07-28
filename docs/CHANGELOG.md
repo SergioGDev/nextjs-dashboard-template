@@ -6,6 +6,81 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B11.5] Seguridad: Next 16.2.4 → 16.2.12 — 2026-07-28
+
+Bloque corto, intercalado entre B11 y B12 a propósito. Sin features: sólo el bump de Next y su
+verificación. El orden importa — hacerlo **después** de tener la suite de tests significa que
+cualquier regresión se detecta en 40 segundos, y hacerlo **antes** de B12 evita reconstruir la
+imagen Docker con una versión que habría que cambiar acto seguido.
+
+### Motivo
+
+`npm audit --omit=dev` sobre `next@16.2.4` reportaba **22 advisories de severidad high**. Varias
+apuntaban directamente a lo que este proyecto usa:
+
+- **Middleware / Proxy bypass** en App Router (varias, incluida una vía rutas i18n) — `proxy.ts`
+  es exactamente la puerta de auth de las rutas del dashboard.
+- **DoS en la Image Optimization API**, incluida una vía SVG — `Avatar` usa `next/image` con
+  `remotePatterns` a un dominio externo desde B9.1.
+- **Cache poisoning** en respuestas de React Server Components.
+
+### Qué se hizo
+
+`next` y `eslint-config-next` subidos de `16.2.4` a `16.2.12`, en lockstep y manteniendo el pin
+exacto (`--save-exact`), que es el estilo que ya usaba `package.json`. `16.2.12` es la última de
+la serie 16.2.x: bump de patch, sin cambio de minor ni de major.
+
+### Verificación
+
+Además de las cuatro puertas (36 tests, typecheck, lint, build — todas verdes), se verificó el
+comportamiento en **runtime contra el build de producción**, porque varias de las CVEs cerradas
+eran de middleware y un patch podía alterar el gate de auth sin romper el build:
+
+| Caso | Resultado |
+|---|---|
+| `/` sin sesión | 307 → `/en/login` |
+| `/en/users` sin sesión | 307 → `/en/login` |
+| `/en/login` (pública) | 200 |
+| `/api/auth/me` sin cookie | 401 |
+| `POST /api/auth/login` con credenciales válidas | 200 + cookie `nexdash_session` |
+| `/api/auth/me` con cookie | 200 + usuario |
+| `/en/users` con cookie | 200, sin redirección |
+| `POST /api/auth/logout` | 200 |
+
+También se confirmó que el lockfile conserva las **24 entradas `@next/swc-*`** (ahora a 16.2.12),
+incluidas `swc-linux-x64-gnu` y `swc-linux-x64-musl` — necesarias para que `npm ci` funcione en la
+imagen Docker de B12.
+
+### Lo que NO se hizo, y por qué
+
+Quedan dos advisories transitivas **dentro** de Next, y se aceptan como deuda conocida:
+
+- **`sharp <0.35.0`** (CVEs heredadas de libvips). Next 16.2.12 declara
+  `optionalDependencies.sharp: "^0.34.5"`, y el caret sobre una `0.x` no permite `0.35.x`.
+  Forzarlo con `overrides` saldría del rango declarado por Next y el fallo aparecería en la
+  optimización de imágenes **en runtime**, no en build — es decir, en el VPS y no en local.
+- **`postcss@8.4.31`** anidado bajo Next (la copia de `@tailwindcss/postcss` es 8.5.23, ya
+  parcheada).
+
+**Exposición real en este proyecto**: las CVEs de `postcss` requieren CSS controlado por un
+atacante, y aquí todo el CSS se escribe en el repo y se procesa en build. Las de `sharp` requieren
+procesar imágenes maliciosas, y el optimizador sólo acepta orígenes de `remotePatterns`
+(hoy `ui-avatars.com`). Si en el futuro se añaden más orígenes, esta valoración cambia.
+
+**Trampa documentada**: `npm audit fix --force` propone `next@9.3.3` — una release de 2020.
+Ejecutarlo destruiría el proyecto. Advertencia añadida a `CLAUDE.md` para que ningún agente futuro
+lo ejecute al recibir un "arregla las vulnerabilidades".
+
+### Corregido de paso
+
+`README.md` afirmaba en Getting started: *"Sign in with any email/password"*. Es **falso** — el
+mock valida contra credenciales fijas vía `findMockUser` (`admin@nexdash.com` / `admin123` y
+`user@nexdash.com` / `user123`). Detectado al hacer el smoke test de login, que devolvió 401 con
+un email arbitrario. Sustituido por una tabla con las cuentas reales. La UI del login ya las
+mostraba correctamente (sección "Demo accounts"); el README era el único sitio equivocado.
+
+---
+
 ## [B11.2] Tests: lógica + componentes — 2026-07-27
 
 Segundo sub-bloque de B11. B11.1 dejó el arnés montado y verde; este sub-bloque escribe los

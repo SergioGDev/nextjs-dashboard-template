@@ -14,6 +14,13 @@ npm test           # Vitest — single pass, CI-style
 npm run test:watch # Vitest — watch mode
 ```
 
+### Never run `npm audit fix --force`
+
+`npm audit` reports two transitive advisories bundled inside Next (`postcss`, `sharp`) and
+proposes `next@9.3.3` as the "fix" — a 2020 release. Running `--force` would destroy the
+project. Both are upstream-bound: Next pins `sharp@^0.34.5`, so the patched `0.35.x` is outside
+its declared range. Accepted as known debt; see `docs/CHANGELOG.md` under B11.5.
+
 ## Architecture
 
 NexDash is a Next.js 16 analytics dashboard template using the App Router with two route groups:
