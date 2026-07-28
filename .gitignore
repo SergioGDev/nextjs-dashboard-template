@@ -34,9 +34,10 @@ yarn-error.log*
 .env*
 !.env.example
 
-# claude code — keep rules, exclude conversation history
+# claude code — keep rules, exclude conversation history and scratch checkouts
 .claude/projects/
 .claude/settings.local.json
+.claude/worktrees/
 
 # vercel
 .vercel
