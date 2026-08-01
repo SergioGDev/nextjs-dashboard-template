@@ -5,7 +5,7 @@ component gets a dedicated page here.
 
 **When creating a new component:**
 1. Create the component in `src/components/ui/` (or the appropriate layer)
-2. Create a page in `src/app/(dashboard)/ui/{categoria}/{nombre}/page.tsx`
+2. Create a page in `src/app/[locale]/(dashboard)/ui/{categoria}/{nombre}/page.tsx`
 3. Register the route in `src/config/routes.ts` under `ui.*`
 4. Remove `disabled: true` from the nav item in `ui-subnav.tsx`
 5. Increment the category `count` in the overview page
@@ -21,7 +21,7 @@ component gets a dedicated page here.
 - Code snippets are plain strings — no syntax highlighting library
 - `ShowcaseDemo` calls `toast.success('Copied to clipboard')` on copy — do NOT add extra feedback
 
-**Reference page:** `src/app/(dashboard)/ui/toasts/page.tsx`
+**Reference page:** `src/app/[locale]/(dashboard)/ui/toasts/page.tsx`
 
 ## Limitaciones conocidas
 

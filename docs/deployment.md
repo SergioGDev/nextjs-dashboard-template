@@ -185,9 +185,62 @@ surgery before trusting the Docker build.
 
 ---
 
+## CI (GitHub Actions)
+
+Added in **B12.2**. Two workflow files in `.github/workflows/`, both scoped to `main` — this repo
+has no pull-request history (45+ commits, all direct to `main`), so any check that only ran on
+`pull_request` would simply never execute in practice.
+
+### `ci.yml` — quality gate
+
+Runs on every `push` and `pull_request` to `main`: `npm ci` → `npm run lint` → `npm run typecheck`
+→ `npm test` → `npm run check:docs` → `npm run build`, in that order (cheapest first, so a broken
+change fails in seconds, not minutes). Uses `actions/setup-node` with Node pinned to `22.16.0`
+(matching `engines.node` and the Dockerfile's `node:22.16-slim`) and `cache: 'npm'`.
+
+Always `npm ci`, never `npm install` — see the package-lock.json trap below; the point of CI is to
+validate exactly what's committed, and `npm install` can silently paper over a missing lockfile
+entry that `npm ci` would fail loudly on.
+
+`npm run check:docs` runs `scripts/check-doc-paths.mjs`, which extracts every `src/...`,
+`docs/...` and `scripts/...` path cited in the living documentation (`CLAUDE.md`, `README.md`,
+`docs/*.md` minus the historical/immutable files, `.claude/rules/*.md`) and fails if any doesn't
+exist on disk. Written in Node rather than bash: the runner is Linux, and an earlier ad-hoc
+version of this check (B11.6) used `sed -i ''` — macOS/BSD syntax that breaks on GNU sed. See
+`.claude/rules/testing.md` for the exclusion conventions (`✗`-marked counter-examples,
+`{placeholder}`/`*`-glob patterns).
+
+### `docker.yml` — image build + smoke test
+
+**Does not publish anywhere.** Dokploy builds and deploys the image itself via its own webhook on
+push to `main` (**B12.3**) — running a second build here and pushing it to a registry nobody reads
+from would just be paying for the same work twice.
+
+Triggers are asymmetric on purpose:
+
+| Trigger | Condition |
+|---|---|
+| `pull_request` → `main` | Always |
+| `push` → `main` | Only if `Dockerfile`, `.dockerignore`, `package.json`, `package-lock.json`, or `next.config.ts` changed |
+
+`paths:` filters in GitHub Actions apply per-trigger, not per-job, so this asymmetry needed its own
+workflow file — a single job can't attach a different path filter to `push` than to `pull_request`.
+Most pushes to `main` touch `src/` or docs, neither of which can change what gets baked into the
+image, so gating the push trigger on the files that *can* avoids a multi-minute Docker build on
+every commit — important here since, with no PR history, push is the primary event.
+
+The job doesn't stop at `docker build`. It also `docker run`s the image, polls `/api/health` until
+it responds (instead of a fixed sleep, to avoid flaking on a slower runner), then asserts the
+healthcheck returns `200` and that `/en/login` returns `200` with `/_next/static` referenced in the
+HTML. Both assertions exist because `docker build` succeeding proves nothing about whether the
+container is actually reachable — see the `HOSTNAME` and "copying only `.next/standalone`" traps
+below, both of which produce a container that builds fine and serves nothing useful. No
+`continue-on-error`, no `|| true` on any of these checks — if the curl fails, the job fails.
+
+---
+
 ## What's explicitly out of scope here
 
-- GitHub Actions CI (build + push the image on push/PR) → **B12.2**
 - Dokploy service definition, healthcheck wiring, domain/TLS, actual VPS deploy → **B12.3**
 - A real session backend to support >1 replica → not planned; would be a breaking architecture
   change to the auth mock, tracked as known debt (see the single-replica note above)

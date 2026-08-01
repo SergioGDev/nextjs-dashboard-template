@@ -1,0 +1,91 @@
+name: Docker image
+
+# Builds and smoke-tests the production image — but never publishes it.
+# Publishing/deploying is Dokploy's job (B12.3), triggered by its own
+# webhook on push to `main`; duplicating that here would mean paying for
+# the same build twice. See docs/deployment.md#ci.
+#
+# Triggers are intentionally asymmetric:
+#   - pull_request → main: ALWAYS. Every PR that touches anything should
+#     prove the image still builds and boots before merging.
+#   - push → main: ONLY when files that can actually change the image
+#     (Dockerfile, .dockerignore, package.json, package-lock.json,
+#     next.config.ts) are part of the push. Everything else (docs, most
+#     source files under src/) can't affect the built image, so re-running
+#     a multi-minute Docker build on every commit to main would be pure
+#     waste — and on a repo with zero PR history (see ci.yml), push IS the
+#     primary event, so this filter is the only thing keeping this workflow
+#     from running unconditionally on every commit.
+#
+# `paths:` filters apply per-trigger in GitHub Actions, not per-job — that's
+# why this asymmetry lives in its own workflow file instead of a second job
+# inside ci.yml (a job-level `if:` can't see which trigger fired with a
+# different paths filter attached).
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'next.config.ts'
+
+jobs:
+  build-and-smoke-test:
+    name: Build image and smoke-test container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t nexdash:ci .
+
+      # Demo/mocks mode (the Dockerfile's default) — no backend required,
+      # exactly what B12.1 validated locally.
+      - name: Run container
+        run: docker run -d -p 3001:3000 --name nexdash-ci nexdash:ci
+
+      # The standalone server needs a moment to bind. Poll instead of a
+      # fixed sleep so the job doesn't flake on a slower runner.
+      - name: Wait for container to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3001/api/health > /dev/null; then
+              echo "Container is up after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Container never became healthy — dumping logs"
+          docker logs nexdash-ci
+          exit 1
+
+      # /api/health must be reachable and return 200 — this is exactly the
+      # trap documented in docs/deployment.md: if the proxy's i18n/auth gate
+      # ever regresses to catching /api routes, this comes back as a 307
+      # instead of 200, and a real Dokploy healthcheck would loop-restart
+      # the container. No `|| true` — a failure here must fail the job.
+      - name: Healthcheck responds 200
+        run: |
+          status=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/health)
+          echo "Status: $status"
+          test "$status" = "200"
+
+      # /en/login must render and reference /_next/static — this is the
+      # other documented trap: forgetting to copy .next/static into the
+      # runner stage produces a 200 page with no CSS/JS. A build that only
+      # docker-builds without ever requesting a page can't catch that.
+      - name: Login page renders with static assets referenced
+        run: |
+          status=$(curl -s -o /tmp/login.html -w '%{http_code}' http://localhost:3001/en/login)
+          echo "Status: $status"
+          test "$status" = "200"
+          grep -q '/_next/static' /tmp/login.html
+
+      - name: Stop and remove container
+        if: always()
+        run: docker rm -f nexdash-ci || true

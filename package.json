@@ -12,7 +12,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:docs": "node scripts/check-doc-paths.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

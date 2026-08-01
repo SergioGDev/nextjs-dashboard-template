@@ -17,7 +17,7 @@ Categorías actuales:
 
 ## Pasos para añadir una nueva página
 
-1. **Crear la página**: `src/app/(dashboard)/ui/{categoria}/{nombre}/page.tsx`
+1. **Crear la página**: `src/app/[locale]/(dashboard)/ui/{categoria}/{nombre}/page.tsx`
 
 2. **Registrar la ruta** en `src/config/routes.ts`:
    ```ts
@@ -30,7 +30,7 @@ Categorías actuales:
 3. **Activar el ítem** en `src/features/ui-showcase/components/ui-subnav.tsx`:
    Cambiar `disabled: true` → eliminar o poner `disabled: false`.
 
-4. **Actualizar el overview** en `src/app/(dashboard)/ui/page.tsx`:
+4. **Actualizar el overview** en `src/app/[locale]/(dashboard)/ui/page.tsx`:
    Incrementar el `count` de la categoría correspondiente.
 
 5. **Añadir labels de breadcrumb** en `src/components/layout/breadcrumbs.tsx`
@@ -95,6 +95,6 @@ Todos se importan desde `@features/ui-showcase`.
 
 ## Referencia: página de Toasts
 
-`src/app/(dashboard)/ui/toasts/page.tsx` es el patrón de referencia más
+`src/app/[locale]/(dashboard)/ui/toasts/page.tsx` es el patrón de referencia más
 completo. Incluye: variantes, with-description, with-action, estado persistente,
 overflow demo, tabla de API y tabla de métodos.

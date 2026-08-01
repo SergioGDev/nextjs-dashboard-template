@@ -55,6 +55,12 @@ src/lib/route-info.test.ts        ✓ same directory
 src/lib/__tests__/route-info.test.ts   ✗ never
 ```
 
+**Convention**: a path on a line containing `✗` is a deliberate counter-example — a path that
+must *not* exist, not a stale citation. `scripts/check-doc-paths.mjs` (run in CI as
+`npm run check:docs`) skips any path on a `✗`-marked line for this reason. If you add a new
+counter-example path anywhere in the docs, mark its line with `✗` or the doc-paths check will
+report it as broken.
+
 ## `Toaster` / `AuthInterceptor` are opt-in
 
 Not included in `renderWithProviders` by default. If a test needs toast assertions or the

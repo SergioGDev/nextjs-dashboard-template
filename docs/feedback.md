@@ -287,7 +287,7 @@ import { ErrorState } from '@components/feedback/error-state';
 Los `error.tsx` de Next.js reciben `{ error, reset }`. Para recuperación de navegación usar `EmptyState variant="error"` + `useRouter`:
 
 ```tsx
-// src/app/(dashboard)/error.tsx
+// src/app/[locale]/(dashboard)/error.tsx
 'use client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@components/ui/button';

@@ -2,7 +2,7 @@
 
 A Next.js 16 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API. Multi-language ready (English + Spanish, easily extensible).
 
-> **Status**: B1–B11.6 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, test suite, security bump). B12.1 done: Dockerized, validated locally. B12.2–B12.3 next: CI/CD and VPS deployment. See [CHANGELOG](docs/CHANGELOG.md).
+> **Status**: B1–B11.6 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, test suite, security bump). B12.1 done: Dockerized, validated locally. B12.2 done: GitHub Actions quality gate (lint, typecheck, test, docs, build) + a Docker build-and-smoke-test workflow, neither of which publishes anywhere. B12.3 next: VPS deployment via Dokploy. See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
@@ -98,18 +98,32 @@ in components.
 ## Development
 
 ```bash
-npm run dev        # Start dev server (localhost:3000)
-npm run build      # Production build
-npm run lint       # ESLint (0 errors policy)
-npm run typecheck  # tsc --noEmit
-npm test           # Vitest — single pass, CI-style
-npm run test:watch # Vitest — watch mode for local development
+npm run dev         # Start dev server (localhost:3000)
+npm run build       # Production build
+npm run lint        # ESLint (0 errors policy)
+npm run typecheck   # tsc --noEmit
+npm test            # Vitest — single pass, CI-style
+npm run test:watch  # Vitest — watch mode for local development
+npm run check:docs  # Verify every path cited in the documentation still exists on disk
 ```
 
 Test suite: Vitest + Testing Library (jsdom). Covers pure logic (`route-info`, `validate()`,
 Zod validator factories), `authHandler.me()`, a handful of UI components (behavior, not CSS
 classes), and the `DataTable` search filter. See [docs/testing.md](docs/testing.md) for what's
 covered, what's deliberately out of scope, and why.
+
+### CI
+
+Two GitHub Actions workflows, both scoped to `main` (this repo has no pull-request history — every
+commit goes straight to `main`, so PR-only checks would never run):
+
+- **`ci.yml`** — lint, typecheck, test, `check:docs`, build. Runs on every push and PR.
+- **`docker.yml`** — builds the Docker image and smoke-tests it (boots the container, curls
+  `/api/health` and `/en/login`). Always on PR; on push to `main`, only when files that can change
+  the image (`Dockerfile`, `package.json`, `package-lock.json`, `next.config.ts`, …) are touched.
+  Never publishes the image — see Deployment below.
+
+→ Full reasoning: [docs/deployment.md#ci-github-actions](docs/deployment.md#ci-github-actions)
 
 ## Deployment
 
@@ -122,6 +136,9 @@ Multi-stage Dockerfile producing a minimal, non-root runtime image via Next's `o
 'standalone'`. `NEXT_PUBLIC_*` vars are build args (`--build-arg NEXT_PUBLIC_USE_MOCKS=false`),
 not runtime env vars — they're inlined into the client bundle at build time. Healthcheck at
 `/api/health`.
+
+CI builds and smoke-tests this image on every push/PR but doesn't publish it — Dokploy builds and
+deploys its own copy via webhook (**B12.3**, pending), so nothing here duplicates that work.
 
 → Full reasoning, traps, and verification steps: [docs/deployment.md](docs/deployment.md)
 
@@ -156,8 +173,8 @@ not runtime env vars — they're inlined into the client bundle at build time. H
 | B11.5 | ✅ Done | Security: Next 16.2.4 → 16.2.12 (22 high advisories closed) |
 | B11.6 | ✅ Done | Realigned agent context: `CLAUDE.md` + `.claude/rules/` |
 | B12.1 | ✅ Done | Dockerized: multi-stage build, `output: standalone`, `/api/health`, verified locally |
-| B12.2 | 🔄 Next | CI/CD: GitHub Actions |
-| B12.3 | Pending | Dokploy deployment |
+| B12.2 | ✅ Done | GitHub Actions: quality gate (lint/typecheck/test/docs/build) + Docker build-and-smoke-test |
+| B12.3 | 🔄 Next | Dokploy deployment |
 | B13 | Pending | Remaining demo-visible tech debt |
 
 B9.2 and B9.3 remain partially open: items with visible demo impact are addressed in B13; the

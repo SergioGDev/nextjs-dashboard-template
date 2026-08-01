@@ -1,0 +1,60 @@
+name: CI
+
+# Quality gate for every change to `main`. This repo has no pull-request-only
+# workflow — all 45+ commits so far have gone straight to `main` — so both
+# triggers point at the same branch; skipping either would mean this gate
+# never runs in practice. See docs/deployment.md#ci for the full picture,
+# including why this workflow does NOT build the Docker image (that's
+# .github/workflows/docker.yml, with different, asymmetric triggers).
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Lint, typecheck, test, docs, build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          cache: 'npm'
+
+      # `npm ci`, never `npm install`: the point of CI is to validate exactly
+      # what's committed in package-lock.json. B12.1 found that npm doesn't
+      # expand nested optionalDependencies (sharp, next-intl's @swc/core,
+      # tailwindcss's oxide, lightningcss, vitest's rolldown, eslint's
+      # unrs-resolver) to every platform automatically — the lockfile now
+      # carries explicit Linux entries for all of them. `npm install` would
+      # silently paper over a regression here; `npm ci` fails loudly instead.
+      - name: Install dependencies
+        run: npm ci
+
+      # Cheapest checks first, so a broken PR fails in seconds, not minutes.
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      # Verifies every src/docs/scripts path cited across CLAUDE.md,
+      # README.md, docs/*.md and .claude/rules/*.md actually exists on disk.
+      # See scripts/check-doc-paths.mjs and .claude/rules/testing.md for the
+      # exclusion conventions (historical docs, ✗-marked counter-examples,
+      # {placeholder}/* patterns).
+      - name: Check documentation paths
+        run: npm run check:docs
+
+      # Last and most expensive: only worth paying for once everything
+      # cheaper has already passed.
+      - name: Build
+        run: npm run build

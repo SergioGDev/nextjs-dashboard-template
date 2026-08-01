@@ -101,7 +101,7 @@ El popover es navegable con teclado. Escape lo cierra.
 ### Añadir una ruta nueva al grupo Reports (o cualquier grupo existente)
 
 1. Añadir la ruta en `src/config/routes.ts`
-2. Crear la página en `src/app/(dashboard)/[ruta]/page.tsx`
+2. Crear la página en `src/app/[locale]/(dashboard)/{route}/page.tsx`
 3. Añadir la label en `src/components/layout/breadcrumbs.tsx` (routeLabels)
 4. Añadir la label en `src/components/layout/topbar.tsx` (pageTitles) si necesita título en la topbar
 5. Añadir el child en `sidebar.config.ts`

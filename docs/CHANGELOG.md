@@ -6,6 +6,112 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B12.2] GitHub Actions — puerta de calidad — 2026-08-01
+
+Segundo sub-bloque de B12. Monta el CI: lint, typecheck, test, build y un check nuevo de paths en
+documentación, más un workflow separado que construye y **smoke-testea** la imagen Docker. No
+publica nada — ni la imagen ni ningún artefacto. Eso lo hace Dokploy vía webhook en **B12.3**;
+duplicar el build aquí sería pagar dos veces lo mismo.
+
+### Decisiones ya fijadas (no reabiertas aquí)
+
+- CI no construye ni publica imagen en `push` a `main` — Dokploy la construye al recibir el
+  webhook (B12.3).
+- Job de Docker con triggers asimétricos: `pull_request` → siempre; `push` a `main` → sólo si
+  cambian `Dockerfile`, `.dockerignore`, `package.json`, `package-lock.json` o `next.config.ts`.
+  Como los filtros `paths:` de GitHub Actions son por trigger y no por job, esto exige **dos**
+  ficheros de workflow, no uno con dos jobs.
+- Node fijado a `22.16.0` en ambos workflows — coherente con `engines.node` del `package.json` y
+  con `node:22.16-slim` del Dockerfile.
+- `npm ci` siempre, nunca `npm install` — el objetivo de CI es validar exactamente lo commiteado
+  (ver la cirugía de `package-lock.json` en B12.1: `npm install` puede tapar en silencio un hueco
+  que `npm ci` señala en el acto).
+
+Razonamiento completo de los dos workflows: **[docs/deployment.md](deployment.md#ci-github-actions)**.
+
+### Por qué los triggers son asimétricos
+
+El repo tiene 45+ commits y **cero pull requests** — todo va directo a `main`. Un check que sólo
+corriera en `pull_request` no se ejecutaría nunca en la práctica; de ahí que `ci.yml` dispare en
+`push` y `pull_request` por igual, y que `docker.yml` sólo filtre por `paths:` en el trigger de
+`push` (en `pull_request` corre siempre, sin filtro).
+
+### Cambios
+
+**Nuevos:**
+- `.github/workflows/ci.yml` — `npm ci` → lint → typecheck → test → `check:docs` → build, en ese
+  orden (lo barato primero, para fallar rápido)
+- `.github/workflows/docker.yml` — `docker build` → `docker run` → poll a `/api/health` → assert
+  200 en `/api/health` y en `/en/login` (con `/_next/static` referenciado en el HTML) → cleanup.
+  Sin `continue-on-error` ni `|| true` en ninguno de esos asserts: si el curl falla, el job falla.
+- `scripts/check-doc-paths.mjs` — recorre la documentación viva (`CLAUDE.md`, `README.md`,
+  `docs/*.md` salvo los históricos, `.claude/rules/*.md`), extrae cada path `src/...`,
+  `docs/...`, `scripts/...` citado (entre backticks, en bloques de código, en links markdown y en
+  `paths:` de frontmatter YAML) y falla si alguno no existe en disco. Escrito en Node, no en
+  bash — el runner de Actions es Linux, y la versión ad-hoc de B11.6 usaba `sed -i ''`
+  (sintaxis macOS/BSD) que rompe con GNU sed.
+- `npm run check:docs` en `package.json`, integrado como paso de `ci.yml`
+
+**Modificados:**
+- `.claude/rules/testing.md` — documentada explícitamente la convención `✗` como marcador de
+  contraejemplo deliberado (ya en uso implícito desde B11.6/testing.md), de la que depende
+  `check-doc-paths.mjs` para no reportar `src/lib/__tests__/route-info.test.ts` como roto
+- `docs/deployment.md` — nueva sección "CI (GitHub Actions)" con el detalle de ambos workflows
+- `README.md` — roadmap y línea de estado
+
+### Deuda encontrada y corregida: paths `(dashboard)`/`(auth)` sin el segmento `[locale]`
+
+No era el objetivo del bloque, pero validar el propio script exigía que pasara en verde sobre el
+repo actual, y no pasaba: 6 ficheros vivos (`docs/architecture.md`, `docs/components.md` ×2,
+`docs/feedback.md`, `.claude/rules/sidebar.md`, `.claude/rules/ui-showcase.md`) citaban rutas
+como `src/app/(dashboard)/ui/toasts/page.tsx`, anteriores a que el App Router quedara anidado bajo
+`src/app/[locale]/(dashboard)/...` (B5, i18n). `docs/foundations.md` y `docs/testing.md` ya
+citaban la forma correcta — la deriva era parcial, no total, lo que probablemente explica por qué
+pasó desapercibida en B11.6 (que auditó `CLAUDE.md` y las 15 reglas, no `docs/*.md`).
+
+**Corrección**: añadido el segmento `[locale]/` en las 6 rutas concretas afectadas. Dos casos
+adicionales usaban además un nombre de ejemplo sin marcar como tal (`src/features/my-feature/` en
+`architecture.md`, `fr` como locale de ejemplo en 8 rutas de `i18n.md`, `[ruta]` como placeholder
+ad-hoc en `sidebar.md`) — convertidos a la sintaxis `{placeholder}` ya establecida en el resto del
+repo (`{feature}`, `{locale}`, `{route}`), que además es la que `check-doc-paths.mjs` reconoce
+como no-literal.
+
+**Deuda relacionada, NO corregida**: `docs/components.md:20` y `.claude/rules/ui-showcase.md:8`
+tienen el mismo problema (`src/app/(dashboard)/ui/{categoria}/{nombre}/page.tsx` sin `[locale]/`)
+pero no lo tenían — ya usan `{categoria}`/`{nombre}`, así que el check los excluye como
+placeholders y no bloqueaban el cierre de este bloque. Corregidos igualmente por consistencia con
+las líneas vecinas tocadas en el mismo fichero, pero merece una pasada dedicada si aparecen más
+casos similares.
+
+### Verificado
+
+- `npm run check:docs` → verde sobre el repo actual (178 paths, 27 ficheros)
+- Prueba de fallo real: path falso insertado temporalmente en `CLAUDE.md` → el check lo reporta y
+  sale con código 1 → revertido; repetido también desactivando temporalmente el filtro `✗` para
+  confirmar que `route-info.test.ts` se reporta como roto sin la exclusión (o sea, que la
+  exclusión no es un no-op) → revertido
+- `npm test` (36 tests), `npm run typecheck`, `npm run lint`, `npm run build` → verdes
+- Sintaxis de ambos workflows validada con `actionlint 1.7.12` → 0 issues
+
+### Lo que NO se ha podido verificar
+
+Este bloque no hace commit ni push, y los workflows sólo se ejecutan al pushear a GitHub — no hay
+forma de ejecutarlos localmente de extremo a extremo. Sin verificar en runner real:
+- Que `actions/checkout` + `actions/setup-node` con `cache: 'npm'` resuelven igual que en local
+- Comportamiento real de `docker.yml` en `ubuntu-latest` (recursos, tiempos de arranque del
+  contenedor — el poll a `/api/health` asume que arranca dentro de 30s)
+- Que los triggers asimétricos disparan como se espera en un push/PR real contra GitHub
+
+### Lo que queda explícitamente fuera de B12.2
+
+- Definición del servicio en Dokploy, healthcheck, dominio/TLS, despliegue real al VPS →
+  **B12.3**
+- Publicar la imagen a un registry → no planificado en este bloque; lo cubre el propio Dokploy
+- Backend de sesión real (Redis, DB) que permita >1 réplica → sigue como deuda conocida,
+  documentado en `docs/deployment.md`
+
+---
+
 ## [B12.1] Dockerizar — 2026-07-28
 
 Primer sub-bloque de B12 (CI/CD y despliegue). Produce una imagen Docker multi-stage que

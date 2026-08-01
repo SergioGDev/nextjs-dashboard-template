@@ -349,7 +349,7 @@ Reconsidered once tokenised motion in foundations proved sufficient.
 
 1. Create the folder structure:
    ```
-   src/features/my-feature/
+   src/features/{feature}/
      api/
        _mock-data.ts
        my-feature.handler.ts
@@ -550,7 +550,7 @@ Maximum 2 levels: Section → Group → Link. Groups cannot contain other groups
 `UiSubnav` (`src/features/ui-showcase/components/ui-subnav.tsx`) provides a secondary navigation panel rendered inside the page layout rather than the main sidebar. Use it when a section is supplementary or admin-only and adding it to the main sidebar would clutter the primary navigation. It is documented as an alternative pattern in `/ui/sidebar` but is not used in the main dashboard navigation.
 
 ```tsx
-// In a section layout (e.g. src/app/(dashboard)/my-section/layout.tsx)
+// In a section layout (e.g. src/app/[locale]/(dashboard)/{section}/layout.tsx)
 import { UiSubnav } from '@features/ui-showcase';
 
 export default function SectionLayout({ children }: { children: React.ReactNode }) {
