@@ -6,6 +6,75 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B12.3] Despliegue en producción — Dokploy — 2026-08-02
+
+La aplicación está desplegada y accesible en
+**https://tfm-master-desarrollo-ia.sergiogdev.com**. Sin cambios en código.
+
+### Modelo elegido: Dokploy construye desde el código
+
+Se evaluaron dos modelos. **A**: Dokploy hace `git pull` y `docker build` en el VPS. **B**: CI
+construye la imagen, la publica en un registry y Dokploy sólo la descarga.
+
+Se eligió **A**. El único argumento duro contra A es la memoria —un `next build` pica 1-2 GB y
+puede morir por OOM en una máquina pequeña—, y el VPS tiene 16 GB. Con esa restricción fuera, pesó
+la simplicidad: sin registry, sin tags, sin credenciales, y **sin tocar nada del CI construido en
+B12.2**. El objetivo del bloque es demostrar un pipeline funcionando, no el más elaborado posible.
+
+La decisión no es irreversible: el Dockerfile es idéntico en ambos modelos. Migrar a B es añadir un
+paso de publish en CI y cambiar el origen en Dokploy, sin tocar código de la aplicación.
+
+### Configuración real
+
+Repo de GitHub sobre `main` · build type Dockerfile · **sin build args**, usando los defaults del
+Dockerfile · 1 réplica · puerto 3000 · healthcheck en `/api/health` · dominio con TLS de Let's
+Encrypt vía Traefik · auto-deploy por webhook en push a `main`.
+
+Dos matices que quedan documentados en `docs/deployment.md` porque afectan a quien replique esto:
+
+- **Los build args no se fijaron.** La imagen se construye con los defaults, que incluyen
+  `NEXT_PUBLIC_USE_MOCKS=true`. Es la configuración correcta para esta demo, pero funciona *por
+  diseño de los defaults*, no por decisión explícita en el despliegue. Contra una API real hay que
+  fijarlos como args de **build**, no como env de runtime.
+- **La réplica única es el default de Dokploy**, no una elección deliberada. Debe permanecer en 1:
+  el store de sesiones es un `Map` en `globalThis` y con dos contenedores el login falla de forma
+  intermitente.
+
+### Verificación contra la URL pública
+
+Certificado TLS válido · `/` sin sesión 307 → `/en/login` · `/api/health` 200 · `/en/users` sin
+cookie 307 · flujo completo de login, `/me`, ruta protegida y logout, todos 200 · estáticos
+servidos · `next/image` vía sharp 200 `image/png` · locale ES 200.
+
+Y una comprobación específica del invariante de réplica única: **12 llamadas consecutivas a `/me`
+con la misma cookie devolvieron 12 × 200**. Es la única forma de confirmarlo desde fuera — con dos
+contenedores el mapa de `globalThis` no se comparte y algunas habrían devuelto 401.
+
+### Por qué este paso no tuvo incidencias
+
+El alta en Dokploy tomó minutos y no encontró un solo obstáculo. Conviene registrarlo como
+resultado y no como anécdota: **todos los modos de fallo se habían encontrado y corregido en local
+durante B12.1** — los binarios nativos ausentes en `package-lock.json`, las trampas de copia de
+estáticos de standalone, el binding de `HOSTNAME`, `sharp` en la etapa runner, y `/api/health` no
+quedando detrás del gate de auth.
+
+De haberlos dejado para el primer deploy real, cada uno habría aparecido como un fallo opaco en una
+máquina remota sin reproducción local. El coste se pagó por adelantado, donde depurar es barato.
+
+### Deuda detectada, no corregida
+
+- **No hay forma de saber qué commit está desplegado.** `/api/health` devuelve un payload mínimo a
+  propósito, y esa decisión sigue siendo correcta para un healthcheck. Pero deja sin manera de
+  confirmar que un auto-deploy llegó a producción sin abrir Dokploy. Un `/api/version` con el SHA
+  inyectado en build lo resolvería.
+- **Cabecera `x-powered-by: Next.js` expuesta.** Divulgación de información gratuita; se quita con
+  `poweredByHeader: false`.
+- **Sin cabecera `Strict-Transport-Security`.**
+
+Las tres pasan a B13.
+
+---
+
 ## [B12.2] GitHub Actions — puerta de calidad — 2026-08-01
 
 Segundo sub-bloque de B12. Monta el CI: lint, typecheck, test, build y un check nuevo de paths en

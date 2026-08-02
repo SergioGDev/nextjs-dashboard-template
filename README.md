@@ -2,7 +2,16 @@
 
 A Next.js 16 analytics dashboard template — feature-based architecture, mock data out of the box, one env var to switch to a real API. Multi-language ready (English + Spanish, easily extensible).
 
-> **Status**: B1–B11.6 complete (architecture, data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, test suite, security bump). B12.1 done: Dockerized, validated locally. B12.2 done: GitHub Actions quality gate (lint, typecheck, test, docs, build) + a Docker build-and-smoke-test workflow, neither of which publishes anywhere. B12.3 next: VPS deployment via Dokploy. See [CHANGELOG](docs/CHANGELOG.md).
+### ▶ Live demo: **https://tfm-master-desarrollo-ia.sergiogdev.com**
+
+Sign in with `admin@nexdash.com` / `admin123` — no backend needed, the credentials are also shown
+on the login page.
+
+> **Status**: B1–B12.3 complete. The app is built, tested, containerised and deployed: architecture,
+> data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, 36 tests,
+> security bump, Docker image, GitHub Actions quality gate, and a live VPS deployment via Dokploy
+> with auto-deploy on push to `main`. B13 next: remaining demo-visible tech debt.
+> See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
@@ -138,7 +147,9 @@ not runtime env vars — they're inlined into the client bundle at build time. H
 `/api/health`.
 
 CI builds and smoke-tests this image on every push/PR but doesn't publish it — Dokploy builds and
-deploys its own copy via webhook (**B12.3**, pending), so nothing here duplicates that work.
+deploys its own copy on the VPS via webhook on push to `main`, so nothing here duplicates that
+work. The deployment runs a single replica: the mock session store is an in-memory `Map` on
+`globalThis` and does not survive a second container.
 
 → Full reasoning, traps, and verification steps: [docs/deployment.md](docs/deployment.md)
 
@@ -174,8 +185,8 @@ deploys its own copy via webhook (**B12.3**, pending), so nothing here duplicate
 | B11.6 | ✅ Done | Realigned agent context: `CLAUDE.md` + `.claude/rules/` |
 | B12.1 | ✅ Done | Dockerized: multi-stage build, `output: standalone`, `/api/health`, verified locally |
 | B12.2 | ✅ Done | GitHub Actions: quality gate (lint/typecheck/test/docs/build) + Docker build-and-smoke-test |
-| B12.3 | 🔄 Next | Dokploy deployment |
-| B13 | Pending | Remaining demo-visible tech debt |
+| B12.3 | ✅ Done | Deployed to VPS via Dokploy, TLS + auto-deploy on push to `main` |
+| B13 | 🔄 Next | Remaining demo-visible tech debt + deployment hardening |
 
 B9.2 and B9.3 remain partially open: items with visible demo impact are addressed in B13; the
 rest is tracked as known debt in [docs/B9-audit.md](docs/B9-audit.md).

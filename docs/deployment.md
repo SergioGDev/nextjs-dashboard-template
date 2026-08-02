@@ -239,8 +239,101 @@ below, both of which produce a container that builds fine and serves nothing use
 
 ---
 
+## Production deployment — Dokploy (B12.3)
+
+Live at **https://tfm-master-desarrollo-ia.sergiogdev.com**.
+
+### Model chosen: Dokploy builds from source
+
+Two models were considered:
+
+| | **A — Dokploy builds** (chosen) | **B — CI publishes, Dokploy pulls** |
+|---|---|---|
+| Where the image is built | On the VPS | In GitHub Actions |
+| Deployed vs tested artifact | Rebuilt — not bit-identical | Bit-identical to the smoke-tested image |
+| Rollback | Revert commit + rebuild | Swap image tag |
+| Moving parts | Fewer: no registry, no tags | More: GHCR, tags, publish step |
+
+**A was chosen** because the VPS has 16 GB of RAM, which removes the only hard argument against it
+(a `next build` peaks at 1–2 GB and would risk OOM on a small box), and because the goal is to
+demonstrate a working pipeline rather than the most elaborate one possible. Choosing A also meant
+the CI built in B12.2 needed no changes at all.
+
+The decision is **not irreversible**: the Dockerfile is identical in both models. Moving to B later
+means adding a publish step to CI and changing the image source in Dokploy — no application code
+changes.
+
+### Actual configuration
+
+| Setting | Value | Note |
+|---|---|---|
+| Source | GitHub repo, branch `main` | |
+| Build type | Dockerfile | Not Nixpacks or buildpacks |
+| Build args | **none set — Dockerfile `ARG` defaults used** | See caveat below |
+| Replicas | 1 | Dokploy's default — see caveat below |
+| Container port | 3000 | `EXPOSE 3000` + `PORT`/`HOSTNAME` in the Dockerfile |
+| Healthcheck | `/api/health` | Returns `{"status":"ok"}` |
+| Domain | `tfm-master-desarrollo-ia.sergiogdev.com` | TLS via Let's Encrypt, managed by Traefik |
+| Auto-deploy | Webhook on push to `main` | |
+
+**Caveat — build args.** No build args were set, so the image is built with the Dockerfile's
+defaults, which include `NEXT_PUBLIC_USE_MOCKS=true`. That is the correct configuration for this
+demo (it runs with no backend), but it works *by design of the defaults*, not by explicit choice at
+deploy time. Anyone deploying this against a real API must set them explicitly as **build-time**
+args — see the section above on why runtime env vars silently do nothing.
+
+**Caveat — replicas.** The value is 1 because that is Dokploy's default, not because it was set
+deliberately. It **must stay at 1**: the session store is an in-memory `Map` on `globalThis`, so a
+second replica makes login fail intermittently depending on which container Traefik routes to.
+Anyone scaling this service must first replace the session store.
+
+### Verification against the public URL
+
+Run after deployment, from outside the VPS:
+
+| Check | Result |
+|---|---|
+| TLS certificate | Valid (`ssl_verify_result=0`) |
+| `/` with no session | 307 → `/en/login` |
+| `/api/health` | 200 `{"status":"ok"}` |
+| `/en/users` with no cookie | 307 → `/en/login` |
+| Login → `/me` → protected route → logout | 200 · 200 with user · 200 no redirect · 200 |
+| Static assets | `/_next/static/...` CSS served, 67 KB |
+| `next/image` via sharp | 200, `image/png` |
+| Spanish locale | `/es/login` 200 |
+| Single replica | 12 consecutive `/me` calls with one cookie → 12 × 200 |
+
+That last check is the only way to confirm the single-replica constraint from outside: with two
+containers the `globalThis` map is not shared, so some calls would return 401 depending on routing.
+
+### Why this step was uneventful
+
+The Dokploy setup itself took minutes and hit no obstacles. That is worth recording as a result,
+not as an anecdote: **every failure mode had already been found and fixed locally in B12.1** — the
+missing platform binaries in `package-lock.json`, the standalone static-copy traps, `HOSTNAME`
+binding, `sharp` in the runner stage, and `/api/health` not being caught by the auth gate.
+
+Had those been left to surface during the first VPS deploy, each would have appeared as an opaque
+failure on a remote machine with no local reproduction. The cost was paid up front, in the place
+where debugging is cheapest.
+
+### Known gaps
+
+- **No way to tell which commit is deployed.** `/api/health` deliberately returns a minimal payload
+  (a healthcheck that does work can fail for reasons unrelated to service health, causing a healthy
+  container to be restarted). But that leaves no way to confirm an auto-deploy actually shipped
+  without opening Dokploy. A separate `/api/version` returning a build-time commit SHA would close
+  this.
+- **`x-powered-by: Next.js` is exposed.** Free information disclosure; removed with
+  `poweredByHeader: false` in `next.config.ts`.
+- **No `Strict-Transport-Security` header.** Can be added in Traefik via Dokploy, or in Next.
+
+All three are tracked for B13.
+
+---
+
 ## What's explicitly out of scope here
 
-- Dokploy service definition, healthcheck wiring, domain/TLS, actual VPS deploy → **B12.3**
 - A real session backend to support >1 replica → not planned; would be a breaking architecture
   change to the auth mock, tracked as known debt (see the single-replica note above)
+- Publishing the image to a container registry → not needed under model A; see the comparison above
