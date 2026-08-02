@@ -6,6 +6,67 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B14] Hub de documentación: objetivos, metodología y arranque — 2026-08-02
+
+Cierra el roadmap. El README pasa de documento único a **índice**: 196 → 117 líneas, con los
+enlaces agrupados por intención (entender el proyecto / ponerlo en marcha / extenderlo /
+historia) en vez de una lista plana.
+
+### Documentos nuevos
+
+**`docs/project-goals.md`** (ES) — el porqué, que no existía en ningún sitio. Qué es NexDash y
+por qué un template y no un producto, qué se propone demostrar, las decisiones deliberadas de
+alcance con su razón (mocks por defecto, sesión en memoria, réplica única, animación en CSS,
+`<select>` nativo), y lo que queda fuera a conciencia — backend real, CSP, e2e, escalado
+horizontal. Incluye una guía de evaluación para quien revise el trabajo.
+
+La sección de contexto académico se redactó a partir de los objetivos reales del autor, no de
+una plantilla: el encargo del máster es construir algo genuinamente útil desarrollándolo
+íntegramente con asistencia de IA, y el problema concreto que resuelve es que **en la práctica
+totalidad de los proyectos que el autor emprende aparece el mismo requisito —un dashboard— y cada
+vez se rehace desde cero**. De ahí que el entregable sea un template del que partir, y no una
+aplicación de demostración.
+
+Eso es lo que sostiene el resto del documento: un template cuyo primer usuario previsto es su
+propio autor en el proyecto siguiente no admite atajos cómodos, porque los paga quien lo hereda.
+Y explica por qué el criterio de éxito no es que la aplicación funcione —eso se ve en la demo—
+sino que el siguiente proyecto pueda arrancar desde aquí sin arrepentirse.
+
+**`docs/methodology.md`** (ES) — cómo se construyó. Es el documento con material que ningún otro
+proyecto podría escribir, y hasta ahora estaba disperso entre `.claude/rules/architect-prompts.md`
+y 63 entradas de este CHANGELOG. Cubre la separación arquitecto/ejecutor, la disciplina de bloques
+con condiciones de cierre, y la verificación —incluida la verificación por mutación, con comandos
+reproducibles.
+
+Su sección más larga es **«Lo que salió mal»**: el diagnóstico erróneo del lockfile de swc que
+habría roto el build en el VPS, los tres checks que verificaban campos que no pueden fallar, los
+dos errores de acotación del arquitecto, un prompt con requisitos contradictorios que el ejecutor
+detectó y reportó, y un generador de datos correcto cuya salida era absurda. Documentar los fallos
+del método es lo que lo hace evaluable.
+
+**`docs/getting-started.md`** (EN) — extraído del README: instalación, scripts, cuentas mock,
+conexión a un backend real, tour de la estructura y tabla de "si quieres hacer X, lee Y".
+
+### El gate de documentación cazó su propio documento
+
+`npm run check:docs` falló al verificar B14: `methodology.md` citaba `src/mocks/` al narrar
+precisamente que ese directorio había sido eliminado. El check no distingue "esta ruta ya no
+existe, ése era el bug" de "esta ruta debería existir".
+
+Se resolvió reformulando la frase, no añadiendo una exclusión. La convención `✗` existe para
+contraejemplos de uso; estirarla para cubrir rutas históricas habría debilitado el check. Es
+preferible perder la literalidad de un path en un párrafo narrativo que aflojar el único
+mecanismo automático que detecta deriva documental.
+
+### Verificación
+
+Los 16 enlaces del README y todos los enlaces internos de los tres documentos nuevos resuelven a
+ficheros existentes. Los cinco comandos que promete la documentación se ejecutaron uno a uno. Las
+credenciales documentadas existen en `_mock-store.ts`. `check:docs` pasa de 183 a **194 rutas
+verificadas en 30 ficheros**.
+
+---
+
 ## [B13.3] Hardening del despliegue — 2026-08-02
 
 Cierra B13 y la deuda anotada en B12.3: los tres huecos detectados al verificar la URL pública
