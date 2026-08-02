@@ -7,11 +7,11 @@ A Next.js 16 analytics dashboard template — feature-based architecture, mock d
 Sign in with `admin@nexdash.com` / `admin123` — no backend needed, the credentials are also shown
 on the login page.
 
-> **Status**: B1–B12.3 complete. The app is built, tested, containerised and deployed: architecture,
-> data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, 36 tests,
-> security bump, Docker image, GitHub Actions quality gate, and a live VPS deployment via Dokploy
-> with auto-deploy on push to `main`. B13 next: remaining demo-visible tech debt.
-> See [CHANGELOG](docs/CHANGELOG.md).
+> **Status**: B1–B13.1 complete. The app is built, tested, containerised and deployed: architecture,
+> data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, 46 tests,
+> security bump, Docker image, GitHub Actions quality gate, a live VPS deployment via Dokploy
+> with auto-deploy on push to `main`, and a functional topbar (route search + real notifications).
+> B13.2/B13.3 next: DataTable pagination + deployment hardening. See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
@@ -117,8 +117,9 @@ npm run check:docs  # Verify every path cited in the documentation still exists 
 ```
 
 Test suite: Vitest + Testing Library (jsdom). Covers pure logic (`route-info`, `validate()`,
-Zod validator factories), `authHandler.me()`, a handful of UI components (behavior, not CSS
-classes), and the `DataTable` search filter. See [docs/testing.md](docs/testing.md) for what's
+Zod validator factories), `authHandler.me()` and `notificationsHandler.getAll()`, a handful of
+UI components (behavior, not CSS classes) including the topbar route search and the notification
+bell, and the `DataTable` search filter. See [docs/testing.md](docs/testing.md) for what's
 covered, what's deliberately out of scope, and why.
 
 ### CI
@@ -186,7 +187,9 @@ work. The deployment runs a single replica: the mock session store is an in-memo
 | B12.1 | ✅ Done | Dockerized: multi-stage build, `output: standalone`, `/api/health`, verified locally |
 | B12.2 | ✅ Done | GitHub Actions: quality gate (lint/typecheck/test/docs/build) + Docker build-and-smoke-test |
 | B12.3 | ✅ Done | Deployed to VPS via Dokploy, TLS + auto-deploy on push to `main` |
-| B13 | 🔄 Next | Remaining demo-visible tech debt + deployment hardening |
+| B13.1 | ✅ Done | Topbar: functional route search + `notifications` feature (closes T-1, T-2) |
+| B13.2 | 🔄 Next | DataTable pagination |
+| B13.3 | 🔄 Next | Deployment hardening |
 
 B9.2 and B9.3 remain partially open: items with visible demo impact are addressed in B13; the
 rest is tracked as known debt in [docs/B9-audit.md](docs/B9-audit.md).

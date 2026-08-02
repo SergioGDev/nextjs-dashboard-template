@@ -15,7 +15,9 @@
   },
   "navigation": {
     "searchPlaceholder": "Buscar…",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "searchEmpty": "No se encontraron rutas",
+    "searchResultsLabel": "Resultados de búsqueda"
   },
   "sidebar": {
     "sections": {

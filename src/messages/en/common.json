@@ -15,7 +15,9 @@
   },
   "navigation": {
     "searchPlaceholder": "Search…",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "searchEmpty": "No routes found",
+    "searchResultsLabel": "Search results"
   },
   "sidebar": {
     "sections": {

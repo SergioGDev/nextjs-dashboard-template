@@ -1,0 +1,12 @@
+{
+  "title": "Notifications",
+  "unreadAriaLabel": "{count} unread notifications",
+  "empty": {
+    "title": "No notifications",
+    "description": "You're all caught up."
+  },
+  "error": {
+    "title": "Couldn't load notifications",
+    "description": "Something went wrong. Try again."
+  }
+}

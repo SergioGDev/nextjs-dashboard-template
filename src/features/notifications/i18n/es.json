@@ -1,0 +1,12 @@
+{
+  "title": "Notificaciones",
+  "unreadAriaLabel": "{count} notificaciones sin leer",
+  "empty": {
+    "title": "Sin notificaciones",
+    "description": "Estás al día."
+  },
+  "error": {
+    "title": "No se pudieron cargar las notificaciones",
+    "description": "Algo salió mal. Inténtalo de nuevo."
+  }
+}

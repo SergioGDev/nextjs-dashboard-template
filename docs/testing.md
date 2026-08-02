@@ -188,6 +188,10 @@ the compiler to the test pipeline to check it.
 Added in **B11.2**. 36 tests across 13 files (35 new + the B11.1 harness smoke test). All
 colocated with the source they cover.
 
+**B13.1** added 10 more — 46 tests across 16 files: `notificationsHandler.getAll()`, the topbar
+route search (`topbar-search.test.tsx`), and the notification bell (`notification-bell.test.tsx`).
+See the "Notifications & topbar search" and "Deliberately NOT covered" sections below.
+
 ### Pure logic
 
 - **`src/lib/route-info.test.ts`** — the most important suite in the repo. Covers exact match,
@@ -225,6 +229,27 @@ None of these assert `toHaveClass(...)` — every assertion is on observable beh
 `disabled`, callbacks, presence/absence of elements), so renaming a CSS class can't break a
 test that isn't testing CSS.
 
+### Notifications & topbar search (B13.1)
+
+- **`src/features/notifications/api/notifications.handler.test.ts`** — exercises the real
+  mock branch (`USE_MOCKS` true, real `randomDelay`, no mocking of `@lib/utils`): the resolved
+  list has the same length as the fixture, and the unread count computed from it matches the
+  fixture's unread count and is `> 0` — i.e. the topbar badge has real data to count, it isn't
+  coincidentally always `3`.
+- **`src/components/layout/topbar-search.test.tsx`** — mocks `@/i18n/navigation`'s `useRouter`
+  (`vi.mock('@/i18n/navigation', ...)`, matching the isolation style of the auth handler test:
+  mock the exact module the component imports). Types "Users" and asserts the EN-translated
+  option appears and Enter calls `push('/users')`; types "usuarios" at `locale: 'es'` and
+  asserts the ES-translated option appears (proves labels are translated *before* filtering, not
+  matched against the raw i18n key); types a nonsense query and asserts the translated empty
+  message renders with zero options.
+- **`src/components/layout/notification-bell.test.tsx`** — mocks the `@features/notifications`
+  barrel (`vi.mock('@features/notifications', ...)`), not the handler underneath it, since the
+  component only ever talks to the public hook. Asserts the badge digit is the unread count
+  computed from mock fixture data (not a literal), that the badge is absent at zero unread, and
+  that the dropdown's loading/error+retry/empty states render per `feedback.md`'s mandatory
+  pattern.
+
 ### `DataTable` search filter
 
 `src/components/ui/data-table.test.tsx` — typing in the search input filters rows, matching is
@@ -239,7 +264,7 @@ not deleting, if D-5 is ever fixed.
 
 Nine modules depend on `@/i18n/navigation` (`useRouter`/`usePathname`/`Link`): `login-form`,
 `session-provider`, the four `sidebar/*` files, `topbar`, `breadcrumbs`, `language-switcher`.
-None of these have component tests in B11.2.
+None of these have component tests.
 
 **Reasoning**: router-dependent components need router mocks, and the mock cost is paid per
 test with little payoff here, because the logic that actually matters in `Topbar` and
@@ -249,6 +274,14 @@ extracted into `src/lib/route-info.ts`, a pure function with zero React or route
 would only be testing that it calls `getRouteLabel()` and renders the result — wiring, not
 logic — for the cost of a full router mock. If `Topbar`/`Breadcrumbs` ever grow real
 conditional logic beyond "call route-info and render", revisit this decision.
+
+**Revisited in B13.1 for `topbar-search`**: this is exactly that "grows real logic" case.
+`topbar-search.tsx` also depends on `@/i18n/navigation` (`useRouter`), but unlike `Topbar` it
+has real conditional logic of its own — filtering, `activeIndex` keyboard navigation, the
+empty-state branch — so the router-mock cost was worth paying. It moved out of this list into
+"Notifications & topbar search" above. `topbar.tsx` itself stays on this list: it still only
+wires `TopbarSearch`, `NotificationBell`, `Breadcrumbs`, etc. together with no branching logic
+of its own.
 
 ---
 

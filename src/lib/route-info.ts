@@ -128,3 +128,31 @@ export function getRouteLabel(pathname: string): string {
 export function getRouteAncestors(pathname: string): RouteAncestors | null {
   return findAncestors(pathname);
 }
+
+export interface SearchableRoute {
+  label: string; // i18n key, relative to the 'common' namespace
+  href: string;
+}
+
+/**
+ * Flattens sidebarConfig into every navigable link (top-level and nested
+ * inside groups) for the topbar route search. Single source of truth —
+ * consumers translate `label` themselves before filtering.
+ */
+export function getSearchableRoutes(): SearchableRoute[] {
+  const results: SearchableRoute[] = [];
+
+  for (const section of sidebarConfig) {
+    for (const item of section.items) {
+      if (item.type === 'link') {
+        results.push({ label: item.label, href: item.href });
+      } else {
+        for (const child of item.children) {
+          results.push({ label: child.label, href: child.href });
+        }
+      }
+    }
+  }
+
+  return results;
+}

@@ -6,6 +6,73 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B13.1] Topbar: buscador de rutas + notificaciones — 2026-08-02
+
+Cierra T-1 y T-2 de `docs/B9-audit.md` (contador de notificaciones hardcodeado y buscador
+decorativo). Ambos eran los elementos falsos más visibles al trastear la demo.
+
+### Buscador de rutas
+
+Nuevo `src/components/layout/topbar-search.tsx` (OPCIÓN A del prompt — específico del topbar,
+depende de `sidebarConfig`, no pertenece a `components/ui/`). Lee `getSearchableRoutes()`, una
+función nueva en `src/lib/route-info.ts` que aplana `sidebarConfig` en `{label, href}[]` — mismo
+patrón que `getRouteLabel`/`getRouteAncestors`, ya viven ahí y ya tocan `sidebarConfig` desde
+`lib/`. Cero listas de rutas paralelas.
+
+Los `label` son claves i18n: el componente traduce cada ruta con `useTranslations('common')`
+**antes** de filtrar, así que "usuarios" encuentra `/users` en `/es` igual que "users" en `/en`.
+Navegación con `useRouter` de `@/i18n/navigation` (nunca `next/navigation`). Combobox accesible
+hecho a mano (`role="combobox"` + `role="listbox"`/`option`, sin portal — el dropdown es
+`position: absolute` bajo el input, no `.nx-menu` que es `position: fixed` pensado para el patrón
+con portal de `DropdownMenu`). Flechas arriba/abajo mueven `activeIndex`, Enter navega, Escape
+cierra, click fuera cierra. Sin resultados → `common.navigation.searchEmpty` traducido.
+
+### Feature `notifications`
+
+`src/features/notifications/` con la anatomía completa (`schemas/`, `types/`, `api/` con
+`_mock-data.ts` + handler + keys + hook, `i18n/en.json` + `es.json`, `index.ts`). Registrado en
+`src/i18n/request.ts`. 6 notificaciones mock, 3 sin leer — coincide con el `3` hardcodeado
+anterior por casualidad, no por diseño: si mañana hay 5 sin leer en `_mock-data.ts`, el badge
+mostrará 5.
+
+Solo lectura (DECISIÓN 4 del prompt): `notificationsHandler` usa `const notificationsStore`, no
+`let`, porque no hay mutaciones. El punto de extensión para "marcar como leída" queda documentado
+como comentario en el handler — no implementado.
+
+Nuevo `src/components/layout/notification-bell.tsx` envuelve el `Bell` + badge + `DropdownMenu`
+con la lista. Sigue el patrón obligatorio de `feedback.md`: `ListSkeleton` en loading, `ErrorState`
+con retry en error, `EmptyState` en vacío. Reutiliza los tres — no se crearon variantes nuevas. El
+badge del bell solo se muestra si `unreadCount > 0` (mismo criterio que los `count` del sidebar).
+
+**Desviación del slot mapping de `docs/feedback.md`**: la fila "List / feed" sugiere `ErrorState`
+tamaño `default`, pero el dropdown de notificaciones usa `size="compact"` — el `default` con su
+icono de 48px y `py-8` no cabe bien en un panel de 320px. Juicio de UX, no un error de seguir el
+patrón; el resto del contrato (skeleton tipado, error con retry, empty tipado) se respeta.
+
+**Deuda detectada, no corregida**: `formatRelativeTime` en `src/lib/utils.ts` existe desde antes
+de este bloque, no se usaba en ningún sitio, y devuelve texto en inglés hardcodeado ("3h ago",
+"just now") sin pasar por i18n — incompatible con la regla de que ningún string visible puede ir
+sin traducir. Se usó `formatDate` en su lugar para el timestamp de cada notificación (mismo patrón
+de `Intl` con locale fijo que ya usan `formatCurrency`/`formatNumber`/`formatPercent`).
+`formatRelativeTime` sigue sin usarse — no se tocó, arreglar su i18n está fuera de alcance de este
+sub-bloque.
+
+### Tests
+
+10 tests nuevos, colocados junto al fuente: `notifications.handler.test.ts` (2, valida el pipeline
+mock→schema y que el conteo de no leídos sale de los datos), `topbar-search.test.tsx` (3: label
+traducido EN, label traducido ES, mensaje de vacío), `notification-bell.test.tsx` (5: badge
+refleja no leídos reales, badge oculto en cero, loading/error+retry/empty). El total pasa de 36 a
+46.
+
+### Cierre
+
+`npm test` (46/46), `npm run typecheck`, `npm run lint`, `npm run check:docs` y `npm run build`
+todos en verde. Ver también README (tabla de roadmap) y `.claude/rules/architecture.md` (feature
+`notifications` añadida a la lista de dominios).
+
+---
+
 ## [B12.3] Despliegue en producción — Dokploy — 2026-08-02
 
 La aplicación está desplegada y accesible en

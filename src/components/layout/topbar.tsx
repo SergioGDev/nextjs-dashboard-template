@@ -2,11 +2,11 @@
 
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/navigation';
-import { Bell, Search } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
 import { Breadcrumbs } from './breadcrumbs';
+import { TopbarSearch } from './topbar-search';
+import { NotificationBell } from './notification-bell';
 import { Avatar } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { useUserStore } from '@/store/user.store';
@@ -35,27 +35,13 @@ export function Topbar() {
       <div className="flex-1" />
 
       {/* Search */}
-      <div className="hidden md:block w-56">
-        <Input
-          placeholder={t('navigation.searchPlaceholder')}
-          leftIcon={<Search size={14} />}
-          className="h-8 text-xs"
-        />
-      </div>
+      <TopbarSearch />
 
       {/* Language switcher */}
       <LanguageSwitcher variant="compact" />
 
       {/* Notification bell */}
-      <button
-        className="relative text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-        aria-label={t('navigation.notifications')}
-      >
-        <Bell size={18} />
-        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-[var(--accent)] text-white text-[9px] font-bold flex items-center justify-center">
-          3
-        </span>
-      </button>
+      <NotificationBell />
 
       {/* Theme toggle */}
       <ThemeToggle />

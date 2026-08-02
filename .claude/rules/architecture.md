@@ -14,7 +14,7 @@ Full reference: `docs/architecture.md`.
 
 ```
 src/app/         Pages and layouts (thin — delegate to features)
-src/features/    Business domains (users, analytics, reports, dashboard, auth, settings, ui-showcase)
+src/features/    Business domains (users, analytics, reports, dashboard, auth, settings, notifications, ui-showcase)
 src/components/  Shared UI (ui/, charts/, forms/, layout/, feedback/, dashboard/, auth/, i18n/)
 src/config/      Configuration (env, constants, routes, i18n)
 src/lib/         Domain-free utilities (api client, validate, utils, route-info, charts)
