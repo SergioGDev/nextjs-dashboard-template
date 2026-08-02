@@ -6,6 +6,109 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B13.3] Hardening del despliegue — 2026-08-02
+
+Cierra B13 y la deuda anotada en B12.3: los tres huecos detectados al verificar la URL pública
+(sin forma de saber qué build corre, `x-powered-by` expuesto, sin `Strict-Transport-Security`)
+quedan cerrados. Sin tocar `/api/health` ni el matcher de `proxy.ts`.
+
+### `GET /api/version` — nuevo endpoint, separado de `/api/health`
+
+`/api/health` se mantiene intacto a propósito (DECISIÓN previa, reafirmada aquí): un healthcheck
+que hace trabajo puede fallar por motivos ajenos a la salud del servicio y provocar que Dokploy
+reinicie un contenedor sano. La información de versión necesitaba un endpoint separado que nadie
+consulta automáticamente.
+
+Combina las tres fuentes posibles (OPCIÓN C del prompt, sobre OPCIÓN A sello temporal u OPCIÓN B
+SHA vía `ARG`):
+
+- `version` — de `package.json`, import estático directo.
+- `buildTimestamp` — generado en la etapa `builder` del Dockerfile: un `RUN` escribe la fecha UTC
+  en `src/generated/build-info.json` justo después de `COPY . .` y antes de `npm run build`. El
+  route handler importa ese JSON como módulo — Next inlinea el valor en el handler compilado, sin
+  nada que leer en runtime.
+- `commitSha` — `ARG COMMIT_SHA` opcional en la misma etapa, default `"unknown"`. Hoy Dokploy no
+  fija build args (hallazgo de B12.3), así que en producción este campo lee `"unknown"` hasta que
+  alguien lo pase explícitamente; `buildTimestamp` solo ya resuelve el problema real.
+
+**Cero configuración externa (DECISIÓN 3 del prompt):** el `src/generated/build-info.json`
+comiteado (`{"timestamp":"unknown","commitSha":"unknown"}`) es lo que ve `npm run dev`, un build
+sin Docker, y `npm test`/`tsc` — nada se rompe fuera de Docker. La build de Docker sobrescribe ese
+fichero con valores reales antes de compilar.
+
+**El valor cambia cuando debe, y no cuando no debe:** el `RUN` que escribe `build-info.json` va
+después de `COPY . .`, así que la caché de capas de Docker lo invalida solo cuando el código bajo
+`src/` cambia — momento en que se re-ejecuta y el timestamp cambia. Si el código no cambia, la
+capa se reutiliza y el timestamp se mantiene: correcto, porque la imagen es la misma build.
+
+**Demostrado, no solo argumentado:** build de la imagen, `curl /api/version` → timestamp T1; toque
+trivial en un fichero de `src/` (revertido después), segunda build, segundo `curl` → timestamp T2
+≠ T1. Una tercera build con `--build-arg COMMIT_SHA=abc1234` confirmó que `commitSha` se propaga
+cuando se pasa explícitamente.
+
+### Cabeceras — `next.config.ts`
+
+- `poweredByHeader: false` — deja de enviar `x-powered-by: Next.js`.
+- `headers()` añade `Strict-Transport-Security: max-age=31536000; includeSubDomains`,
+  `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+  `Referrer-Policy: strict-origin-when-cross-origin`. Verificado que convive con el plugin de
+  `next-intl` y que el build sigue en verde (era el punto de mayor riesgo del prompt).
+- **Sin Content-Security-Policy** (DECISIÓN 2, reafirmada): una CSP real chocaría con el script de
+  bootstrap inline de Next y el script bloqueante anti-flash de next-themes, y una CSP rota falla
+  en la consola del navegador, no en un `curl`. Queda como deuda documentada, no implementada a
+  ciegas.
+
+### CI — `.github/workflows/docker.yml`
+
+Tres asserts nuevos junto a los curl existentes, sin `|| true` ni `continue-on-error`:
+`GET /api/version` responde 200 con `version` no vacío; `GET /en/login` sin `x-powered-by`;
+`GET /en/login` con `Strict-Transport-Security`.
+
+### Verificación manual (local, Docker)
+
+`/api/version` 200 con contenido real · `curl -I /en/login` sin `x-powered-by`, con
+`Strict-Transport-Security` · valor de `/api/version` distinto entre dos builds con código
+distinto (demostrado arriba) · `/api/version` no da 307 (no está detrás del gate del proxy,
+confirmado) · `/api/health` sigue devolviendo exactamente `{"status":"ok"}`.
+
+### Cambios
+
+**Nuevos:**
+- `src/app/api/version/route.ts` — endpoint de versión
+- `src/generated/build-info.json` — fallback comiteado, sobrescrito en la etapa `builder` del
+  Dockerfile
+
+**Modificados:**
+- `Dockerfile` — `ARG COMMIT_SHA` + `RUN` que genera `build-info.json` en la etapa `builder`
+- `next.config.ts` — `poweredByHeader: false` + `headers()`
+- `.github/workflows/docker.yml` — tres checks nuevos
+- `docs/deployment.md` — sección "Hardening (B13.3)"; "Known gaps" de B12.3 cerrado
+
+### Estado al cerrar el bloque
+
+`npm test`, `npm run typecheck`, `npm run lint`, `npm run check:docs` y `npm run build` → verdes.
+Build de Docker construida y arrancada tres veces (baseline, tras cambio de código, con
+`COMMIT_SHA`) para validar el requisito duro del prompt en la imagen real, no solo en el código
+fuente.
+
+### Lo que queda explícitamente fuera de B13.3
+
+- Content-Security-Policy → deuda documentada, ver arriba
+- `commitSha` real en producción → requiere que alguien fije `--build-arg COMMIT_SHA` en la
+  configuración de build de Dokploy; no se ha tocado esa configuración
+
+
+### Refuerzo del assert de CI en la revisión de cierre
+
+El check de `/api/version` en `docker.yml` comprobaba `version`, que sale de `package.json` y por
+tanto **nunca puede estar vacío**. Si el `RUN` que escribe `src/generated/build-info.json` fallara
+en silencio, la imagen serviría el fallback commiteado (`"unknown"`) y ese assert seguiría pasando:
+verificaba lo que no puede fallar en vez de lo que sí. Añadida una aserción sobre `buildTimestamp`
+distinto de `"unknown"`, que es el campo que de verdad depende de que la etapa de build haga su
+trabajo. Comprobado en ambos sentidos: pasa contra una imagen construida y rechazaría el fallback.
+
+---
+
 ## [B13.2] Pagination: componente extraído + windowed con elipsis — 2026-08-02
 
 Cierra D-1, D-2 y D-4 de `docs/B9-audit.md`. D-4 era deuda **latente**: con solo 3 páginas como

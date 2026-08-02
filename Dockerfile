@@ -36,6 +36,21 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
     NEXT_PUBLIC_APP_NAME=$NEXT_PUBLIC_APP_NAME \
     NEXT_TELEMETRY_DISABLED=1
 
+# Build metadata for GET /api/version (docs/deployment.md#known-gaps). COMMIT_SHA
+# is an optional ARG — Dokploy today builds with no --build-arg set at all, so this
+# defaults to "unknown" and the endpoint still works with zero configuration.
+# `src/generated/build-info.json` is imported by the route handler as a plain JSON
+# module, so Next inlines its value into the compiled output at `npm run build`
+# time below — no file to read, no env var to wire up at runtime.
+#
+# This RUN sits after `COPY . .`, so Docker's layer cache only re-executes it (and
+# only then does the timestamp change) when the source actually changed. Same code
+# → cached layer → same value, which is correct: the image IS the same build.
+ARG COMMIT_SHA=unknown
+RUN printf '{"timestamp":"%s","commitSha":"%s"}\n' \
+      "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$COMMIT_SHA" \
+      > src/generated/build-info.json
+
 RUN npm run build
 
 # ── runner ── minimal runtime image, non-root, standalone output only ────────
