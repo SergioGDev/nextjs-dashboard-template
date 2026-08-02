@@ -1,24 +1,59 @@
-import { User } from '../types/user.types';
+import { User, UserRole, UserStatus } from '../types/user.types';
 
-export const mockUsers: User[] = [
-  { id: '1', name: 'Aria Blackwood', email: 'aria.blackwood@nexdash.io', role: 'admin', avatar: 'https://ui-avatars.com/api/?name=Aria+Blackwood&background=6366F1&color=fff&size=128', status: 'active', createdAt: '2024-01-15T10:30:00Z', lastLogin: '2026-04-30T08:14:00Z' },
-  { id: '2', name: 'Marcus Chen', email: 'marcus.chen@nexdash.io', role: 'manager', avatar: 'https://ui-avatars.com/api/?name=Marcus+Chen&background=10B981&color=fff&size=128', status: 'active', createdAt: '2024-02-03T14:20:00Z', lastLogin: '2026-04-29T17:42:00Z' },
-  { id: '3', name: 'Sofia Reyes', email: 'sofia.reyes@nexdash.io', role: 'editor', avatar: 'https://ui-avatars.com/api/?name=Sofia+Reyes&background=F43F5E&color=fff&size=128', status: 'active', createdAt: '2024-02-18T09:15:00Z', lastLogin: '2026-04-30T06:55:00Z' },
-  { id: '4', name: 'James Okafor', email: 'james.okafor@nexdash.io', role: 'viewer', avatar: 'https://ui-avatars.com/api/?name=James+Okafor&background=F59E0B&color=fff&size=128', status: 'inactive', createdAt: '2024-03-01T11:00:00Z', lastLogin: '2026-03-15T13:22:00Z' },
-  { id: '5', name: 'Luna Petrov', email: 'luna.petrov@nexdash.io', role: 'editor', avatar: 'https://ui-avatars.com/api/?name=Luna+Petrov&background=06B6D4&color=fff&size=128', status: 'active', createdAt: '2024-03-12T16:45:00Z', lastLogin: '2026-04-28T20:10:00Z' },
-  { id: '6', name: 'Ethan Walsh', email: 'ethan.walsh@nexdash.io', role: 'manager', avatar: 'https://ui-avatars.com/api/?name=Ethan+Walsh&background=8B5CF6&color=fff&size=128', status: 'active', createdAt: '2024-04-05T08:30:00Z', lastLogin: '2026-04-30T07:33:00Z' },
-  { id: '7', name: 'Nadia Russo', email: 'nadia.russo@nexdash.io', role: 'viewer', avatar: 'https://ui-avatars.com/api/?name=Nadia+Russo&background=EC4899&color=fff&size=128', status: 'active', createdAt: '2024-04-20T13:00:00Z', lastLogin: '2026-04-27T11:05:00Z' },
-  { id: '8', name: 'Kai Tanaka', email: 'kai.tanaka@nexdash.io', role: 'editor', avatar: 'https://ui-avatars.com/api/?name=Kai+Tanaka&background=14B8A6&color=fff&size=128', status: 'inactive', createdAt: '2024-05-08T10:15:00Z', lastLogin: '2026-02-20T09:44:00Z' },
-  { id: '9', name: 'Isabelle Fontaine', email: 'isabelle.fontaine@nexdash.io', role: 'admin', avatar: 'https://ui-avatars.com/api/?name=Isabelle+Fontaine&background=6366F1&color=fff&size=128', status: 'active', createdAt: '2024-05-22T15:20:00Z', lastLogin: '2026-04-30T09:01:00Z' },
-  { id: '10', name: 'Omar Hassan', email: 'omar.hassan@nexdash.io', role: 'viewer', avatar: 'https://ui-avatars.com/api/?name=Omar+Hassan&background=EF4444&color=fff&size=128', status: 'active', createdAt: '2024-06-10T12:00:00Z', lastLogin: '2026-04-29T14:38:00Z' },
-  { id: '11', name: 'Priya Sharma', email: 'priya.sharma@nexdash.io', role: 'manager', avatar: 'https://ui-avatars.com/api/?name=Priya+Sharma&background=F97316&color=fff&size=128', status: 'active', createdAt: '2024-06-25T09:40:00Z', lastLogin: '2026-04-30T08:59:00Z' },
-  { id: '12', name: 'Leo Dubois', email: 'leo.dubois@nexdash.io', role: 'editor', avatar: 'https://ui-avatars.com/api/?name=Leo+Dubois&background=3B82F6&color=fff&size=128', status: 'inactive', createdAt: '2024-07-14T14:10:00Z', lastLogin: '2026-01-10T16:22:00Z' },
-  { id: '13', name: 'Zara Mitchell', email: 'zara.mitchell@nexdash.io', role: 'viewer', avatar: 'https://ui-avatars.com/api/?name=Zara+Mitchell&background=A855F7&color=fff&size=128', status: 'active', createdAt: '2024-08-02T11:30:00Z', lastLogin: '2026-04-28T15:17:00Z' },
-  { id: '14', name: 'Finn Larsen', email: 'finn.larsen@nexdash.io', role: 'editor', avatar: 'https://ui-avatars.com/api/?name=Finn+Larsen&background=84CC16&color=fff&size=128', status: 'active', createdAt: '2024-08-19T08:00:00Z', lastLogin: '2026-04-30T07:48:00Z' },
-  { id: '15', name: 'Amara Osei', email: 'amara.osei@nexdash.io', role: 'manager', avatar: 'https://ui-avatars.com/api/?name=Amara+Osei&background=0EA5E9&color=fff&size=128', status: 'active', createdAt: '2024-09-05T16:00:00Z', lastLogin: '2026-04-29T10:30:00Z' },
-  { id: '16', name: 'Hugo Martinez', email: 'hugo.martinez@nexdash.io', role: 'viewer', avatar: 'https://ui-avatars.com/api/?name=Hugo+Martinez&background=F43F5E&color=fff&size=128', status: 'inactive', createdAt: '2024-09-20T13:45:00Z', lastLogin: '2026-03-01T08:11:00Z' },
-  { id: '17', name: 'Cleo Andersen', email: 'cleo.andersen@nexdash.io', role: 'editor', avatar: 'https://ui-avatars.com/api/?name=Cleo+Andersen&background=10B981&color=fff&size=128', status: 'active', createdAt: '2024-10-08T10:20:00Z', lastLogin: '2026-04-30T06:22:00Z' },
-  { id: '18', name: 'Ravi Kapoor', email: 'ravi.kapoor@nexdash.io', role: 'admin', avatar: 'https://ui-avatars.com/api/?name=Ravi+Kapoor&background=6366F1&color=fff&size=128', status: 'active', createdAt: '2024-10-25T09:00:00Z', lastLogin: '2026-04-30T09:15:00Z' },
-  { id: '19', name: 'Sienna Brooks', email: 'sienna.brooks@nexdash.io', role: 'viewer', avatar: 'https://ui-avatars.com/api/?name=Sienna+Brooks&background=D946EF&color=fff&size=128', status: 'active', createdAt: '2024-11-12T14:30:00Z', lastLogin: '2026-04-27T18:44:00Z' },
-  { id: '20', name: 'Tobias Müller', email: 'tobias.muller@nexdash.io', role: 'manager', avatar: 'https://ui-avatars.com/api/?name=Tobias+Muller&background=F59E0B&color=fff&size=128', status: 'active', createdAt: '2024-12-01T11:00:00Z', lastLogin: '2026-04-29T12:05:00Z' },
+// Deterministic generator (no Math.random, no relative `new Date()`) — see
+// docs/CHANGELOG.md B13.2. 10 first names × 7 last names = 70 unique pairs,
+// no repeats: first cycles every 10 entries, last advances every 10 entries.
+const FIRST_NAMES = [
+  'Aria', 'Marcus', 'Sofia', 'James', 'Luna',
+  'Ethan', 'Nadia', 'Kai', 'Isabelle', 'Omar',
+] as const;
+
+const LAST_NAMES = [
+  'Blackwood', 'Chen', 'Reyes', 'Okafor', 'Petrov', 'Walsh', 'Russo',
+] as const;
+
+const AVATAR_COLORS = [
+  '6366F1', '10B981', 'F43F5E', 'F59E0B', '06B6D4',
+  '8B5CF6', 'EC4899', '14B8A6', 'EF4444', 'F97316',
+] as const;
+
+// Weighted so viewer/editor are more common than manager/admin.
+const ROLE_CYCLE: UserRole[] = [
+  'viewer', 'editor', 'manager', 'admin', 'editor',
+  'viewer', 'manager', 'editor', 'viewer', 'admin',
 ];
+
+const USER_COUNT = 70;
+
+function isoDate(base: string, dayOffset: number, hour: number, minute: number): string {
+  const d = new Date(base);
+  d.setUTCDate(d.getUTCDate() + dayOffset);
+  d.setUTCHours(hour, minute, 0, 0);
+  return d.toISOString();
+}
+
+function buildUser(index: number): User {
+  // Both cycle per-entry with coprime periods (10 and 7), so the 70 pairs are
+  // unique AND every page shows a mix of surnames. Advancing the surname every
+  // FIRST_NAMES.length entries would make each page of 10 share one surname.
+  const first = FIRST_NAMES[index % FIRST_NAMES.length];
+  const last = LAST_NAMES[index % LAST_NAMES.length];
+  const name = `${first} ${last}`;
+  const email = `${first.toLowerCase()}.${last.toLowerCase()}@nexdash.io`;
+  const color = AVATAR_COLORS[index % AVATAR_COLORS.length];
+  const role = ROLE_CYCLE[index % ROLE_CYCLE.length];
+  const status: UserStatus = index % 5 === 4 ? 'inactive' : 'active';
+
+  return {
+    id: String(index + 1),
+    name,
+    email,
+    role,
+    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${color}&color=fff&size=128`,
+    status,
+    createdAt: isoDate('2024-01-15', index * 5, 8 + (index % 10), (index * 7) % 60),
+    lastLogin: isoDate('2026-01-05', index * 3, 7 + (index % 12), (index * 11) % 60),
+  };
+}
+
+export const mockUsers: User[] = Array.from({ length: USER_COUNT }, (_, i) => buildUser(i));

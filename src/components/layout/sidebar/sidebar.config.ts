@@ -71,6 +71,7 @@ export const sidebarConfig: SidebarConfig = [
           { type: 'link', label: 'sidebar.items.uiForms', href: routes.ui.forms },
           { type: 'link', label: 'sidebar.items.uiTable', href: routes.ui.table },
           { type: 'link', label: 'sidebar.items.uiDataTable', href: routes.ui.dataTable },
+          { type: 'link', label: 'sidebar.items.uiPagination', href: routes.ui.pagination },
           { type: 'link', label: 'sidebar.items.uiAreaChart', href: routes.ui.areaChart },
           { type: 'link', label: 'sidebar.items.uiBarChart', href: routes.ui.barChart },
           { type: 'link', label: 'sidebar.items.uiLineChart', href: routes.ui.lineChart },

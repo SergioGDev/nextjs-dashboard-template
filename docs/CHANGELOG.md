@@ -6,6 +6,135 @@ para el TFM: incluye **qué** se hizo, **por qué** y **qué se descartó**.
 
 ---
 
+## [B13.2] Pagination: componente extraído + windowed con elipsis — 2026-08-02
+
+Cierra D-1, D-2 y D-4 de `docs/B9-audit.md`. D-4 era deuda **latente**: con solo 3 páginas como
+máximo en toda la app (users: 2, dashboard: 3), el límite hardcodeado de 5 botones nunca llegaba a
+morder. Se amplía el dataset mock de usuarios precisamente para que sea demostrable.
+
+### `Pagination` — nuevo componente en `src/components/ui/pagination.tsx`
+
+Extraído del bloque embebido en `DataTable` (antes ~45 líneas inline). Contrato: `page`,
+`totalPages`, `onPageChange` — mismos nombres que el estado que `DataTable` ya mantenía, así que
+la integración fue un swap directo sin tocar la API pública de `DataTable`.
+
+Windowing con el algoritmo clásico de siblingCount (usado por MUI y similares): con
+`totalPages <= 7` se muestran todas las páginas sin elipsis; por encima de 7, la ventana muestra
+siempre 7 slots — primera, última, página actual, un sibling a cada lado, y una o dos elipsis
+rellenando el resto. El número de slots es **constante** para un `totalPages` dado, sea cual sea
+la página actual: solo cambia qué lado colapsa. Es lo que evita que los botones salten de sitio al
+paginar.
+
+A11y: `<nav aria-label>` traducido, `aria-current="page"` en el botón activo, cada botón de página
+lleva `aria-label="Go to page N"` (nueva clave `common.table.goToPage`), y las elipsis son
+`<span aria-hidden="true">` — nunca en el orden de tabulación.
+
+### `DataTable`
+
+`data-table.tsx` pasa de 258 a 225 líneas (**-33**, D-2). El bloque de paginación ahora es
+`<Pagination page={page} totalPages={totalPages} onPageChange={setPage} />` dentro del mismo
+`nx-data-table__pagination` que ya envolvía el texto "Showing X–Y of Z" — ese texto se queda en
+`DataTable` porque depende de `pageSize`/`sortedData`, no del componente de paginación.
+
+Los 4 tests de `data-table.test.tsx` (incluido el de contrato D-5) no se tocaron y siguen en verde
+sin modificación — la refactorización fue puramente interna.
+
+### Dataset mock de usuarios: 20 → 70 registros
+
+`src/features/users/api/_mock-data.ts` pasa de un array literal de 20 entradas a un generador
+determinista (OPCIÓN B del prompt): 10 nombres × 7 apellidos = 70 combinaciones únicas sin
+repetir (el apellido avanza cada 10 índices, el nombre cicla dentro de cada bloque de 10).
+Emails, avatares (`ui-avatars.com`, mismo patrón de color por índice) y fechas (`createdAt`,
+`lastLogin`) se derivan del índice con aritmética simple — nada de `Math.random()` ni `new
+Date()` relativo a "ahora", así que el dataset es idéntico en cada carga y no hay riesgo de
+desajuste de hidratación servidor/cliente ni de tests no reproducibles (DECISIÓN 4 del prompt).
+70 usuarios con `pageSize={10}` en `/users` dan exactamente 7 páginas.
+
+Verificado manualmente: crear usuario, borrar usuario y borrado múltiple siguen funcionando sobre
+el dataset ampliado.
+
+### Página `/ui/pagination`
+
+Nueva bajo `src/app/[locale]/(dashboard)/ui/pagination/`, split `page.tsx` (server,
+`generateMetadata`) + `pagination-content.tsx` (client). Secciones: Anatomy, Few pages (5, sin
+elipsis), Many pages (50, elipsis a ambos lados), Boundaries (página 1 de 20 vs. página 20 de 20 —
+un solo lado colapsa en cada caso), Sibling count (1 vs. 2), Accessibility, Props, Localization.
+Namespace `pagination` nuevo en `src/features/ui-showcase/i18n/pagination-{en,es}.json`,
+registrado en `src/i18n/request.ts`. Ruta `routes.ui.pagination`, ítem en `sidebar.config.ts`
+(sección UI → Components), contador de la categoría `data` en el overview de `/ui`: 2 → 3.
+
+**Deuda de escritura detectada y corregida en el propio bloque**: dos descripciones de
+`pagination-{en,es}.json` (`props.className`, `sections.accessibility.description`) usaban
+`<nav>` literal dentro de un string pasado a `t()` plano (no `t.rich()`). next-intl interpreta
+`<tag>` como sintaxis de texto enriquecido incluso fuera de `t.rich()`, así que el mensaje fallaba
+a resolver y se renderizaba el path completo de la clave (`pagination.props.className`) en vez del
+texto. Se corrigió reescribiendo ambas frases sin ángulos (`nav element` / `elemento nav`). Se
+comprobó que **el mismo patrón ya existe sin corregir en `badge-en.json`**
+(`props.extendsNote`: "Extends all native `<span>` attributes…") — bug preexistente de B6c, fuera
+de scope de este bloque, no se tocó.
+
+### Corregido en revisión de cierre
+
+Tres cosas detectadas al verificar el sub-bloque, arregladas dentro de él:
+
+**1. El generador de nombres agrupaba un apellido por página.** Los pares se construían con
+`LAST_NAMES[Math.floor(index / FIRST_NAMES.length)]`, es decir, el apellido avanzaba cada 10
+entradas — exactamente el `pageSize` de `/users`. Resultado: la primera página mostraba diez
+personas apellidadas Blackwood, lo primero que ve quien entra en la vista. Corregido a
+`LAST_NAMES[index % LAST_NAMES.length]`: con periodos coprimos (10 y 7) los 70 pares siguen siendo
+únicos y cada página mezcla apellidos.
+
+**2. El clamp de página, que estaba anotado como deuda, se implementa aquí.** Ver abajo el detalle
+del fallo. Se acota en render (`safePage = Math.min(page, Math.max(1, totalPages))`) y no en un
+`useEffect`, para evitar el parpadeo de un render intermedio con la tabla vacía. `safePage` se usa
+también en el mensaje de rango y en el prop que recibe `Pagination`, no sólo en el `slice`. Cubierto
+por un test de regresión que renderiza 25 filas, navega a la página 3 y vuelve a renderizar con 3
+filas, comprobando que se ven filas y no el mensaje de "sin resultados".
+
+**3. Dos tests de `Pagination` eran más débiles que su nombre.** El de "muestra todas las páginas
+cuando `totalPages <= 7`" probaba con **5**, no con 7, dejando el límite sin cubrir; y el de
+constancia de slots comprobaba que los tres recuentos fueran iguales, pero no *cuál* era. Verificado
+por mutación: alterar `totalSlots` de `+5` a `+4` no rompía ningún test. Importa porque `/users`
+tiene ahora exactamente 7 páginas — justo el valor frontera. Añadidos un test en el límite (7
+páginas, sin elipsis), otro justo por encima (8, con elipsis), y una aserción del recuento real de
+slots. Con eso, la misma mutación sí falla.
+
+### Deuda técnica detectada — el clamp, corregido arriba
+
+**`DataTable` no re-acotaba `page` cuando el prop `data` se reduce desde fuera.** `users-content.tsx`
+filtra `users` externamente (buscador + selects de rol/estado) y pasa el array ya filtrado a
+`DataTable` — un patrón distinto del `searchable` interno de `DataTable` (que sí hace `setPage(1)`
+en cada tecla). Si el usuario navega a una página alta y **luego** aplica un filtro que reduce
+`totalPages` por debajo de la página actual, `pageData` queda vacío (`slice` fuera de rango) y se
+muestra el mensaje de "sin resultados" aunque el dataset filtrado sí tenga filas. Preexistente
+desde que `users-content.tsx` implementa su filtro propio (B6g.3) — invisible hasta ahora porque
+con 20 usuarios y 2 páginas era casi imposible llegar a ese estado accidentalmente; con 70 usuarios
+y 7 páginas es trivial de reproducir. Fix natural: acotar `page` con `Math.min(page, totalPages)`
+en el render de `DataTable`, o un `useEffect` que resetee `page` cuando cambia `data.length`. No
+**Corregido en la revisión de cierre** (ver arriba), no diferido: con 7 páginas es trivial de
+reproducir y B13 va justamente de deuda que se nota al usar la demo.
+
+### Tests
+
+10 tests nuevos en `src/components/ui/pagination.test.tsx` y 1 en `data-table.test.tsx`: pocas páginas sin elipsis, primera y
+última página alcanzables desde una página intermedia de un set grande, `aria-current` en la
+página activa, mismo número de slots totales (botones + elipsis) en la página 1/intermedia/última,
+click invoca `onPageChange` con la página correcta (número y flecha anterior), y `totalPages<=1`
+no renderiza nada, más los tres añadidos en revisión (límite de 7, elipsis a partir de 8, y
+recuento real de slots). En `data-table.test.tsx`, un test de regresión del clamp de página.
+Total: 46 → 56.
+
+### Cierre
+
+`npm test` (56/56), `npm run typecheck`, `npm run lint`, `npm run check:docs` y `npm run build`
+todos en verde. Verificado manualmente en `/users`: salto directo a la última página, elipsis en
+ambos lados en una página intermedia (visible en `/ui/pagination`, no en `/users` — con 70
+usuarios y `pageSize=10` da exactamente 7 páginas, que caen en el caso "≤7 sin elipsis" por
+diseño), botones sin salto de posición al paginar, buscador recalculando la paginación, y CRUD de
+usuarios intacto.
+
+---
+
 ## [B13.1] Topbar: buscador de rutas + notificaciones — 2026-08-02
 
 Cierra T-1 y T-2 de `docs/B9-audit.md` (contador de notificaciones hardcodeado y buscador

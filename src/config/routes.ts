@@ -43,6 +43,7 @@ export const routes = {
     forms: '/ui/forms',
     table: '/ui/table',
     dataTable: '/ui/data-table',
+    pagination: '/ui/pagination',
     areaChart: '/ui/area-chart',
     barChart: '/ui/bar-chart',
     lineChart: '/ui/line-chart',

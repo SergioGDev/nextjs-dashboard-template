@@ -29,7 +29,7 @@ const categories: Category[] = [
   { key: 'display', count: 6, href: routes.ui.card, icon: Table2 },
   { key: 'overlays', count: 3, href: routes.ui.tooltip, icon: MessageSquare },
   { key: 'feedback', count: 5, href: routes.ui.toasts, icon: Bell },
-  { key: 'data', count: 2, href: routes.ui.table, icon: Database },
+  { key: 'data', count: 3, href: routes.ui.table, icon: Database },
   { key: 'charts', count: 4, href: routes.ui.areaChart, icon: BarChart2 },
   { key: 'layout', count: 4, href: routes.ui.sidebar, icon: PanelLeft },
 ];

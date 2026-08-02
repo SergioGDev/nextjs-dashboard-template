@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "title": "Pagination"
+  },
+  "header": {
+    "title": "Pagination",
+    "subtitle": "Control de paginación con ventana deslizante y un número constante de slots — la primera y la última página están siempre a un clic, y la página actual nunca sale del rango visible. Usado por DataTable, y disponible de forma independiente para cualquier lista paginada."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "Una fila de controles: una flecha anterior, una serie de números de página (con elipsis donde se colapsan páginas) y una flecha siguiente.",
+    "parts": {
+      "previous": "Va a la página - 1. Deshabilitado en la primera página.",
+      "pages": "Un botón por cada número de página visible. La página actual está resaltada y marcada con aria-current=\"page\".",
+      "ellipsis": "Marcador no interactivo que se muestra donde se colapsa una serie de páginas. No es focusable ni se anuncia a lectores de pantalla.",
+      "next": "Va a la página + 1. Deshabilitado en la última página."
+    }
+  },
+  "sections": {
+    "fewPages": {
+      "title": "Pocas páginas",
+      "description": "Cuando totalPages es 7 o menos, se muestran todos los números de página — no hay nada que colapsar, así que no aparece ninguna elipsis."
+    },
+    "manyPages": {
+      "title": "Muchas páginas",
+      "description": "Con un totalPages grande y la página actual en el centro, aparece una elipsis a ambos lados. La primera y la última página siguen alcanzables con un solo clic."
+    },
+    "boundaries": {
+      "title": "Límites",
+      "description": "Cerca del inicio solo colapsa el lado derecho; cerca del final solo colapsa el izquierdo. El número total de slots es el mismo que en el caso intermedio — solo cambia qué lado muestra la elipsis."
+    },
+    "siblingCount": {
+      "title": "Sibling count",
+      "description": "siblingCount controla cuántas páginas se mantienen a cada lado de la página actual antes de colapsar. El valor por defecto es 1; aumentarlo ensancha la ventana visible."
+    },
+    "accessibility": {
+      "title": "Accesibilidad",
+      "description": "El control es un elemento nav con una etiqueta localizada. El botón de la página activa lleva aria-current=\"page\". Las elipsis son aria-hidden y nunca forman parte del orden de tabulación."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Pagination es un componente controlado — quien lo usa mantiene la página actual en su propio estado."
+    }
+  },
+  "demos": {
+    "startBoundary": "Página 1 de 20",
+    "endBoundary": "Página 20 de 20"
+  },
+  "props": {
+    "page": "La página actual, indexada desde 1.",
+    "totalPages": "Número total de páginas.",
+    "onPageChange": "Se llama con el número de página objetivo al pulsar una flecha o un botón de página.",
+    "siblingCount": "Páginas mantenidas a cada lado de la página actual antes de colapsar en una elipsis.",
+    "className": "Clases extra aplicadas al elemento nav raíz."
+  }
+}

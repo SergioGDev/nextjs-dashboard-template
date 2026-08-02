@@ -2,11 +2,11 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronsUpDown, Search } from 'lucide-react';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './table';
 import { Input } from './input';
 import { Skeleton } from './skeleton';
-import { Button } from './button';
+import { Pagination } from './pagination';
 import { cn } from '@lib/utils';
 
 export interface Column<T> {
@@ -80,7 +80,11 @@ export function DataTable<T extends object>({
 
   // 3. Paginate
   const totalPages = Math.ceil(sortedData.length / pageSize);
-  const pageData = sortedData.slice((page - 1) * pageSize, page * pageSize);
+  // Clamp during render rather than in an effect: `data` can shrink from the
+  // outside (consumers filter before passing it in), and an out-of-range page
+  // would slice to an empty array — "no results" while matches exist.
+  const safePage = Math.min(page, Math.max(1, totalPages));
+  const pageData = sortedData.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   function handleSort(key: string) {
     if (sortKey !== key) { setSortKey(key); setSortDir('asc'); }
@@ -212,45 +216,12 @@ export function DataTable<T extends object>({
         <div className="nx-data-table__pagination">
           <p className="nx-data-table__showing">
             {t('table.showing', {
-              start: (page - 1) * pageSize + 1,
-              end: Math.min(page * pageSize, sortedData.length),
+              start: (safePage - 1) * pageSize + 1,
+              end: Math.min(safePage * pageSize, sortedData.length),
               total: sortedData.length,
             })}
           </p>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              iconOnly
-              aria-label={t('table.previousPage')}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-            >
-              <ChevronLeft size={16} />
-            </Button>
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              const p = i + 1;
-              return (
-                <Button
-                  key={p}
-                  variant={page === p ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setPage(p)}
-                  className="h-8 w-8 p-0"
-                >
-                  {p}
-                </Button>
-              );
-            })}
-            <Button
-              variant="ghost"
-              iconOnly
-              aria-label={t('table.nextPage')}
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-            >
-              <ChevronRight size={16} />
-            </Button>
-          </div>
+          <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
     </div>

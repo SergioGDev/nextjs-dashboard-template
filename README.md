@@ -7,11 +7,12 @@ A Next.js 16 analytics dashboard template — feature-based architecture, mock d
 Sign in with `admin@nexdash.com` / `admin123` — no backend needed, the credentials are also shown
 on the login page.
 
-> **Status**: B1–B13.1 complete. The app is built, tested, containerised and deployed: architecture,
-> data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, 46 tests,
+> **Status**: B1–B13.2 complete. The app is built, tested, containerised and deployed: architecture,
+> data layer, auth, UX feedback, i18n, full design system showcase, tech debt audit, 53 tests,
 > security bump, Docker image, GitHub Actions quality gate, a live VPS deployment via Dokploy
-> with auto-deploy on push to `main`, and a functional topbar (route search + real notifications).
-> B13.2/B13.3 next: DataTable pagination + deployment hardening. See [CHANGELOG](docs/CHANGELOG.md).
+> with auto-deploy on push to `main`, a functional topbar (route search + real notifications), and
+> a standalone `Pagination` component with windowed/ellipsis paging used by `DataTable`.
+> B13.3 next: deployment hardening. See [CHANGELOG](docs/CHANGELOG.md).
 
 ## Stack
 
@@ -188,7 +189,7 @@ work. The deployment runs a single replica: the mock session store is an in-memo
 | B12.2 | ✅ Done | GitHub Actions: quality gate (lint/typecheck/test/docs/build) + Docker build-and-smoke-test |
 | B12.3 | ✅ Done | Deployed to VPS via Dokploy, TLS + auto-deploy on push to `main` |
 | B13.1 | ✅ Done | Topbar: functional route search + `notifications` feature (closes T-1, T-2) |
-| B13.2 | 🔄 Next | DataTable pagination |
+| B13.2 | ✅ Done | `Pagination` extracted, windowed with ellipsis, 70-user mock dataset (closes D-1, D-2, D-4) |
 | B13.3 | 🔄 Next | Deployment hardening |
 
 B9.2 and B9.3 remain partially open: items with visible demo impact are addressed in B13; the

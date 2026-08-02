@@ -33,9 +33,21 @@ const messages = {
       searchPlaceholder: 'Search…',
       noResults: 'No results found',
       empty: 'No data',
+      showing: 'Showing {start}–{end} of {total}',
+      pagination: 'Pagination',
+      previousPage: 'Previous page',
+      nextPage: 'Next page',
+      goToPage: 'Go to page {page}',
     },
   },
 };
+
+// 25 rows / pageSize 10 → 3 pages. Used only by the clamping test below.
+const manyRows: Row[] = Array.from({ length: 25 }, (_, i) => ({
+  id: String(i + 1),
+  name: `User ${i + 1}`,
+  status: i % 2 === 0 ? 'active' : 'inactive',
+}));
 
 describe('DataTable — search filter', () => {
   it('filters rows to those matching the query in any raw column value', async () => {
@@ -87,5 +99,32 @@ describe('DataTable — search filter', () => {
     await user.type(screen.getByRole('textbox'), 'currently');
 
     expect(screen.getByText(messages.common.table.noResults)).toBeInTheDocument();
+  });
+});
+
+describe('DataTable — page clamping', () => {
+  // Regression: `data` can shrink from outside (consumers filter before passing
+  // it in — users-content.tsx does exactly that with its role/status filters).
+  // Without clamping, the internal page stayed out of range and the table
+  // sliced to an empty array, showing "no results" while matches existed.
+  it('shows rows instead of an empty page when data shrinks below the current page', async () => {
+    const user = userEvent.setup();
+    const simpleColumns: Column<Row>[] = [{ key: 'name', header: 'Name' }];
+
+    const { rerender } = renderWithProviders(
+      <DataTable columns={simpleColumns} data={manyRows} pageSize={10} getRowId={(r) => r.id} />,
+      { messages },
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Go to page 3' }));
+    expect(screen.getByText('User 21')).toBeInTheDocument();
+
+    // Parent filters the data down to a single page while we sit on page 3.
+    rerender(
+      <DataTable columns={simpleColumns} data={manyRows.slice(0, 3)} pageSize={10} getRowId={(r) => r.id} />,
+    );
+
+    expect(screen.getByText('User 1')).toBeInTheDocument();
+    expect(screen.queryByText(messages.common.table.noResults)).not.toBeInTheDocument();
   });
 });

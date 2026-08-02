@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "title": "Pagination"
+  },
+  "header": {
+    "title": "Pagination",
+    "subtitle": "Windowed page control with a constant number of slots — first and last page are always one click away, and the current page never leaves the visible range. Used by DataTable, and available standalone for any paginated list."
+  },
+  "anatomy": {
+    "title": "Anatomy",
+    "description": "A row of controls: a previous arrow, a run of page numbers (with ellipses where pages are collapsed), and a next arrow.",
+    "parts": {
+      "previous": "Moves to page - 1. Disabled on the first page.",
+      "pages": "One button per visible page number. The current page is highlighted and marked aria-current=\"page\".",
+      "ellipsis": "Non-interactive placeholder shown where a run of pages is collapsed. Not focusable, hidden from screen readers.",
+      "next": "Moves to page + 1. Disabled on the last page."
+    }
+  },
+  "sections": {
+    "fewPages": {
+      "title": "Few pages",
+      "description": "When totalPages is 7 or fewer, every page number is shown — there is nothing to collapse, so no ellipsis appears."
+    },
+    "manyPages": {
+      "title": "Many pages",
+      "description": "With a large totalPages and the current page in the middle, an ellipsis appears on both sides. First and last page stay reachable with a single click."
+    },
+    "boundaries": {
+      "title": "Boundaries",
+      "description": "Near the start only the right side collapses; near the end only the left side does. The total slot count stays the same as the middle case — only which side shows an ellipsis changes."
+    },
+    "siblingCount": {
+      "title": "Sibling count",
+      "description": "siblingCount controls how many pages are kept on each side of the current page before collapsing. The default is 1; raising it widens the visible window."
+    },
+    "accessibility": {
+      "title": "Accessibility",
+      "description": "The control is a nav element with a localized label. The active page button carries aria-current=\"page\". Ellipses are aria-hidden and are never part of the tab order."
+    },
+    "props": {
+      "title": "Props",
+      "description": "Pagination is a controlled component — the caller owns the current page in state."
+    }
+  },
+  "demos": {
+    "startBoundary": "Page 1 of 20",
+    "endBoundary": "Page 20 of 20"
+  },
+  "props": {
+    "page": "The current page, 1-indexed.",
+    "totalPages": "Total number of pages.",
+    "onPageChange": "Called with the target page number when an arrow or page button is clicked.",
+    "siblingCount": "Pages kept on each side of the current page before collapsing into an ellipsis.",
+    "className": "Extra classes applied to the root nav element."
+  }
+}

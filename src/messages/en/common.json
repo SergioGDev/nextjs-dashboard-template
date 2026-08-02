@@ -65,6 +65,7 @@
       "uiForms": "Forms",
       "uiTable": "Table",
       "uiDataTable": "Data Table",
+      "uiPagination": "Pagination",
       "uiAreaChart": "Area Chart",
       "uiBarChart": "Bar Chart",
       "uiLineChart": "Line Chart",
@@ -99,7 +100,9 @@
     "searchPlaceholder": "Search…",
     "showing": "{start}–{end} of {total}",
     "previousPage": "Previous page",
-    "nextPage": "Next page"
+    "nextPage": "Next page",
+    "pagination": "Pagination",
+    "goToPage": "Go to page {page}"
   },
   "feedback": {
     "emptyState": {
