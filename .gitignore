@@ -39,6 +39,10 @@ yarn-error.log*
 .claude/settings.local.json
 .claude/worktrees/
 
+# source images for the TFM deck — embedded as data URIs in the generated HTML,
+# so the deck is self-contained and these don't need to travel with the repo
+screenshots/
+
 # vercel
 .vercel
 
